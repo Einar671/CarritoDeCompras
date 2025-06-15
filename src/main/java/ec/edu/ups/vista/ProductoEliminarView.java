@@ -20,6 +20,7 @@ public class ProductoEliminarView extends JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setResizable(false);
         setVisible(true);
+        setSize(600, 400);
 
 
         modelo = new DefaultTableModel();

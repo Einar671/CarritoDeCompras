@@ -45,6 +45,13 @@ public class ProductoController {
             }
 
         });
+        productoEliminarView.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowActivated(WindowEvent e) {
+                mostrarProductos();
+            }
+            });
+
         productoListaView.getBtnListar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -60,8 +67,10 @@ public class ProductoController {
                if (productoEncontrado == null) {
                    productoEliminarView.mostrarMensaje("El producto no existe");
                }else {
-                   productoEliminarView.mostrarMensaje("El producto" + productoEncontrado.getNombre());
-
+                   productoEliminarView.mostrarMensaje("El producto " + productoEncontrado.getNombre()+" fue eliminado correctamente");
+                   productoDAO.eliminar(codigo);
+                   productoEliminarView.getTxtNombre().setText("");
+                   productoEliminarView.mostrarProductos(productoDAO.listarTodos());
                }
            }
         });
@@ -77,6 +86,7 @@ public class ProductoController {
     }
     private void mostrarProductos() {
         productoListaView.mostrarProductos(productoDAO.listarTodos());
+        productoEliminarView.mostrarProductos(productoDAO.listarTodos());
     }
     private void guardarProducto() {
         int codigo = Integer.parseInt(productoAnadirView.getTxtCodigo().getText());
