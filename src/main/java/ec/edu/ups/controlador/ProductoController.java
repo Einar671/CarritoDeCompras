@@ -3,6 +3,7 @@ package ec.edu.ups.controlador;
 import ec.edu.ups.dao.ProductoDAO;
 import ec.edu.ups.modelo.Producto;
 import ec.edu.ups.vista.ProductoAnadirView;
+import ec.edu.ups.vista.ProductoEliminarView;
 import ec.edu.ups.vista.ProductoListaView;
 
 import java.awt.event.*;
@@ -12,12 +13,14 @@ public class ProductoController {
 
     private final ProductoAnadirView productoAnadirView;
     private final ProductoListaView productoListaView;
+    private final ProductoEliminarView productoEliminarView;
     private final ProductoDAO productoDAO;
 
-    public ProductoController(ProductoDAO productoDAO, ProductoAnadirView productoView, ProductoListaView productoListaView) {
+    public ProductoController(ProductoDAO productoDAO, ProductoAnadirView productoView, ProductoListaView productoListaView, ProductoEliminarView productoEliminarView) {
         this.productoDAO = productoDAO;
         this.productoAnadirView = productoView;
         this.productoListaView = productoListaView;
+        this.productoEliminarView = productoEliminarView;
         configurarEventos();
     }
 
@@ -48,6 +51,22 @@ public class ProductoController {
                 mostrarProductos();
             }
         });
+
+        productoEliminarView.getBtnEliminar().addActionListener(new ActionListener() {
+           @Override
+           public void actionPerformed(ActionEvent e) {
+               int codigo = Integer.parseInt(productoEliminarView.getTxtNombre().getText());
+               Producto productoEncontrado = productoDAO.buscarPorCodigo(codigo);
+               if (productoEncontrado == null) {
+                   productoEliminarView.mostrarMensaje("El producto no existe");
+               }else {
+                   productoEliminarView.mostrarMensaje("El producto" + productoEncontrado.getNombre());
+
+               }
+           }
+        });
+
+
     }
 
     private void buscarProducto() {
@@ -69,6 +88,14 @@ public class ProductoController {
         productoAnadirView.limpiarCampos();
         productoAnadirView.mostrarProductos(productoDAO.listarTodos());
     }
+
+    private void buscarProductoCodigo() {
+        String nombre = productoEliminarView.getTxtNombre().getText();
+        List<Producto> productos = productoDAO.buscarPorNombre(nombre);
+        productoListaView.getTxtBuscar().setText("");
+        productoListaView.mostrarProductos(productos);
+    }
+
 
 
 }
