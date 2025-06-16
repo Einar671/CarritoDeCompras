@@ -6,7 +6,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
 
-public class ProductoEliminarView extends JFrame {
+public class ProductoEliminarView extends JInternalFrame {
     private JPanel panelPrincipal;
     private JTextField txtNombre;
     private JButton btnEliminar;
@@ -16,7 +16,6 @@ public class ProductoEliminarView extends JFrame {
     public ProductoEliminarView() {
         setContentPane(panelPrincipal);
         setTitle("Eliminar Producto");
-        setLocationRelativeTo(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setResizable(false);
         setVisible(true);
