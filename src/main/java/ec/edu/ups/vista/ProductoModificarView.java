@@ -20,7 +20,7 @@ public class ProductoModificarView extends JInternalFrame{
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(500,500);
         setResizable(false);
-        setVisible(true);
+        //setVisible(true);
     }
 
     public JTextField getTxtCodigo() {

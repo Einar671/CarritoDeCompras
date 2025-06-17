@@ -20,6 +20,7 @@ public class Main {
                 ProductoAnadirView productoAnadirView = new ProductoAnadirView();
                 ProductoController productoController = new ProductoController(productoDAO);
 
+
                 principalView.getMenuItemCargarProducto().addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -29,6 +30,7 @@ public class Main {
                         }
                     }
                 });
+
                 principalView.getMenuItemActualizarProducto().addActionListener(new ActionListener() {
 
                     @Override
@@ -61,8 +63,6 @@ public class Main {
                         }
                     }
                 });
-                principalView.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
-                principalView.setVisible(true);
             }
         });
 

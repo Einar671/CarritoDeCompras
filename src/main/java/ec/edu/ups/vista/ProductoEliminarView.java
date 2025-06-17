@@ -18,7 +18,7 @@ public class ProductoEliminarView extends JInternalFrame {
         setTitle("Eliminar Producto");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setResizable(false);
-        setVisible(true);
+        //setVisible(true);
         setSize(600, 400);
 
 
