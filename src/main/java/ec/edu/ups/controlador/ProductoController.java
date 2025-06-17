@@ -2,10 +2,7 @@ package ec.edu.ups.controlador;
 
 import ec.edu.ups.dao.ProductoDAO;
 import ec.edu.ups.modelo.Producto;
-import ec.edu.ups.vista.ProductoAnadirView;
-import ec.edu.ups.vista.ProductoEliminarView;
-import ec.edu.ups.vista.ProductoListaView;
-import ec.edu.ups.vista.ProductoModificarView;
+import ec.edu.ups.vista.*;
 
 import java.awt.event.*;
 import java.util.List;
@@ -16,11 +13,21 @@ public class ProductoController {
     private ProductoListaView productoListaView;
     private ProductoEliminarView productoEliminarView;
     private ProductoModificarView productoModificarView;
+    private CarritoAñadirView carritoAñadirView;
     private final ProductoDAO productoDAO;
 
-
-    public ProductoController(ProductoDAO productoDAO) {
+    public ProductoController(ProductoDAO productoDAO, CarritoAñadirView carritoAñadirView, ProductoModificarView productoModificarView, ProductoEliminarView productoEliminarView, ProductoListaView productoListaView, ProductoAnadirView productoAnadirView) {
         this.productoDAO = productoDAO;
+        this.carritoAñadirView = carritoAñadirView;
+        this.productoModificarView = productoModificarView;
+        this.productoEliminarView = productoEliminarView;
+        this.productoListaView = productoListaView;
+        this.productoAnadirView = productoAnadirView;
+        configurarAñadirEventos();
+        configurarListaEventos();
+        configurarEliminarEventos();
+        configurarModificarEventos();
+        configurarCarritoEventos();
     }
 
     public ProductoAnadirView getProductoAnadirView() {
@@ -29,7 +36,7 @@ public class ProductoController {
 
     public void setProductoAnadirView(ProductoAnadirView productoAnadirView) {
         this.productoAnadirView = productoAnadirView;
-        this.configurarAñadirEventos();
+
     }
 
     public ProductoListaView getProductoListaView() {
@@ -38,7 +45,6 @@ public class ProductoController {
 
     public void setProductoListaView(ProductoListaView productoListaView) {
         this.productoListaView = productoListaView;
-        this.configurarListaEventos();
     }
 
     public ProductoEliminarView getProductoEliminarView() {
@@ -47,7 +53,6 @@ public class ProductoController {
 
     public void setProductoEliminarView(ProductoEliminarView productoEliminarView) {
         this.productoEliminarView = productoEliminarView;
-        configurarEliminarEventos();
     }
 
     public ProductoModificarView getProductoModificarView() {
@@ -56,7 +61,6 @@ public class ProductoController {
 
     public void setProductoModificarView(ProductoModificarView productoModificarView) {
         this.productoModificarView = productoModificarView;
-        configurarModificarEventos();
     }
 
     private void configurarAñadirEventos() {
@@ -184,6 +188,17 @@ public class ProductoController {
                 }
             });
 
+
+
+    }
+
+    private void configurarCarritoEventos() {
+        carritoAñadirView.getBtnBuscar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                buscarProductoPorCodigo();
+            }
+        });
     }
 
     private void buscarProducto() {
@@ -205,6 +220,24 @@ public class ProductoController {
         productoAnadirView.mostrarMensaje("Producto guardado correctamente");
         productoAnadirView.limpiarCampos();
         productoAnadirView.mostrarProductos(productoDAO.listarTodos());
+    }
+
+    private void buscarProductoPorCodigo(){
+        int codigo = Integer.parseInt(carritoAñadirView.getTxtCodigo().getText());
+        Producto producto = productoDAO.buscarPorCodigo(codigo);
+
+        if (producto == null){
+            carritoAñadirView.mostrarMensaje("No se han encontrado el producto");
+            carritoAñadirView.getTxtNombre().setText("");
+            carritoAñadirView.getTxtPrecio().setText("");
+        }else{
+            carritoAñadirView.getTxtNombre().setText(producto.getNombre());
+            carritoAñadirView.getTxtPrecio().setText(String.valueOf(producto.getPrecio()));
+        }
+    }
+
+    private void mostrarProductoEnCarrito(Producto producto){
+
     }
 
 }

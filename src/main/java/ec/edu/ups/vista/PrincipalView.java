@@ -6,12 +6,14 @@ import java.awt.event.ActionListener;
 
 public class PrincipalView extends JFrame {
     private JMenuBar menubar;
+    private JMenu menuCarrito;
     private JMenu menuProducto;
     private JMenuItem menuItemEliminarProducto;
     private JMenuItem menuItemModificarProducto;
     private JMenuItem menuItemActualizarProducto;
     private JMenuItem menuItemCargarProducto;
     private JDesktopPane desktop;
+    private JMenuItem menuItemAñadirCarrito;
 
     public JDesktopPane getDesktop() {
         return desktop;
@@ -24,17 +26,23 @@ public class PrincipalView extends JFrame {
     public PrincipalView() {
         desktop = new JDesktopPane();
         menubar = new JMenuBar();
+        menuCarrito = new JMenu("Carrito");
         menuProducto = new JMenu("Producto");
         menuItemEliminarProducto = new JMenuItem("Eliminar");
         menuItemModificarProducto = new JMenuItem("Modificar");
         menuItemActualizarProducto = new JMenuItem("Actualizar");
         menuItemCargarProducto = new JMenuItem("Cargar");
+        menuItemAñadirCarrito = new JMenuItem("Carrito Añadir");
 
+        menubar.add(menuCarrito);
+        menuCarrito.add(menuItemAñadirCarrito);
         menubar.add(menuProducto);
         menuProducto.add(menuItemEliminarProducto);
         menuProducto.add(menuItemModificarProducto);
         menuProducto.add(menuItemActualizarProducto);
         menuProducto.add(menuItemCargarProducto);
+
+
 
         setJMenuBar(menubar);
         setContentPane(desktop);
@@ -46,6 +54,14 @@ public class PrincipalView extends JFrame {
         setVisible(true);
 
 
+    }
+
+    public JMenuItem getMenuItemAñadirCarrito() {
+        return menuItemAñadirCarrito;
+    }
+
+    public void setMenuItemAñadirCarrito(JMenuItem menuItemAñadirCarrito) {
+        this.menuItemAñadirCarrito = menuItemAñadirCarrito;
     }
 
     public JMenuItem getMenuItemEliminarProducto() {

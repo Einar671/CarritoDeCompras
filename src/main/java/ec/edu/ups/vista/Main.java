@@ -15,11 +15,22 @@ public class Main {
                 ProductoDAO productoDAO = new ProductoDAOMemoria();
                 ProductoModificarView productoModificarView = new ProductoModificarView();
                 ProductoEliminarView productoEliminarView = new ProductoEliminarView();
+                CarritoAñadirView carritoAñadirView = new CarritoAñadirView();
                 PrincipalView principalView = new PrincipalView();
                 ProductoListaView productoListaView = new ProductoListaView();
                 ProductoAnadirView productoAnadirView = new ProductoAnadirView();
-                ProductoController productoController = new ProductoController(productoDAO);
+                ProductoController productoController = new ProductoController(productoDAO, carritoAñadirView, productoModificarView, productoEliminarView, productoListaView, productoAnadirView);
 
+                principalView.getMenuItemAñadirCarrito().addActionListener(new ActionListener() {
+
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if(!carritoAñadirView.isVisible()){
+                            carritoAñadirView.setVisible(true);
+                            principalView.getDesktop().add(carritoAñadirView);
+                        }
+                    }
+                });
 
                 principalView.getMenuItemCargarProducto().addActionListener(new ActionListener() {
                     @Override
