@@ -1,6 +1,11 @@
 package ec.edu.ups.vista;
 
+import ec.edu.ups.modelo.ItemCarrito;
+import ec.edu.ups.modelo.Producto;
+
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.util.List;
 
 public class CarritoAñadirView extends JInternalFrame {
     private JPanel panelPrincipal;
@@ -11,18 +16,23 @@ public class CarritoAñadirView extends JInternalFrame {
     private JTextField txtSubtotal;
     private JTextField txtIVA;
     private JTextField txtTotal;
-    private JTable table1;
+    private JTable tblItems;
     private JButton btnGuardar;
     private JButton btnBuscar;
     private JButton btnAñadir;
     private JButton btnLimpiar;
     private JComboBox cbxCantidad;
+    private DefaultTableModel modelo;
 
     public CarritoAñadirView() {
         super("Carrito de Compras", true, true, false, true);
         setContentPane(panelPrincipal);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(500, 500);
+        modelo = new DefaultTableModel();
+        Object[] columnas = {"Id", "Nombre", "Precio","cantidad","Subtotal"};
+        modelo.setColumnIdentifiers(columnas);
+        tblItems.setModel(modelo);
         cargarDatos();
     }
 
@@ -123,13 +133,14 @@ public class CarritoAñadirView extends JInternalFrame {
     }
 
     public JTable getTable1() {
-        return table1;
+        return tblItems;
     }
 
     public void setTable1(JTable table1) {
-        this.table1 = table1;
+        this.tblItems = table1;
     }
     public void mostrarMensaje(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje);
     }
+
 }

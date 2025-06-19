@@ -1,7 +1,10 @@
 package ec.edu.ups.vista;
 
+import ec.edu.ups.controlador.CarritoController;
 import ec.edu.ups.controlador.ProductoController;
+import ec.edu.ups.dao.CarritoDAO;
 import ec.edu.ups.dao.ProductoDAO;
+import ec.edu.ups.dao.impl.CarritoDAOMemoria;
 import ec.edu.ups.dao.impl.ProductoDAOMemoria;
 
 import java.awt.event.ActionEvent;
@@ -13,12 +16,14 @@ public class Main {
             public void run() {
 
                 ProductoDAO productoDAO = new ProductoDAOMemoria();
+                CarritoDAO carritoDAO = new CarritoDAOMemoria();
                 ProductoModificarView productoModificarView = new ProductoModificarView();
                 ProductoEliminarView productoEliminarView = new ProductoEliminarView();
                 CarritoAñadirView carritoAñadirView = new CarritoAñadirView();
                 PrincipalView principalView = new PrincipalView();
                 ProductoListaView productoListaView = new ProductoListaView();
                 ProductoAnadirView productoAnadirView = new ProductoAnadirView();
+                CarritoController carritoController = new CarritoController(carritoDAO, productoDAO, carritoAñadirView);
                 ProductoController productoController = new ProductoController(productoDAO, carritoAñadirView, productoModificarView, productoEliminarView, productoListaView, productoAnadirView);
 
                 principalView.getMenuItemAñadirCarrito().addActionListener(new ActionListener() {

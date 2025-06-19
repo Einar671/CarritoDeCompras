@@ -79,17 +79,18 @@ public class ProductoController {
                 buscarProducto();
             }
         });
-
-    }
-
-    private void configurarEliminarEventos() {
-
         productoListaView.getBtnListar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 mostrarProductos();
             }
         });
+
+    }
+
+    private void configurarEliminarEventos() {
+
+
 
         productoEliminarView.getBtnEliminar().addActionListener(new ActionListener() {
             @Override
