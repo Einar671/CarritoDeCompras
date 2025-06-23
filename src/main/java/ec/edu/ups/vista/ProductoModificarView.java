@@ -5,14 +5,15 @@ import javax.swing.*;
 public class ProductoModificarView extends JInternalFrame{
     private JPanel panelPrincipal;
     private JTextField txtCodigo;
-    private JButton buscarButton;
+    private JButton btnBuscar;
     private JLabel lblCodigo;
     private JTextField txtModificar;
     private JLabel lblNombre;
     private JLabel lblPrecio;
-    private JComboBox cbxOpciones;
-    private JLabel lblMensaje;
     private JButton btnModificar;
+    private JTextField txtNombre;
+    private JTextField txtPrecio;
+
 
     public ProductoModificarView() {
         setContentPane(panelPrincipal);
@@ -27,73 +28,27 @@ public class ProductoModificarView extends JInternalFrame{
         return txtCodigo;
     }
 
-    public void setTxtCodigo(JTextField txtCodigo) {
-        this.txtCodigo = txtCodigo;
-    }
-
-    public JButton getBuscarButton() {
-        return buscarButton;
-    }
-
-    public void setBuscarButton(JButton buscarButton) {
-        this.buscarButton = buscarButton;
-    }
-
-    public JLabel getLblCodigo() {
-        return lblCodigo;
-    }
-
-    public void setLblCodigo(JLabel lblCodigo) {
-        this.lblCodigo = lblCodigo;
+    public JButton getBtnBuscar() {
+        return btnBuscar;
     }
 
     public JTextField getTxtModificar() {
         return txtModificar;
     }
 
-    public void setTxtModificar(JTextField txtModificar) {
-        this.txtModificar = txtModificar;
-    }
-
-    public JLabel getLblNombre() {
-        return lblNombre;
-    }
-
-    public void setLblNombre(JLabel lblNombre) {
-        this.lblNombre = lblNombre;
-    }
-
-    public JLabel getLblPrecio() {
-        return lblPrecio;
-    }
-
-    public void setLblPrecio(JLabel lblPrecio) {
-        this.lblPrecio = lblPrecio;
-    }
-
-    public JComboBox getCbxOpciones() {
-        return cbxOpciones;
-    }
-
-    public void setCbxOpciones(JComboBox cbxOpciones) {
-        this.cbxOpciones = cbxOpciones;
-    }
-
-    public JLabel getLblMensaje() {
-        return lblMensaje;
-    }
-
     public JButton getBtnModificar() {
         return btnModificar;
     }
 
-    public void setBtnModificar(JButton btnModificar) {
-        this.btnModificar = btnModificar;
+    public JTextField getTxtNombre() {
+        return txtNombre;
     }
 
-    public void setLblMensaje(JLabel lblMensaje) {
-        this.lblMensaje = lblMensaje;
+    public JTextField getTxtPrecio() {
+        return txtPrecio;
     }
+
+
 
     public void mostrarMensaje(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje);

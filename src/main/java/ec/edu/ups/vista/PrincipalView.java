@@ -95,4 +95,15 @@ public class PrincipalView extends JFrame {
     public void setMenuItemCargarProducto(JMenuItem menuItemCargarProducto) {
         this.menuItemCargarProducto = menuItemCargarProducto;
     }
+
+    public void mostrarMensaje(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje);
+    }
+
+    public void desactivar() {
+        getMenuItemEliminarProducto().setEnabled(false);
+        getMenuItemModificarProducto().setEnabled(false);
+        getMenuItemActualizarProducto().setEnabled(false);
+        getMenuItemCargarProducto().setEnabled(false);
+    }
 }

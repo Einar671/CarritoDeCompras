@@ -4,8 +4,10 @@ import ec.edu.ups.dao.ProductoDAO;
 import ec.edu.ups.modelo.Producto;
 import ec.edu.ups.vista.*;
 
+import javax.swing.*;
 import java.awt.event.*;
 import java.util.List;
+import java.util.Objects;
 
 public class ProductoController {
 
@@ -109,89 +111,49 @@ public class ProductoController {
         });
     }
 
-        private void configurarModificarEventos(){
+        private void configurarModificarEventos() {
 
-            productoModificarView.getBuscarButton().addActionListener(new ActionListener() {
+            productoModificarView.getBtnBuscar().addActionListener(new ActionListener() {
+
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     int codigo  = Integer.parseInt(productoModificarView.getTxtCodigo().getText());
                     Producto productoEncontrado = productoDAO.buscarPorCodigo(codigo);
-                    if (productoEncontrado == null) {
+                    if(productoEncontrado == null) {
                         productoModificarView.mostrarMensaje("El producto no existe");
-                    }else {
-                        productoModificarView.getLblCodigo().setText(String.valueOf(productoEncontrado.getCodigo()));
-                        productoModificarView.getLblNombre().setText(productoEncontrado.getNombre());
-                        productoModificarView.getLblPrecio().setText(String.valueOf(productoEncontrado.getPrecio()));
-                        productoModificarView.getCbxOpciones().setEnabled(true);
-                        productoModificarView.getTxtModificar().setEditable(true);
-                        productoModificarView.getCbxOpciones().addItemListener(new ItemListener() {
-
-                            @Override
-                            public void itemStateChanged(ItemEvent e) {
-                                String tipo = String.valueOf(productoModificarView.getCbxOpciones().getSelectedItem());
-                                switch (tipo) {
-                                    case "Modificar Nombre":
-                                        productoModificarView.getLblMensaje().setText("Nuevo Nombre");
-                                        break;
-                                    case "Modificar Codigo":
-                                        productoModificarView.getLblMensaje().setText("Nuevo Codigo");
-                                        break;
-                                    case "Modificar Precio":
-
-                                        productoModificarView.getLblMensaje().setText("Nuevo Precio");
-                                        break;
-                                    default:
-                                        productoModificarView.mostrarMensaje("Ingrese el tipo de modificacion");
-                                }
-                            }
-                        });
+                    }
+                    else {
+                        productoModificarView.getTxtCodigo().setText(String.valueOf(productoEncontrado.getCodigo()));
+                        productoModificarView.getTxtNombre().setText(productoEncontrado.getNombre());
+                        productoModificarView.getTxtPrecio().setText(String.valueOf(productoEncontrado.getPrecio()));
+                        productoModificarView.getBtnModificar().setEnabled(true);
+                        productoModificarView.getBtnBuscar().setEnabled(false);
                         productoModificarView.getBtnModificar().addActionListener(new ActionListener() {
+
                             @Override
                             public void actionPerformed(ActionEvent e) {
-                                String tipo = String.valueOf(productoModificarView.getCbxOpciones().getSelectedItem());
-                                Producto productonuevo = new Producto();
-                                switch (tipo) {
-                                    case "Modificar Nombre":
-                                        productoDAO.eliminar(codigo);
-                                        productonuevo.setCodigo(productoEncontrado.getCodigo());
-                                        productonuevo.setNombre(productoModificarView.getTxtModificar().getText());
-                                        productonuevo.setPrecio(productoEncontrado.getPrecio());
-                                        productoDAO.crear(productonuevo);
-                                        break;
-                                    case "Modificar Codigo":
-                                        productoDAO.eliminar(codigo);
-                                        productonuevo.setCodigo(Integer.parseInt(productoModificarView.getTxtModificar().getText()));
-                                        productonuevo.setNombre(productoEncontrado.getNombre());
-                                        productonuevo.setPrecio(productoEncontrado.getPrecio());
-                                        productoDAO.crear(productonuevo);
-                                        break;
-                                    case "Modificar Precio":
-                                        productoDAO.eliminar(codigo);
-                                        productonuevo.setCodigo(productoEncontrado.getCodigo());
-                                        productonuevo.setNombre(productoEncontrado.getNombre());
-                                        productonuevo.setPrecio(Double.parseDouble(productoModificarView.getTxtModificar().getText()));
-                                        productoDAO.crear(productonuevo);
-                                        break;
-                                    default:
-                                        productoModificarView.mostrarMensaje("Ingrese el tipo de modificacion");
+                                int respueta = JOptionPane.showConfirmDialog(null,"¿Desea modificar este producto?","Confirmar",JOptionPane.YES_NO_OPTION);
+                                if (respueta == JOptionPane.YES_OPTION) {
+                                    productoDAO.eliminar(codigo);
+                                    productoDAO.crear(new Producto(Integer.parseInt(productoModificarView.getTxtCodigo().getText()),productoModificarView.getTxtNombre().getText(),Double.parseDouble(productoModificarView.getTxtPrecio().getText())));
+                                    productoModificarView.mostrarMensaje("Producto modificado correctamente");
+                                    productoModificarView.getBtnModificar().setEnabled(false);
+                                    productoModificarView.getBtnBuscar().setEnabled(true);
+                                    productoModificarView.getTxtPrecio().setText("");
+                                    productoModificarView.getTxtNombre().setText("");
+                                    productoModificarView.getTxtCodigo().setText("");
+                                    productoModificarView.getTxtPrecio().setEnabled(false);
+                                    productoModificarView.getTxtNombre().setEnabled(false);
                                 }
-                                productoModificarView.mostrarMensaje("Modificado correctamente"+productonuevo);
-                                productoModificarView.getTxtModificar().setText("");
-                                productoModificarView.getCbxOpciones().setEnabled(false);
-                                productoModificarView.getLblCodigo().setText("");
-                                productoModificarView.getLblNombre().setText("");
-                                productoModificarView.getLblPrecio().setText("");
-                                productoModificarView.getTxtCodigo().setText("");
                             }
                         });
-
                     }
                 }
             });
 
 
+        }
 
-    }
 
     private void configurarCarritoEventos() {
         carritoAñadirView.getBtnBuscar().addActionListener(new ActionListener() {
@@ -223,8 +185,11 @@ public class ProductoController {
         productoAnadirView.mostrarProductos(productoDAO.listarTodos());
     }
 
+
+
     private void buscarProductoPorCodigo(){
         int codigo = Integer.parseInt(carritoAñadirView.getTxtCodigo().getText());
+        productoModificarView.getTxtCodigo().setEnabled(false);
         Producto producto = productoDAO.buscarPorCodigo(codigo);
 
         if (producto == null){
@@ -237,8 +202,5 @@ public class ProductoController {
         }
     }
 
-    private void mostrarProductoEnCarrito(Producto producto){
-
-    }
 
 }

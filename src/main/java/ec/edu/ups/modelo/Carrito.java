@@ -16,6 +16,7 @@ public class Carrito {
     private double subtotal=0;
     private double total;
     private double IVA;
+    private Usuario usuarioLogueado;
 
     @Override
     public String toString() {
@@ -84,5 +85,9 @@ public class Carrito {
 
     public List<ItemCarrito> obtenerItems() {
         return items;
+    }
+
+    public void setUsuario(Usuario usuarioLogueado) {
+        this.usuarioLogueado=usuarioLogueado;
     }
 }
