@@ -34,7 +34,7 @@ public class UsuarioDAOMemoria implements UsuarioDAO {
     }
 
     @Override
-    public Usuario bucarPorUsuario(String username) {
+    public Usuario buscarPorUsuario(String username) {
         for(Usuario usuario : usuarios) {
             if(usuario.getUsername().equals(username)) {
                 return usuario;
@@ -43,6 +43,7 @@ public class UsuarioDAOMemoria implements UsuarioDAO {
         return null;
     }
 
+    // ... resto de los métodos sin cambios ...
     @Override
     public void eliminar(String username) {
         Iterator<Usuario> iterator = usuarios.iterator();
@@ -83,7 +84,7 @@ public class UsuarioDAOMemoria implements UsuarioDAO {
                 usuariosRol.add(usuario);
             }
         }
-        return List.of();
+        return usuariosRol;
     }
 
     @Override

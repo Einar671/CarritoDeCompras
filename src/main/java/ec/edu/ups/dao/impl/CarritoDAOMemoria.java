@@ -10,6 +10,9 @@ import java.util.List;
 public class CarritoDAOMemoria implements CarritoDAO {
     private List<Carrito> listaCarritos;
 
+    public CarritoDAOMemoria() {
+        this.listaCarritos = new ArrayList<>(); // Inicializamos la lista aquí
+    }
 
     @Override
     public void crear(Carrito carrito) {

@@ -132,7 +132,7 @@ public class CarritoAñadirView extends JInternalFrame {
         this.cbxCantidad = cbxCantidad;
     }
 
-    public JTable getTable1() {
+    public JTable getTblItems() {
         return tblItems;
     }
 

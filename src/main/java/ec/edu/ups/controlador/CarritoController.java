@@ -7,6 +7,7 @@ import ec.edu.ups.modelo.ItemCarrito;
 import ec.edu.ups.modelo.Producto;
 import ec.edu.ups.modelo.Usuario; // Importar Usuario
 import ec.edu.ups.vista.CarritoAñadirView;
+import ec.edu.ups.vista.CarritoListarView;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -20,12 +21,14 @@ public class CarritoController {
     private final CarritoDAO carritoDAO;
     private final ProductoDAO productoDAO;
     private final CarritoAñadirView carritoAñadirView;
-    private final Usuario usuarioLogueado; // Guardar el usuario que usa el carrito
+    private final CarritoListarView carritoListarView;
+    private final Usuario usuarioLogueado;
 
-    public CarritoController(CarritoDAO carritoDAO, ProductoDAO productoDAO, CarritoAñadirView carritoAñadirView, Usuario usuarioLogueado) {
+    public CarritoController(CarritoDAO carritoDAO, ProductoDAO productoDAO, CarritoAñadirView carritoAñadirView, CarritoListarView carritoListarView, Usuario usuarioLogueado) {
         this.carritoDAO = carritoDAO;
         this.productoDAO = productoDAO;
         this.carritoAñadirView = carritoAñadirView;
+        this.carritoListarView = carritoListarView;
         this.usuarioLogueado = usuarioLogueado;
         iniciarNuevoCarrito();
         configurarEventosEnVistas();
@@ -33,16 +36,40 @@ public class CarritoController {
 
     private void iniciarNuevoCarrito() {
         this.carrito = new Carrito();
-        this.carrito.setUsuario(this.usuarioLogueado); // Asociar el usuario al carrito
+        this.carrito.setUsuario(this.usuarioLogueado);
     }
 
     public void configurarEventosEnVistas() {
         carritoAñadirView.getBtnAñadir().addActionListener(e -> añadirProducto());
         carritoAñadirView.getBtnGuardar().addActionListener(e -> guardarCarrito());
-
-
         carritoAñadirView.getBtnLimpiar().addActionListener(e -> limpiarCarrito());
+        carritoListarView.getListarButton().addActionListener(e -> listarTodosLosCarritos());
+        carritoListarView.getBtBuscar().addActionListener(e -> buscarYMostrarDetalles());
 
+    }
+
+    private void buscarYMostrarDetalles() {
+        String codigoStr = carritoListarView.getTxtCodigo().getText().trim();
+        if (codigoStr.isEmpty()) {
+            carritoListarView.mostrarMensaje("Por favor, ingrese un código de carrito para buscar.");
+            return;
+        }
+            int codigo = Integer.parseInt(codigoStr);
+            Carrito carritoEncontrado = carritoDAO.buscarPorCodigo(codigo);
+
+            if (carritoEncontrado != null) {
+                carritoListarView.mostrarDetallesCarrito(carritoEncontrado);
+            } else {
+                carritoListarView.mostrarMensaje("No se encontró ningún carrito con el código: " + codigo);
+            }
+    }
+
+    private void listarTodosLosCarritos() {
+        List<Carrito> carritos = carritoDAO.listarTodos();
+        if (carritos.isEmpty()) {
+            carritoListarView.mostrarMensaje("No hay carritos registrados.");
+        }
+        carritoListarView.mostrarCarritos(carritos);
     }
 
     private void guardarCarrito() {
@@ -89,7 +116,7 @@ public class CarritoController {
 
     private void cargarProductosEnTabla() {
         List<ItemCarrito> items = carrito.obtenerItems();
-        DefaultTableModel modelo = (DefaultTableModel) carritoAñadirView.getTable1().getModel();
+        DefaultTableModel modelo = (DefaultTableModel) carritoAñadirView.getTblItems().getModel();
         modelo.setRowCount(0);
         for (ItemCarrito item : items) {
             modelo.addRow(new Object[]{

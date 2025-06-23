@@ -10,7 +10,7 @@ public interface UsuarioDAO {
 
     void crear(Usuario usuario);
 
-    Usuario bucarPorUsuario(String username);
+    Usuario buscarPorUsuario(String username);
 
     void eliminar(String username);
 

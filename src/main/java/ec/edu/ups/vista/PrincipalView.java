@@ -8,12 +8,16 @@ public class PrincipalView extends JFrame {
     private JMenuBar menubar;
     private JMenu menuCarrito;
     private JMenu menuProducto;
+    private JMenu menuUsuario;
     private JMenuItem menuItemEliminarProducto;
     private JMenuItem menuItemModificarProducto;
     private JMenuItem menuItemActualizarProducto;
     private JMenuItem menuItemCargarProducto;
     private JDesktopPane desktop;
     private JMenuItem menuItemAñadirCarrito;
+    private JMenuItem menuItemCerrarSesión;
+    private JMenuItem menuItemListarCarritos;
+
 
     public JDesktopPane getDesktop() {
         return desktop;
@@ -28,14 +32,20 @@ public class PrincipalView extends JFrame {
         menubar = new JMenuBar();
         menuCarrito = new JMenu("Carrito");
         menuProducto = new JMenu("Producto");
+        menuUsuario = new JMenu("Usuario");
         menuItemEliminarProducto = new JMenuItem("Eliminar");
         menuItemModificarProducto = new JMenuItem("Modificar");
         menuItemActualizarProducto = new JMenuItem("Actualizar");
         menuItemCargarProducto = new JMenuItem("Cargar");
         menuItemAñadirCarrito = new JMenuItem("Carrito Añadir");
+        menuItemCerrarSesión = new JMenuItem("Cerrar Sesión");
+        menuItemListarCarritos = new JMenuItem("Listar Carritos");
 
+        menubar.add(menuUsuario);
+        menuUsuario.add(menuItemCerrarSesión);
         menubar.add(menuCarrito);
         menuCarrito.add(menuItemAñadirCarrito);
+        menuCarrito.add(menuItemListarCarritos);
         menubar.add(menuProducto);
         menuProducto.add(menuItemEliminarProducto);
         menuProducto.add(menuItemModificarProducto);
@@ -100,7 +110,24 @@ public class PrincipalView extends JFrame {
         JOptionPane.showMessageDialog(this, mensaje);
     }
 
+    public JMenuItem getMenuItemCerrarSesión() {
+        return menuItemCerrarSesión;
+    }
+
+    public void setMenuItemCerrarSesión(JMenuItem menuItemCerrarSesión) {
+        this.menuItemCerrarSesión = menuItemCerrarSesión;
+    }
+
+    public JMenuItem getMenuItemListarCarritos() {
+        return menuItemListarCarritos;
+    }
+
+    public void setMenuItemListarCarritos(JMenuItem menuItemListarCarritos) {
+        this.menuItemListarCarritos = menuItemListarCarritos;
+    }
+
     public void desactivar() {
+        getMenuItemListarCarritos().setEnabled(false);
         getMenuItemEliminarProducto().setEnabled(false);
         getMenuItemModificarProducto().setEnabled(false);
         getMenuItemActualizarProducto().setEnabled(false);

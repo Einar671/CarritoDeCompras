@@ -1,48 +1,42 @@
 package ec.edu.ups.modelo;
 
-
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
-import java.util.Iterator;
-
 import java.util.List;
 
 public class Carrito {
 
     private int codigo;
-    private static int contador =1;
+    private static int contador = 1;
     private GregorianCalendar fecha;
     private final List<ItemCarrito> items;
-    private double subtotal=0;
-    private double total;
-    private double IVA;
-    private Usuario usuarioLogueado;
+    private Usuario usuario;
 
     @Override
     public String toString() {
         return "Carrito{" +
                 "codigo=" + codigo +
-                ", fecha=" + fecha +
-                ", items=" + items +
-                ", subtotal=" + subtotal +
-                ", total=" + total +
-                ", IVA=" + IVA +
+                ", fecha=" + (fecha != null ? fecha.getTime() : "N/A") + // Mejorar la visualización de la fecha
+                ", items=" + items.size() + " items" + // Mostrar solo el número de ítems para evitar logs muy largos
+                ", subtotal=" + String.format("%.2f", calcularSubtotal()) + // Calcular en el toString
+                ", total=" + String.format("%.2f", calcularTotal()) + // Calcular en el toString
+                ", IVA=" + String.format("%.2f", calcularIVA()) + // Calcular en el toString
+                ", usuario=" + (usuario != null ? usuario.getUsername() : "N/A") + // Incluir el usuario
                 '}';
     }
 
-    public Carrito(GregorianCalendar fecha, int codigo, double subtotal, double total, double IVA) {
-
+    public Carrito() {
         this.items = new ArrayList<>();
-        this.fecha = fecha;
         this.codigo = contador++;
-        this.subtotal = 0;
-        this.total = total;
-        this.IVA = 0.12;
+        this.fecha = new GregorianCalendar();
     }
 
-    public Carrito() {
-        items = new ArrayList<>();
-        codigo = contador++;
+
+    public Carrito(int codigo, GregorianCalendar fecha, Usuario usuario) {
+        this.items = new ArrayList<>();
+        this.codigo = codigo;
+        this.fecha = fecha;
+        this.usuario = usuario;
     }
 
     public int getCodigo() {
@@ -61,33 +55,59 @@ public class Carrito {
         this.fecha = fecha;
     }
 
-    public void agregarProducto(Producto producto, int cantidad){
+    public void agregarProducto(Producto producto, int cantidad) {
+        for (ItemCarrito item : items) {
+            if (item.getProducto().getCodigo() == producto.getCodigo()) {
+                item.setCantidad(item.getCantidad() + cantidad);
+                return; // Producto ya agregado, cantidad actualizada
+            }
+        }
         ItemCarrito item = new ItemCarrito(producto, cantidad);
         items.add(item);
-
     }
 
-    public double calcularSubtotal(){
-        for(ItemCarrito item : items){
-            subtotal += item.getSubtotal();
+    public void eliminarProducto(int codigoProducto) {
+        items.removeIf(item -> item.getProducto().getCodigo() == codigoProducto);
+    }
+
+    public void actualizarCantidadProducto(int codigoProducto, int nuevaCantidad) {
+        if (nuevaCantidad <= 0) {
+            eliminarProducto(codigoProducto);
+            return;
         }
-        return subtotal;
+        for (ItemCarrito item : items) {
+            if (item.getProducto().getCodigo() == codigoProducto) {
+                item.setCantidad(nuevaCantidad);
+                return;
+            }
+        }
+    }
 
+    public double calcularSubtotal() {
+        double currentSubtotal = 0;
+        for (ItemCarrito item : items) {
+            currentSubtotal += item.getSubtotal();
+        }
+        return currentSubtotal;
     }
-    public double calcularIVA(){
-        IVA = subtotal * 0.12;
-        return IVA;
+
+    public double calcularIVA() {
+        return calcularSubtotal() * 0.12;
     }
+
     public double calcularTotal() {
-        total = subtotal + IVA;
-        return total;
+        return calcularSubtotal() + calcularIVA();
     }
 
     public List<ItemCarrito> obtenerItems() {
-        return items;
+        return new ArrayList<>(items);
     }
 
-    public void setUsuario(Usuario usuarioLogueado) {
-        this.usuarioLogueado=usuarioLogueado;
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 }
