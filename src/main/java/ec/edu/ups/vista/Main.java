@@ -53,8 +53,10 @@ public class Main {
         CarritoAñadirView carritoAñadirView = new CarritoAñadirView();
         ProductoListaView productoListaView = new ProductoListaView();
         ProductoAnadirView productoAnadirView = new ProductoAnadirView();
+        CarritoModificarView carritoModificarView = new CarritoModificarView();
+        CarritoEliminarView carritoEliminarView = new CarritoEliminarView();
 
-        CarritoController carritoController = new CarritoController(carritoDAO, productoDAO, carritoAñadirView,carritoListarView, usuarioAutenticado);
+        CarritoController carritoController = new CarritoController(carritoDAO, productoDAO, carritoAñadirView,carritoListarView,carritoModificarView,carritoEliminarView,usuarioAutenticado);
         ProductoController productoController = new ProductoController(productoDAO, carritoAñadirView, productoModificarView, productoEliminarView, productoListaView, productoAnadirView);
 
         principalView.mostrarMensaje("Bienvenido al sistema, " + usuarioAutenticado.getUsername());
@@ -62,12 +64,15 @@ public class Main {
             principalView.desactivar();
         }
 
-        configurarMenu(principalView, carritoAñadirView, productoAnadirView, productoListaView, productoEliminarView, productoModificarView,carritoListarView);
+        configurarMenu(principalView, carritoAñadirView, productoAnadirView, productoListaView, productoEliminarView, productoModificarView,carritoListarView,carritoModificarView,carritoEliminarView);
 
         principalView.setVisible(true);
     }
 
-    private static void configurarMenu(PrincipalView principalView, CarritoAñadirView carritoAñadirView, ProductoAnadirView productoAnadirView, ProductoListaView productoListaView, ProductoEliminarView productoEliminarView, ProductoModificarView productoModificarView, CarritoListarView carritoListarView) {
+    private static void configurarMenu(PrincipalView principalView, CarritoAñadirView carritoAñadirView, ProductoAnadirView productoAnadirView,
+                                       ProductoListaView productoListaView, ProductoEliminarView productoEliminarView,
+                                       ProductoModificarView productoModificarView, CarritoListarView carritoListarView,
+                                       CarritoModificarView carritoModificarView,CarritoEliminarView carritoEliminarView) {
 
         principalView.getMenuItemCerrarSesión().addActionListener(e -> {
             principalView.dispose();
@@ -119,6 +124,20 @@ public class Main {
                carritoListarView.setVisible(true);
            }
            carritoListarView.toFront();
+        });
+        principalView.getMenuItemModificarCarrito().addActionListener(e -> {
+           if(!carritoModificarView.isVisible()){
+               principalView.getDesktop().add(carritoModificarView);
+               carritoModificarView.setVisible(true);
+           }
+           carritoModificarView.toFront();
+        });
+        principalView.getMenuItemEliminarCarrito().addActionListener(e -> {
+            if(!carritoEliminarView.isVisible()){
+                principalView.getDesktop().add(carritoEliminarView);
+                carritoEliminarView.setVisible(true);
+            }
+            carritoEliminarView.toFront();
         });
     }
 }

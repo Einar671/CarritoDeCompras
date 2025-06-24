@@ -14,7 +14,57 @@ public class CarritoListarView extends JInternalFrame {
     private JButton btBuscar;
     private JTable tblCarritos;
     private JButton btnListar;
+    private JTable tblDetalles;
     private DefaultTableModel modelo;
+    private DefaultTableModel modeloDetalles;
+
+    public JPanel getPanelPrincipal() {
+        return panelPrincipal;
+    }
+
+    public void setPanelPrincipal(JPanel panelPrincipal) {
+        this.panelPrincipal = panelPrincipal;
+    }
+
+    public void setTxtCodigo(JTextField txtCodigo) {
+        this.txtCodigo = txtCodigo;
+    }
+
+    public void setBtBuscar(JButton btBuscar) {
+        this.btBuscar = btBuscar;
+    }
+
+    public JTable getTblCarritos() {
+        return tblCarritos;
+    }
+
+    public void setTblCarritos(JTable tblCarritos) {
+        this.tblCarritos = tblCarritos;
+    }
+
+    public JButton getBtnListar() {
+        return btnListar;
+    }
+
+    public void setBtnListar(JButton btnListar) {
+        this.btnListar = btnListar;
+    }
+
+    public JTable getTable1() {
+        return tblDetalles;
+    }
+
+    public void setTable1(JTable table1) {
+        this.tblDetalles = table1;
+    }
+
+    public DefaultTableModel getModelo() {
+        return modelo;
+    }
+
+    public void setModelo(DefaultTableModel modelo) {
+        this.modelo = modelo;
+    }
 
     public CarritoListarView() {
         super("[ADMIN] Listar Carrito de compras", true, true, false, true);
@@ -26,7 +76,13 @@ public class CarritoListarView extends JInternalFrame {
         Object[] columnas = {"Código Carrito", "Usuario", "Fecha", "Cantidad Items", "Subtotal", "IVA", "Total"};
         modelo.setColumnIdentifiers(columnas);
         tblCarritos.setModel(modelo);
+
+        modeloDetalles = new DefaultTableModel();
+        Object[] columnasDetalles = {"Cod. Producto", "Nombre", "Precio Unit.", "Cantidad", "Subtotal"};
+        modeloDetalles.setColumnIdentifiers(columnasDetalles);
+        tblDetalles.setModel(modeloDetalles);
     }
+
 
     public JTextField getTxtCodigo() {
         return txtCodigo;
@@ -58,32 +114,28 @@ public class CarritoListarView extends JInternalFrame {
 
 
     public void mostrarDetallesCarrito(Carrito carrito) {
-        if (carrito == null) {
-            mostrarMensaje("No se encontró el carrito para mostrar detalles.");
-            return;
-        }
+        limpiarTablaDetalles();
 
-        String detalles = "Detalles del Carrito Código: " + carrito.getCodigo() + "\n";
-        detalles += "Usuario: " + carrito.getUsuario().getUsername() + "\n";
-        detalles += "--------------------------------------------------\n";
-        detalles += "ITEMS DEL CARRITO:\n";
-
-        if (carrito.obtenerItems().isEmpty()) {
-            detalles += " (El carrito no tiene ítems)\n";
-        } else {
-            for (ItemCarrito item : carrito.obtenerItems()) {
-                detalles += "- Producto: " + item.getProducto().getNombre() + "\n";
-                detalles += "  Cantidad: " + item.getCantidad() + "\n";
-                detalles += "  Precio Unit.: $" + String.format("%.2f", item.getProducto().getPrecio()) + "\n";
-                detalles += "  Subtotal Ítem: $" + String.format("%.2f", item.getSubtotal()) + "\n\n";
+        if (carrito != null) {
+            List<ItemCarrito> items = carrito.obtenerItems();
+            for (ItemCarrito item : items) {
+                Object[] fila = {
+                        item.getProducto().getCodigo(),
+                        item.getProducto().getNombre(),
+                        item.getProducto().getPrecio(),
+                        item.getCantidad(),
+                        item.getSubtotal()
+                };
+                modeloDetalles.addRow(fila);
             }
         }
-
-        detalles += "--------------------------------------------------\n";
-        detalles += "Total Carrito: $" + String.format("%.2f", carrito.calcularTotal()) + "\n";
-
-        JOptionPane.showMessageDialog(this, detalles, "Detalles del Carrito", JOptionPane.INFORMATION_MESSAGE);
     }
+
+
+    public void limpiarTablaDetalles() {
+        modeloDetalles.setRowCount(0);
+    }
+
 
     public void mostrarMensaje(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje, "Información", JOptionPane.INFORMATION_MESSAGE);

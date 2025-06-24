@@ -16,12 +16,12 @@ public class Carrito {
     public String toString() {
         return "Carrito{" +
                 "codigo=" + codigo +
-                ", fecha=" + (fecha != null ? fecha.getTime() : "N/A") + // Mejorar la visualización de la fecha
-                ", items=" + items.size() + " items" + // Mostrar solo el número de ítems para evitar logs muy largos
-                ", subtotal=" + String.format("%.2f", calcularSubtotal()) + // Calcular en el toString
-                ", total=" + String.format("%.2f", calcularTotal()) + // Calcular en el toString
-                ", IVA=" + String.format("%.2f", calcularIVA()) + // Calcular en el toString
-                ", usuario=" + (usuario != null ? usuario.getUsername() : "N/A") + // Incluir el usuario
+                ", fecha=" + (fecha != null ? fecha.getTime() : "N/A") +
+                ", items=" + items.size() + " items" +
+                ", subtotal=" + String.format("%.2f", calcularSubtotal()) +
+                ", total=" + String.format("%.2f", calcularTotal()) +
+                ", IVA=" + String.format("%.2f", calcularIVA()) +
+                ", usuario=" + (usuario != null ? usuario.getUsername() : "N/A") +
                 '}';
     }
 

@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="ec.edu.ups.vista.CarritoEliminarView">
-  <grid id="27dc6" binding="panelPrincipal" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="ec.edu.ups.vista.CarritoModificarView">
+  <grid id="27dc6" binding="panelPrincipal" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
       <xy x="20" y="20" width="500" height="400"/>
     </constraints>
     <properties/>
-    <border type="none"/>
+    <border type="none" title="Modificar Carrito" title-justification="2"/>
     <children>
-      <grid id="c3539" layout-manager="GridLayoutManager" row-count="5" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="80986" layout-manager="GridLayoutManager" row-count="4" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties/>
-        <border type="none"/>
+        <border type="line">
+          <color color="-16777216"/>
+        </border>
         <children>
-          <component id="634cc" class="javax.swing.JLabel" binding="lblCodigo">
+          <component id="71f4a" class="javax.swing.JLabel" binding="lblCodigo">
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -24,7 +26,7 @@
               <text value="Label"/>
             </properties>
           </component>
-          <component id="8e458" class="javax.swing.JTextField" binding="txtCodigo">
+          <component id="6d66e" class="javax.swing.JTextField" binding="txtCodigo">
             <constraints>
               <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
@@ -32,7 +34,7 @@
             </constraints>
             <properties/>
           </component>
-          <component id="dab9b" class="javax.swing.JButton" binding="btnBuscar">
+          <component id="8ab6d" class="javax.swing.JButton" binding="btnBuscar">
             <constraints>
               <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -40,7 +42,7 @@
               <text value="Button"/>
             </properties>
           </component>
-          <component id="12c45" class="javax.swing.JLabel" binding="lblUsuario">
+          <component id="961d0" class="javax.swing.JLabel" binding="lblUsuario">
             <constraints>
               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -48,7 +50,7 @@
               <text value="Label"/>
             </properties>
           </component>
-          <component id="557b5" class="javax.swing.JLabel" binding="lblFecha">
+          <component id="2f77f" class="javax.swing.JLabel" binding="lblFecha">
             <constraints>
               <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -56,7 +58,7 @@
               <text value="Label"/>
             </properties>
           </component>
-          <component id="f274b" class="javax.swing.JLabel" binding="lblItems">
+          <component id="35b7b" class="javax.swing.JLabel" binding="lblItems">
             <constraints>
               <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -64,20 +66,7 @@
               <text value="Label"/>
             </properties>
           </component>
-          <scrollpane id="834e">
-            <constraints>
-              <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties/>
-            <border type="none"/>
-            <children>
-              <component id="ed84a" class="javax.swing.JTable" binding="tblItems">
-                <constraints/>
-                <properties/>
-              </component>
-            </children>
-          </scrollpane>
-          <component id="8f900" class="javax.swing.JTextField" binding="txtUsuario">
+          <component id="23846" class="javax.swing.JTextField" binding="txtUsuario">
             <constraints>
               <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
@@ -85,7 +74,7 @@
             </constraints>
             <properties/>
           </component>
-          <component id="36ba2" class="javax.swing.JTextField" binding="txtFecha">
+          <component id="9029a" class="javax.swing.JTextField" binding="txtFecha">
             <constraints>
               <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
@@ -93,16 +82,29 @@
             </constraints>
             <properties/>
           </component>
-          <component id="2a3b6" class="javax.swing.JButton" binding="btnEliminar">
+          <scrollpane id="5a460">
             <constraints>
-              <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
             </constraints>
-            <properties>
-              <text value="Button"/>
-            </properties>
-          </component>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="1905" class="javax.swing.JTable" binding="tblItems">
+                <constraints/>
+                <properties/>
+              </component>
+            </children>
+          </scrollpane>
         </children>
       </grid>
+      <component id="347a4" class="javax.swing.JButton" binding="btnModificar">
+        <constraints>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Button"/>
+        </properties>
+      </component>
     </children>
   </grid>
 </form>

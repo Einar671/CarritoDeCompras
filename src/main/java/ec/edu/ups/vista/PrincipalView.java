@@ -175,6 +175,70 @@ public class PrincipalView extends JFrame {
         this.menuUsuario = menuUsuario;
     }
 
+    public JMenuBar getMenubar() {
+        return menubar;
+    }
+
+    public void setMenubar(JMenuBar menubar) {
+        this.menubar = menubar;
+    }
+
+    public JMenu getMenuAdministrador() {
+        return menuAdministrador;
+    }
+
+    public void setMenuAdministrador(JMenu menuAdministrador) {
+        this.menuAdministrador = menuAdministrador;
+    }
+
+    public JMenuItem getMenuItemEliminarCarrito() {
+        return menuItemEliminarCarrito;
+    }
+
+    public void setMenuItemEliminarCarrito(JMenuItem menuItemEliminarCarrito) {
+        this.menuItemEliminarCarrito = menuItemEliminarCarrito;
+    }
+
+    public JMenuItem getMenuItemModificarCarrito() {
+        return menuItemModificarCarrito;
+    }
+
+    public void setMenuItemModificarCarrito(JMenuItem menuItemModificarCarrito) {
+        this.menuItemModificarCarrito = menuItemModificarCarrito;
+    }
+
+    public JMenuItem getMenuItemCrearUsuario() {
+        return menuItemCrearUsuario;
+    }
+
+    public void setMenuItemCrearUsuario(JMenuItem menuItemCrearUsuario) {
+        this.menuItemCrearUsuario = menuItemCrearUsuario;
+    }
+
+    public JMenuItem getMenuItemEliminarUsuario() {
+        return menuItemEliminarUsuario;
+    }
+
+    public void setMenuItemEliminarUsuario(JMenuItem menuItemEliminarUsuario) {
+        this.menuItemEliminarUsuario = menuItemEliminarUsuario;
+    }
+
+    public JMenuItem getMenuItemListarUsuarios() {
+        return menuItemListarUsuarios;
+    }
+
+    public void setMenuItemListarUsuarios(JMenuItem menuItemListarUsuarios) {
+        this.menuItemListarUsuarios = menuItemListarUsuarios;
+    }
+
+    public JMenuItem getMenuItemModificarUsuario() {
+        return menuItemModificarUsuario;
+    }
+
+    public void setMenuItemModificarUsuario(JMenuItem menuItemModificarUsuario) {
+        this.menuItemModificarUsuario = menuItemModificarUsuario;
+    }
+
     public void desactivar() {
         getMenuProducto().setVisible(false);
         getMenuItemListarCarritos().setEnabled(false);
