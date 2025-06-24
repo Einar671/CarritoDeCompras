@@ -118,6 +118,7 @@ public class Main {
                principalView.getDesktop().add(carritoListarView);
                carritoListarView.setVisible(true);
            }
+           carritoListarView.toFront();
         });
     }
 }

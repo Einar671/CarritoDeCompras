@@ -9,14 +9,23 @@ public class PrincipalView extends JFrame {
     private JMenu menuCarrito;
     private JMenu menuProducto;
     private JMenu menuUsuario;
+    private JMenu menuAdministrador;
     private JMenuItem menuItemEliminarProducto;
     private JMenuItem menuItemModificarProducto;
     private JMenuItem menuItemActualizarProducto;
     private JMenuItem menuItemCargarProducto;
     private JDesktopPane desktop;
     private JMenuItem menuItemAñadirCarrito;
-    private JMenuItem menuItemCerrarSesión;
     private JMenuItem menuItemListarCarritos;
+    private JMenuItem menuItemEliminarCarrito;
+    private JMenuItem menuItemModificarCarrito;
+    private JMenuItem menuItemCrearUsuario;
+    private JMenuItem menuItemEliminarUsuario;
+    private JMenuItem menuItemListarUsuarios;
+    private JMenuItem menuItemModificarUsuario;
+    private JMenuItem menuItemCerrarSesión;
+
+
 
 
     public JDesktopPane getDesktop() {
@@ -33,6 +42,8 @@ public class PrincipalView extends JFrame {
         menuCarrito = new JMenu("Carrito");
         menuProducto = new JMenu("Producto");
         menuUsuario = new JMenu("Usuario");
+        menuAdministrador = new JMenu("Administrador");
+
         menuItemEliminarProducto = new JMenuItem("Eliminar");
         menuItemModificarProducto = new JMenuItem("Modificar");
         menuItemActualizarProducto = new JMenuItem("Actualizar");
@@ -40,17 +51,31 @@ public class PrincipalView extends JFrame {
         menuItemAñadirCarrito = new JMenuItem("Carrito Añadir");
         menuItemCerrarSesión = new JMenuItem("Cerrar Sesión");
         menuItemListarCarritos = new JMenuItem("Listar Carritos");
+        menuItemEliminarCarrito = new JMenuItem("Eliminar Carrito");
+        menuItemModificarCarrito = new JMenuItem("Modificar Carrito");
+        menuItemCrearUsuario = new JMenuItem("Crear Usuario");
+        menuItemEliminarUsuario = new JMenuItem("Eliminar Usuario");
+        menuItemListarUsuarios = new JMenuItem("Listar Usuarios");
+        menuItemModificarUsuario = new JMenuItem("Modificar Usuario");
 
         menubar.add(menuUsuario);
         menuUsuario.add(menuItemCerrarSesión);
-        menubar.add(menuCarrito);
-        menuCarrito.add(menuItemAñadirCarrito);
-        menuCarrito.add(menuItemListarCarritos);
+        menubar.add(menuAdministrador);
+        menuAdministrador.add(menuItemCrearUsuario);
+        menuAdministrador.add(menuItemEliminarUsuario);
+        menuAdministrador.add(menuItemListarUsuarios);
+        menuAdministrador.add(menuItemModificarUsuario);
         menubar.add(menuProducto);
         menuProducto.add(menuItemEliminarProducto);
         menuProducto.add(menuItemModificarProducto);
         menuProducto.add(menuItemActualizarProducto);
         menuProducto.add(menuItemCargarProducto);
+        menubar.add(menuCarrito);
+        menuCarrito.add(menuItemAñadirCarrito);
+        menuCarrito.add(menuItemListarCarritos);
+        menuCarrito.add(menuItemEliminarCarrito);
+        menuCarrito.add(menuItemModificarCarrito);
+
 
 
 
@@ -126,7 +151,32 @@ public class PrincipalView extends JFrame {
         this.menuItemListarCarritos = menuItemListarCarritos;
     }
 
+    public JMenu getMenuCarrito() {
+        return menuCarrito;
+    }
+
+    public void setMenuCarrito(JMenu menuCarrito) {
+        this.menuCarrito = menuCarrito;
+    }
+
+    public JMenu getMenuProducto() {
+        return menuProducto;
+    }
+
+    public void setMenuProducto(JMenu menuProducto) {
+        this.menuProducto = menuProducto;
+    }
+
+    public JMenu getMenuUsuario() {
+        return menuUsuario;
+    }
+
+    public void setMenuUsuario(JMenu menuUsuario) {
+        this.menuUsuario = menuUsuario;
+    }
+
     public void desactivar() {
+        getMenuProducto().setVisible(false);
         getMenuItemListarCarritos().setEnabled(false);
         getMenuItemEliminarProducto().setEnabled(false);
         getMenuItemModificarProducto().setEnabled(false);
