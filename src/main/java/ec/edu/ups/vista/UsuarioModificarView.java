@@ -1,112 +1,72 @@
 package ec.edu.ups.vista;
 
+import ec.edu.ups.modelo.Rol; // Importar el enum
+
 import javax.swing.*;
 
 public class UsuarioModificarView extends JInternalFrame{
     private JPanel panelPrincipal;
     private JButton btnBuscar;
-    private JTextField txtBuscar;
-    private JTextField txtUsuario;
     private JTextField txtContraseña;
     private JButton btnModificar;
     private JLabel lblUsuario;
-    private JLabel lblUsuarioA;
     private JLabel lblContraseña;
     private JLabel lblRol;
-    private JComboBox cbxRoles;
+    private JComboBox<Rol> cbxRoles;
+    private JTextField txtUsuario;
 
     public UsuarioModificarView(){
-        super("",true,true,false,true);
+        super("Modificar Usuario",true,true,false,true);
         setContentPane(panelPrincipal);
         setSize(600,400);
 
+        lblUsuario.setText("Buscar Usuario:");
+        lblContraseña.setText("Contraseña:");
+        lblRol.setText("Rol:");
+        btnBuscar.setText("Buscar");
+        btnModificar.setText("Guardar Cambios");
+
+        cargarRoles();
+        limpiarCampos();
     }
 
-    public JPanel getPanelPrincipal() {
-        return panelPrincipal;
-    }
-
-    public void setPanelPrincipal(JPanel panelPrincipal) {
-        this.panelPrincipal = panelPrincipal;
-    }
-
-    public JButton getBtnBuscar() {
-        return btnBuscar;
-    }
-
-    public void setBtnBuscar(JButton btnBuscar) {
-        this.btnBuscar = btnBuscar;
-    }
-
-    public JTextField getTxtBuscar() {
-        return txtBuscar;
-    }
-
-    public void setTxtBuscar(JTextField txtBuscar) {
-        this.txtBuscar = txtBuscar;
+    private void cargarRoles() {
+        cbxRoles.removeAllItems();
+        for (Rol rol : Rol.values()) {
+            cbxRoles.addItem(rol);
+        }
     }
 
     public JTextField getTxtUsuario() {
         return txtUsuario;
     }
 
-    public void setTxtUsuario(JTextField txtUsuario) {
-        this.txtUsuario = txtUsuario;
-    }
-
-    public JTextField getTxtContraseña() {
-        return txtContraseña;
-    }
-
-    public void setTxtContraseña(JTextField txtContraseña) {
-        this.txtContraseña = txtContraseña;
-    }
-
-    public JButton getBtnModificar() {
-        return btnModificar;
-    }
-
-    public void setBtnModificar(JButton btnModificar) {
-        this.btnModificar = btnModificar;
-    }
-
-    public JLabel getLblUsuario() {
-        return lblUsuario;
-    }
-
-    public void setLblUsuario(JLabel lblUsuario) {
-        this.lblUsuario = lblUsuario;
-    }
-
-    public JLabel getLblUsuarioA() {
-        return lblUsuarioA;
-    }
-
-    public void setLblUsuarioA(JLabel lblUsuarioA) {
-        this.lblUsuarioA = lblUsuarioA;
-    }
-
-    public JLabel getLblContraseña() {
-        return lblContraseña;
-    }
-
-    public void setLblContraseña(JLabel lblContraseña) {
-        this.lblContraseña = lblContraseña;
-    }
-
-    public JLabel getLblRol() {
-        return lblRol;
-    }
-
-    public void setLblRol(JLabel lblRol) {
-        this.lblRol = lblRol;
-    }
-
-    public JComboBox getCbxRoles() {
+    public JComboBox<Rol> getCbxRoles() {
         return cbxRoles;
     }
 
-    public void setCbxRoles(JComboBox cbxRoles) {
-        this.cbxRoles = cbxRoles;
+    public void limpiarCampos() {
+        txtUsuario.setText("");
+        txtContraseña.setText("");
+        if (cbxRoles.getItemCount() > 0) {
+            cbxRoles.setSelectedIndex(0);
+        }
+        btnModificar.setEnabled(false);
+        txtContraseña.setEnabled(false);
+        cbxRoles.setEnabled(false);
+        txtUsuario.setEditable(true);
+        btnBuscar.setEnabled(true);
     }
+
+    public void mostrarMensaje(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje, "Información", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public JPanel getPanelPrincipal() { return panelPrincipal; }
+    public JButton getBtnBuscar() { return btnBuscar; }
+    public JTextField getTxtContraseña() { return txtContraseña; }
+    public JButton getBtnModificar() { return btnModificar; }
+    public JLabel getLblUsuario() { return lblUsuario; }
+    public JLabel getLblContraseña() { return lblContraseña; }
+    public JLabel getLblRol() { return lblRol; }
 }

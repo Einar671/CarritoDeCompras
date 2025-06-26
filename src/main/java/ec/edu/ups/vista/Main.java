@@ -12,40 +12,45 @@ import ec.edu.ups.dao.impl.UsuarioDAOMemoria;
 import ec.edu.ups.modelo.Rol;
 import ec.edu.ups.modelo.Usuario;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public class Main {
 
-    private static UsuarioDAO usuarioDAO = new UsuarioDAOMemoria();
-    private static ProductoDAO productoDAO = new ProductoDAOMemoria();
-    private static CarritoDAO carritoDAO = new CarritoDAOMemoria();
+    private static final UsuarioDAO usuarioDAO = new UsuarioDAOMemoria();
+    private static final ProductoDAO productoDAO = new ProductoDAOMemoria();
+    private static final CarritoDAO carritoDAO = new CarritoDAOMemoria();
 
     public static void main(String[] args) {
-        java.awt.EventQueue.invokeLater(() -> mostrarVentanaDeLogin());
+        java.awt.EventQueue.invokeLater(Main::mostrarVentanaDeLogin);
     }
 
     public static void mostrarVentanaDeLogin() {
-        LogInView logInView = new LogInView();
-        UsuarioController usuarioController = new UsuarioController(usuarioDAO, logInView);
+        LogInView loginView = new LogInView();
+        UsuarioCrearView usuarioCrearView = new UsuarioCrearView();
+        UsuarioModificarView usuarioModificarView = new UsuarioModificarView();
+        UsuarioEliminarView usuarioEliminarView = new UsuarioEliminarView();
+        UsuarioListarView usuarioListarView = new UsuarioListarView();
+        UsuarioModificarMisView usuarioModificarMisView = new UsuarioModificarMisView();
 
-        logInView.addWindowListener(new WindowAdapter() {
+        UsuarioController usuarioController = new UsuarioController(usuarioCrearView, usuarioDAO, loginView,usuarioModificarView,usuarioEliminarView,usuarioModificarMisView,usuarioListarView);
+
+        loginView.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
                 Usuario usuarioAutenticado = usuarioController.getUsuarioAutentificado();
                 if (usuarioAutenticado != null) {
-                    iniciarAplicacionPrincipal(usuarioAutenticado);
+                    iniciarAplicacionPrincipal(usuarioAutenticado, usuarioCrearView, usuarioModificarView,usuarioEliminarView,usuarioModificarMisView,usuarioListarView);
                 } else {
                     System.exit(0);
                 }
             }
         });
-        logInView.setVisible(true);
+
+        loginView.setVisible(true);
     }
 
-    public static void iniciarAplicacionPrincipal(Usuario usuarioAutenticado) {
+    public static void iniciarAplicacionPrincipal(Usuario usuarioAutenticado, UsuarioCrearView usuarioCrearView, UsuarioModificarView usuarioModificarView, UsuarioEliminarView usuarioEliminarView,UsuarioModificarMisView usuarioModificarMisView ,UsuarioListarView usuarioListarView) {
         PrincipalView principalView = new PrincipalView();
         ProductoModificarView productoModificarView = new ProductoModificarView();
         ProductoEliminarView productoEliminarView = new ProductoEliminarView();
@@ -55,8 +60,11 @@ public class Main {
         ProductoAnadirView productoAnadirView = new ProductoAnadirView();
         CarritoModificarView carritoModificarView = new CarritoModificarView();
         CarritoEliminarView carritoEliminarView = new CarritoEliminarView();
+        CarritoListarMisView carritoListarMisView = new CarritoListarMisView();
 
-        CarritoController carritoController = new CarritoController(carritoDAO, productoDAO, carritoAñadirView,carritoListarView,carritoModificarView,carritoEliminarView,usuarioAutenticado);
+
+
+        CarritoController carritoController = new CarritoController(carritoDAO, productoDAO, carritoAñadirView, carritoListarView, carritoModificarView,carritoEliminarView, carritoListarMisView,usuarioAutenticado);
         ProductoController productoController = new ProductoController(productoDAO, carritoAñadirView, productoModificarView, productoEliminarView, productoListaView, productoAnadirView);
 
         principalView.mostrarMensaje("Bienvenido al sistema, " + usuarioAutenticado.getUsername());
@@ -64,7 +72,9 @@ public class Main {
             principalView.desactivar();
         }
 
-        configurarMenu(principalView, carritoAñadirView, productoAnadirView, productoListaView, productoEliminarView, productoModificarView,carritoListarView,carritoModificarView,carritoEliminarView);
+        configurarMenu(principalView, carritoAñadirView, productoAnadirView, productoListaView, productoEliminarView,
+                productoModificarView, carritoListarView, carritoModificarView, carritoEliminarView,carritoListarMisView,
+                usuarioCrearView, usuarioModificarView,usuarioEliminarView,usuarioModificarMisView, usuarioListarView);
 
         principalView.setVisible(true);
     }
@@ -72,12 +82,14 @@ public class Main {
     private static void configurarMenu(PrincipalView principalView, CarritoAñadirView carritoAñadirView, ProductoAnadirView productoAnadirView,
                                        ProductoListaView productoListaView, ProductoEliminarView productoEliminarView,
                                        ProductoModificarView productoModificarView, CarritoListarView carritoListarView,
-                                       CarritoModificarView carritoModificarView,CarritoEliminarView carritoEliminarView) {
+                                       CarritoModificarView carritoModificarView, CarritoEliminarView carritoEliminarView,CarritoListarMisView carritoListarMisView,
+                                       UsuarioCrearView usuarioCrearView, UsuarioModificarView usuarioModificarView, UsuarioEliminarView usuarioEliminarView,UsuarioModificarMisView usuarioModificarMisView ,UsuarioListarView usuarioListarView) {
 
         principalView.getMenuItemCerrarSesión().addActionListener(e -> {
             principalView.dispose();
             mostrarVentanaDeLogin();
         });
+
 
         principalView.getMenuItemAñadirCarrito().addActionListener(e -> {
             if (!carritoAñadirView.isVisible()) {
@@ -85,6 +97,27 @@ public class Main {
                 carritoAñadirView.setVisible(true);
             }
             carritoAñadirView.toFront();
+        });
+        principalView.getMenuItemListarCarritos().addActionListener(e -> {
+            if (!carritoListarView.isVisible()) {
+                principalView.getDesktop().add(carritoListarView);
+                carritoListarView.setVisible(true);
+            }
+            carritoListarView.toFront();
+        });
+        principalView.getMenuItemModificarCarrito().addActionListener(e -> {
+            if (!carritoModificarView.isVisible()) {
+                principalView.getDesktop().add(carritoModificarView);
+                carritoModificarView.setVisible(true);
+            }
+            carritoModificarView.toFront();
+        });
+        principalView.getMenuItemEliminarCarrito().addActionListener(e -> {
+            if (!carritoEliminarView.isVisible()) {
+                principalView.getDesktop().add(carritoEliminarView);
+                carritoEliminarView.setVisible(true);
+            }
+            carritoEliminarView.toFront();
         });
 
         principalView.getMenuItemCargarProducto().addActionListener(e -> {
@@ -94,7 +127,6 @@ public class Main {
             }
             productoAnadirView.toFront();
         });
-
         principalView.getMenuItemActualizarProducto().addActionListener(e -> {
             if (!productoListaView.isVisible()) {
                 principalView.getDesktop().add(productoListaView);
@@ -102,7 +134,6 @@ public class Main {
             }
             productoListaView.toFront();
         });
-
         principalView.getMenuItemEliminarProducto().addActionListener(e -> {
             if (!productoEliminarView.isVisible()) {
                 principalView.getDesktop().add(productoEliminarView);
@@ -110,7 +141,6 @@ public class Main {
             }
             productoEliminarView.toFront();
         });
-
         principalView.getMenuItemModificarProducto().addActionListener(e -> {
             if (!productoModificarView.isVisible()) {
                 principalView.getDesktop().add(productoModificarView);
@@ -118,26 +148,53 @@ public class Main {
             }
             productoModificarView.toFront();
         });
-        principalView.getMenuItemListarCarritos().addActionListener(e -> {
-           if(!carritoListarView.isVisible()){
-               principalView.getDesktop().add(carritoListarView);
-               carritoListarView.setVisible(true);
-           }
-           carritoListarView.toFront();
-        });
-        principalView.getMenuItemModificarCarrito().addActionListener(e -> {
-           if(!carritoModificarView.isVisible()){
-               principalView.getDesktop().add(carritoModificarView);
-               carritoModificarView.setVisible(true);
-           }
-           carritoModificarView.toFront();
-        });
-        principalView.getMenuItemEliminarCarrito().addActionListener(e -> {
-            if(!carritoEliminarView.isVisible()){
-                principalView.getDesktop().add(carritoEliminarView);
-                carritoEliminarView.setVisible(true);
+
+
+        principalView.getMenuItemCrearUsuario().addActionListener(e -> {
+            if (!usuarioCrearView.isVisible()) {
+                principalView.getDesktop().add(usuarioCrearView);
+                usuarioCrearView.setVisible(true);
             }
-            carritoEliminarView.toFront();
+            usuarioCrearView.toFront();
+        });
+        principalView.getMenuItemModificarUsuario().addActionListener(e -> {
+            if (!usuarioModificarView.isVisible()) {
+                principalView.getDesktop().add(usuarioModificarView);
+                usuarioModificarView.setVisible(true);
+            }
+            usuarioModificarView.toFront();
+        });
+
+        principalView.getMenuItemEliminarUsuario().addActionListener(e->{
+            if(!usuarioEliminarView.isVisible()){
+                principalView.getDesktop().add(usuarioEliminarView);
+                usuarioEliminarView.setVisible(true);
+            }
+            usuarioEliminarView.toFront();
+        });
+
+        principalView.getMenuItemListarUsuarios().addActionListener(e->{
+            if(!usuarioListarView.isVisible()){
+                principalView.getDesktop().add(usuarioListarView);
+                usuarioListarView.setVisible(true);
+            }
+            usuarioListarView.toFront();
+        });
+
+        principalView.getMenuItemListarCarritoMis().addActionListener(e->{
+            if(!carritoListarMisView.isVisible()){
+                principalView.getDesktop().add(carritoListarMisView);
+                carritoListarMisView.setVisible(true);
+            }
+            carritoListarMisView.toFront();
+        });
+
+        principalView.getMenuItemModificarMisUsuario().addActionListener(e->{
+            if(!usuarioModificarMisView.isVisible()){
+                principalView.getDesktop().add(usuarioModificarMisView);
+                usuarioModificarMisView.setVisible(true);
+            }
+            usuarioModificarMisView.toFront();
         });
     }
 }

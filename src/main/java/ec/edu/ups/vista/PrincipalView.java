@@ -10,6 +10,7 @@ public class PrincipalView extends JFrame {
     private JMenu menuProducto;
     private JMenu menuUsuario;
     private JMenu menuAdministrador;
+    private JMenu menuIdiomas;
     private JMenuItem menuItemEliminarProducto;
     private JMenuItem menuItemModificarProducto;
     private JMenuItem menuItemActualizarProducto;
@@ -19,11 +20,16 @@ public class PrincipalView extends JFrame {
     private JMenuItem menuItemListarCarritos;
     private JMenuItem menuItemEliminarCarrito;
     private JMenuItem menuItemModificarCarrito;
+    private JMenuItem menuItemListarCarritoMis;
     private JMenuItem menuItemCrearUsuario;
     private JMenuItem menuItemEliminarUsuario;
     private JMenuItem menuItemListarUsuarios;
     private JMenuItem menuItemModificarUsuario;
+    private JMenuItem menuItemModificarMisUsuario;
     private JMenuItem menuItemCerrarSesión;
+    private JMenuItem menuItemEspañol;
+    private JMenuItem menuItemIngles;
+    private JMenuItem menuItemNoruego;
 
 
 
@@ -43,6 +49,7 @@ public class PrincipalView extends JFrame {
         menuProducto = new JMenu("Producto");
         menuUsuario = new JMenu("Usuario");
         menuAdministrador = new JMenu("Administrador");
+        menuIdiomas = new JMenu("Idiomas");
 
         menuItemEliminarProducto = new JMenuItem("Eliminar");
         menuItemModificarProducto = new JMenuItem("Modificar");
@@ -53,13 +60,20 @@ public class PrincipalView extends JFrame {
         menuItemListarCarritos = new JMenuItem("Listar Carritos");
         menuItemEliminarCarrito = new JMenuItem("Eliminar Carrito");
         menuItemModificarCarrito = new JMenuItem("Modificar Carrito");
+        menuItemListarCarritoMis = new JMenuItem("Listar Mis Carritos");
         menuItemCrearUsuario = new JMenuItem("Crear Usuario");
         menuItemEliminarUsuario = new JMenuItem("Eliminar Usuario");
         menuItemListarUsuarios = new JMenuItem("Listar Usuarios");
         menuItemModificarUsuario = new JMenuItem("Modificar Usuario");
+        menuItemModificarMisUsuario = new JMenuItem("Modifica tu Usuario");
+        menuItemEspañol = new JMenuItem("Español");
+        menuItemIngles = new JMenuItem("Ingles");
+        menuItemNoruego = new JMenuItem("Noruego");
+
 
         menubar.add(menuUsuario);
         menuUsuario.add(menuItemCerrarSesión);
+        menuUsuario.add(menuItemModificarMisUsuario);
         menubar.add(menuAdministrador);
         menuAdministrador.add(menuItemCrearUsuario);
         menuAdministrador.add(menuItemEliminarUsuario);
@@ -72,9 +86,14 @@ public class PrincipalView extends JFrame {
         menuProducto.add(menuItemCargarProducto);
         menubar.add(menuCarrito);
         menuCarrito.add(menuItemAñadirCarrito);
+        menuCarrito.add(menuItemListarCarritoMis);
         menuCarrito.add(menuItemListarCarritos);
         menuCarrito.add(menuItemEliminarCarrito);
         menuCarrito.add(menuItemModificarCarrito);
+        menubar.add(menuIdiomas);
+        menuIdiomas.add(menuItemEspañol);
+        menuIdiomas.add(menuItemIngles);
+        menuIdiomas.add(menuItemNoruego);
 
 
 
@@ -89,6 +108,54 @@ public class PrincipalView extends JFrame {
         setVisible(true);
 
 
+    }
+
+    public JMenuItem getMenuItemModificarMisUsuario() {
+        return menuItemModificarMisUsuario;
+    }
+
+    public void setMenuItemModificarMisUsuario(JMenuItem menuItemModificarMisUsuario) {
+        this.menuItemModificarMisUsuario = menuItemModificarMisUsuario;
+    }
+
+    public JMenu getMenuIdiomas() {
+        return menuIdiomas;
+    }
+
+    public void setMenuIdiomas(JMenu menuIdiomas) {
+        this.menuIdiomas = menuIdiomas;
+    }
+
+    public JMenuItem getMenuItemListarCarritoMis() {
+        return menuItemListarCarritoMis;
+    }
+
+    public void setMenuItemListarCarritoMis(JMenuItem menuItemListarCarritoMis) {
+        this.menuItemListarCarritoMis = menuItemListarCarritoMis;
+    }
+
+    public JMenuItem getMenuItemEspañol() {
+        return menuItemEspañol;
+    }
+
+    public void setMenuItemEspañol(JMenuItem menuItemEspañol) {
+        this.menuItemEspañol = menuItemEspañol;
+    }
+
+    public JMenuItem getMenuItemIngles() {
+        return menuItemIngles;
+    }
+
+    public void setMenuItemIngles(JMenuItem menuItemIngles) {
+        this.menuItemIngles = menuItemIngles;
+    }
+
+    public JMenuItem getMenuItemNoruego() {
+        return menuItemNoruego;
+    }
+
+    public void setMenuItemNoruego(JMenuItem menuItemNoruego) {
+        this.menuItemNoruego = menuItemNoruego;
     }
 
     public JMenuItem getMenuItemAñadirCarrito() {
@@ -241,6 +308,9 @@ public class PrincipalView extends JFrame {
 
     public void desactivar() {
         getMenuProducto().setVisible(false);
+        getMenuAdministrador().setVisible(false);
+        getMenuItemEliminarCarrito().setEnabled(false);
+        getMenuItemModificarCarrito().setEnabled(false);
         getMenuItemListarCarritos().setEnabled(false);
         getMenuItemEliminarProducto().setEnabled(false);
         getMenuItemModificarProducto().setEnabled(false);

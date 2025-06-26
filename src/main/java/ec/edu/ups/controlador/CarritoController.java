@@ -6,10 +6,7 @@ import ec.edu.ups.modelo.Carrito;
 import ec.edu.ups.modelo.ItemCarrito;
 import ec.edu.ups.modelo.Producto;
 import ec.edu.ups.modelo.Usuario;
-import ec.edu.ups.vista.CarritoAñadirView;
-import ec.edu.ups.vista.CarritoEliminarView;
-import ec.edu.ups.vista.CarritoListarView;
-import ec.edu.ups.vista.CarritoModificarView;
+import ec.edu.ups.vista.*;
 
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;
@@ -29,17 +26,19 @@ public class CarritoController {
     private final CarritoListarView carritoListarView;
     private final CarritoModificarView carritoModificarView;
     private final CarritoEliminarView carritoEliminarView;
+    private final CarritoListarMisView carritoListarMisView;
     private final Usuario usuarioLogueado;
 
     private Carrito carritoSeleccionadoParaModificar;
 
-    public CarritoController(CarritoDAO carritoDAO, ProductoDAO productoDAO, CarritoAñadirView carritoAñadirView, CarritoListarView carritoListarView, CarritoModificarView carritoModificarView, CarritoEliminarView carritoEliminarView, Usuario usuarioLogueado) {
+    public CarritoController(CarritoDAO carritoDAO, ProductoDAO productoDAO, CarritoAñadirView carritoAñadirView, CarritoListarView carritoListarView, CarritoModificarView carritoModificarView, CarritoEliminarView carritoEliminarView, CarritoListarMisView carritoListarMisView, Usuario usuarioLogueado) {
         this.carritoDAO = carritoDAO;
         this.productoDAO = productoDAO;
         this.carritoAñadirView = carritoAñadirView;
         this.carritoListarView = carritoListarView;
         this.carritoModificarView = carritoModificarView;
         this.carritoEliminarView = carritoEliminarView;
+        this.carritoListarMisView = carritoListarMisView;
         this.usuarioLogueado = usuarioLogueado;
 
         iniciarNuevoCarrito();
@@ -68,6 +67,16 @@ public class CarritoController {
         });
         carritoEliminarView.getBtnBuscar().addActionListener(e -> buscarCarritoParaEliminar());
         carritoEliminarView.getBtnEliminar().addActionListener(e -> eliminarCarrito());
+        carritoListarMisView.getBtnListar().addActionListener(e -> listarMisCarritos());
+        carritoListarMisView.getBtBuscar().addActionListener(e->buscarYMostrarDetallesMis());
+    }
+
+    private void listarMisCarritos() {
+        List<Carrito> carritos = carritoDAO.buscarPorUsuario(usuarioLogueado);
+        if (carritos.isEmpty()) {
+            carritoListarMisView.mostrarMensaje("No hay carritos registrados.");
+        }
+        carritoListarMisView.mostrarCarritos(carritos);
     }
 
     private void eliminarCarrito() {
@@ -183,16 +192,32 @@ public class CarritoController {
         carritoEliminarView.getTxtCodigo().setText("");
         carritoEliminarView.getTxtUsuario().setText("");
         carritoEliminarView.getTxtFecha().setText("");
-        carritoEliminarView.mostrarItemsCarrito(null); // Limpia la tabla
+        carritoEliminarView.mostrarItemsCarrito(null);
         carritoEliminarView.getTxtCodigo().setEditable(true);
         carritoEliminarView.getBtnBuscar().setEnabled(true);
         carritoEliminarView.getBtnEliminar().setEnabled(false);
         this.carritoSeleccionadoParaModificar = null;
     }
+    private void buscarYMostrarDetallesMis() {
+        String codigoStr = carritoListarMisView.getTxtCodigo().getText();
+        if (codigoStr.isEmpty()) {
+            carritoListarMisView.mostrarMensaje("Por favor, ingrese un código de carrito para buscar.");
+            return;
+        }
 
+        int codigo = Integer.parseInt(codigoStr);
+        Carrito carritoEncontrado = carritoDAO.buscarPorCodigo(codigo);
+
+        if (carritoEncontrado != null) {
+            carritoListarMisView.mostrarDetalles(carritoEncontrado);
+        } else {
+            carritoListarMisView.mostrarMensaje("No se encontró ningún carrito con el código: " + codigo);
+        }
+
+    }
 
     private void buscarYMostrarDetalles() {
-        String codigoStr = carritoListarView.getTxtCodigo().getText().trim();
+        String codigoStr = carritoListarView.getTxtCodigo().getText();
         if (codigoStr.isEmpty()) {
             carritoListarView.mostrarMensaje("Por favor, ingrese un código de carrito para buscar.");
             return;
