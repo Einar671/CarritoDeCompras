@@ -1,26 +1,62 @@
 package ec.edu.ups.vista;
 
 import ec.edu.ups.modelo.Rol;
+import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class UsuarioCrearView extends JInternalFrame {
-    private JLabel lblUsuario;;
     private JLabel lblUsuarioA;
     private JLabel lblContraseña;
     private JLabel lblRol;
     private JTextField txtUsuario;
     private JTextField txtContraseña;
     private JButton btnCrear;
-    private JComboBox cbxRoles;
+    private JComboBox<Rol> cbxRoles;
     private JPanel panelPrincipal;
 
-    public UsuarioCrearView() {
-        super("",true,true,false,true);
-        setSize(600,400);
+    private MensajeInternacionalizacionHandler mensajes;
+
+    public UsuarioCrearView(MensajeInternacionalizacionHandler mensajes) {
+        this.mensajes = mensajes;
+
         setContentPane(panelPrincipal);
+        setSize(600, 400);
+        setClosable(true);
+        setIconifiable(true);
+
+        actualizarTextos();
         cargarRoles();
     }
+
+    public void actualizarTextos() {
+        setTitle(mensajes.get("usuario.crear.titulo.app"));
+
+        lblUsuarioA.setText(mensajes.get("global.usuario")+": ");
+        lblContraseña.setText(mensajes.get("global.contraseña") + ":");
+        lblRol.setText(mensajes.get("global.rol") + ":");
+
+        btnCrear.setText(mensajes.get("global.crear"));
+
+
+        cbxRoles.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                if (value instanceof Rol) {
+                    Rol rol = (Rol) value;
+                    if (rol == Rol.ADMINISTRADOR) {
+                        setText(mensajes.get("global.rol.admin"));
+                    } else if (rol == Rol.USUARIO) {
+                        setText(mensajes.get("global.rol.user"));
+                    }
+                }
+                return this;
+            }
+        });
+    }
+
     private void cargarRoles() {
         cbxRoles.removeAllItems();
         for (Rol rol : Rol.values()) {
@@ -28,86 +64,31 @@ public class UsuarioCrearView extends JInternalFrame {
         }
     }
 
-    public JLabel getLblUsuario() {
-        return lblUsuario;
-    }
-
-    public void setLblUsuario(JLabel lblUsuario) {
-        this.lblUsuario = lblUsuario;
-    }
-
-
-    public JLabel getLblUsuarioA() {
-        return lblUsuarioA;
-    }
-
-    public void setLblUsuarioA(JLabel lblUsuarioA) {
-        this.lblUsuarioA = lblUsuarioA;
-    }
-
-    public JLabel getLblContraseña() {
-        return lblContraseña;
-    }
-
-    public void setLblContraseña(JLabel lblContraseña) {
-        this.lblContraseña = lblContraseña;
-    }
-
-    public JLabel getLblRol() {
-        return lblRol;
-    }
-
-    public void setLblRol(JLabel lblRol) {
-        this.lblRol = lblRol;
-    }
-
     public JTextField getTxtUsuario() {
         return txtUsuario;
-    }
-
-    public void setTxtUsuario(JTextField txtUsuario) {
-        this.txtUsuario = txtUsuario;
     }
 
     public JTextField getTxtContraseña() {
         return txtContraseña;
     }
 
-    public void setTxtContraseña(JTextField txtContraseña) {
-        this.txtContraseña = txtContraseña;
-    }
-
     public JButton getBtnCrear() {
         return btnCrear;
     }
 
-    public void setBtnCrear(JButton btnCrear) {
-        this.btnCrear = btnCrear;
-    }
-
-    public JComboBox getCbxRoles() {
+    public JComboBox<Rol> getCbxRoles() {
         return cbxRoles;
-    }
-
-    public void setCbxRoles(JComboBox cbxRoles) {
-        this.cbxRoles = cbxRoles;
-    }
-
-    public JPanel getPanelPrincipal() {
-        return panelPrincipal;
-    }
-
-    public void setPanelPrincipal(JPanel panelPrincipal) {
-        this.panelPrincipal = panelPrincipal;
     }
 
     public void limpiarCampos() {
         txtUsuario.setText("");
         txtContraseña.setText("");
-        cbxRoles.setSelectedIndex(0);
+        if (cbxRoles.getItemCount() > 0) {
+            cbxRoles.setSelectedIndex(0);
+        }
     }
 
     public void mostrarMensaje(String mensaje) {
-        JOptionPane.showMessageDialog(this, mensaje, "Información", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, mensaje, mensajes.get("yesNo.app.titulo"), JOptionPane.INFORMATION_MESSAGE);
     }
 }

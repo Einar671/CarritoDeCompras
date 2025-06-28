@@ -1,6 +1,8 @@
 package ec.edu.ups.vista;
 
 import ec.edu.ups.modelo.Producto;
+// 1. Importar el manejador de internacionalización
+import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -15,19 +17,24 @@ public class ProductoAnadirView extends JInternalFrame {
     private JTextField txtCodigo;
     private JButton btnAceptar;
     private JButton btnLimpiar;
+    private JLabel lblCodigo;
+    private JLabel lblNombre;
+    private JLabel lblPrecio;
 
-    public ProductoAnadirView() {
+    private MensajeInternacionalizacionHandler mensajes;
+
+    public ProductoAnadirView(MensajeInternacionalizacionHandler mensajes) {
+        super(mensajes.get("producto.crear.titulo.app"), true, true, true, true);
+        this.mensajes = mensajes;
 
         setContentPane(panelPrincipal);
-        setTitle("Datos del Producto");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        actualizarTextos();
+
         setSize(500, 500);
         setClosable(true);
         setIconifiable(Boolean.TRUE);
         setResizable(Boolean.TRUE);
-        //setResizable(false);
-        //setVisible(true);
-        //pack();
 
         btnLimpiar.addActionListener(new ActionListener() {
             @Override
@@ -35,6 +42,17 @@ public class ProductoAnadirView extends JInternalFrame {
                 limpiarCampos();
             }
         });
+    }
+
+
+    public void actualizarTextos() {
+        setTitle(mensajes.get("producto.crear.titulo.app"));
+        btnAceptar.setText(mensajes.get("global.crear"));
+        btnLimpiar.setText(mensajes.get("global.boton.limpiar"));
+
+        lblCodigo.setText(mensajes.get("global.codigo"));
+        lblNombre.setText(mensajes.get("global.nombre"));
+        lblPrecio.setText(mensajes.get("global.precio"));
     }
 
     public JPanel getPanelPrincipal() {
@@ -86,7 +104,7 @@ public class ProductoAnadirView extends JInternalFrame {
     }
 
     public void mostrarMensaje(String mensaje) {
-        JOptionPane.showMessageDialog(this, mensaje);
+        JOptionPane.showMessageDialog(this, mensaje, mensajes.get("yesNo.app.titulo"), JOptionPane.INFORMATION_MESSAGE);
     }
 
     public void limpiarCampos() {

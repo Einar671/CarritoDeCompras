@@ -1,6 +1,8 @@
 package ec.edu.ups.vista;
 
 import ec.edu.ups.modelo.Producto;
+// 1. Importar el manejador de internacionalización
+import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -13,19 +15,48 @@ public class ProductoListaView extends JInternalFrame {
     private JTable tblProductos;
     private JPanel panelPrincipal;
     private JButton btnListar;
+    private JLabel lblTitulo;
     private DefaultTableModel modelo;
 
-    public ProductoListaView() {
+    private MensajeInternacionalizacionHandler mensajes;
+
+    public ProductoListaView(MensajeInternacionalizacionHandler mensajes) {
+
+        super("",true,true,false,true);
         setContentPane(panelPrincipal);
-        setTitle("Lista de Productos");
+        this.mensajes = mensajes;
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(500, 500);
-        //setVisible(true);
 
         modelo = new DefaultTableModel();
-        Object[] columnas = {"Id", "Nombre", "Precio"};
-        modelo.setColumnIdentifiers(columnas);
         tblProductos.setModel(modelo);
+
+        actualizarTextos();
+    }
+
+    public void actualizarTextos() {
+        setTitle(mensajes.get("producto.listar.titulo.app"));
+
+        lblTitulo.setText(mensajes.get("producto.listar.titulo"));
+        lblBuscar.setText(mensajes.get("global.boton.buscar") + ":");
+
+        btnBuscar.setText(mensajes.get("global.boton.buscar"));
+        btnListar.setText(mensajes.get("menu.usuario.listar"));
+
+        Object[] columnas = {
+                mensajes.get("global.codigo"),
+                mensajes.get("global.nombre"),
+                mensajes.get("global.precio")
+        };
+        modelo.setColumnIdentifiers(columnas);
+    }
+
+    public JLabel getLblTitulo() {
+        return lblTitulo;
+    }
+
+    public void setLblTitulo(JLabel lblTitulo) {
+        this.lblTitulo = lblTitulo;
     }
 
     public JTextField getTxtBuscar() {
@@ -85,6 +116,5 @@ public class ProductoListaView extends JInternalFrame {
                     producto.getPrecio()};
             modelo.addRow(fila);
         }
-
     }
 }

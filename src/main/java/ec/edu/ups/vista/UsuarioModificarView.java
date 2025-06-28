@@ -1,33 +1,63 @@
 package ec.edu.ups.vista;
 
-import ec.edu.ups.modelo.Rol; // Importar el enum
+import ec.edu.ups.modelo.Rol;
+import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
+import java.awt.*;
 
-public class UsuarioModificarView extends JInternalFrame{
+public class UsuarioModificarView extends JInternalFrame {
     private JPanel panelPrincipal;
-    private JButton btnBuscar;
-    private JTextField txtContraseña;
-    private JButton btnModificar;
     private JLabel lblUsuario;
+    private JTextField txtUsuario;
+    private JButton btnBuscar;
     private JLabel lblContraseña;
+    private JTextField txtContraseña;
     private JLabel lblRol;
     private JComboBox<Rol> cbxRoles;
-    private JTextField txtUsuario;
+    private JButton btnModificar;
 
-    public UsuarioModificarView(){
-        super("Modificar Usuario",true,true,false,true);
+    private MensajeInternacionalizacionHandler mensajes;
+
+    public UsuarioModificarView(MensajeInternacionalizacionHandler mensajes) {
+
+        super("", true, true, false, true);
+        this.mensajes = mensajes;
+
         setContentPane(panelPrincipal);
-        setSize(600,400);
+        setSize(600, 400);
+        setClosable(true);
+        setIconifiable(true);
 
-        lblUsuario.setText("Buscar Usuario:");
-        lblContraseña.setText("Contraseña:");
-        lblRol.setText("Rol:");
-        btnBuscar.setText("Buscar");
-        btnModificar.setText("Guardar Cambios");
-
+        actualizarTextos();
         cargarRoles();
-        limpiarCampos();
+    }
+
+    public void actualizarTextos() {
+        setTitle(mensajes.get("usuario.modificar.titulo.app"));
+
+        lblUsuario.setText(mensajes.get("global.usuario") + ":");
+        lblContraseña.setText(mensajes.get("global.contraseña") + ":");
+        lblRol.setText(mensajes.get("global.rol") + ":");
+
+        btnBuscar.setText(mensajes.get("global.boton.buscar"));
+        btnModificar.setText(mensajes.get("global.boton.modificar"));
+
+        cbxRoles.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                if (value instanceof Rol) {
+                    Rol rol = (Rol) value;
+                    if (rol == Rol.ADMINISTRADOR) {
+                        setText(mensajes.get("global.rol.admin"));
+                    } else if (rol == Rol.USUARIO) {
+                        setText(mensajes.get("global.rol.user"));
+                    }
+                }
+                return this;
+            }
+        });
     }
 
     private void cargarRoles() {
@@ -41,8 +71,24 @@ public class UsuarioModificarView extends JInternalFrame{
         return txtUsuario;
     }
 
+    public JButton getBtnBuscar() {
+        return btnBuscar;
+    }
+
+    public JTextField getTxtContraseña() {
+        return txtContraseña;
+    }
+
     public JComboBox<Rol> getCbxRoles() {
         return cbxRoles;
+    }
+
+    public JButton getBtnModificar() {
+        return btnModificar;
+    }
+
+    public void mostrarMensaje(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje, mensajes.get("yesNo.app.titulo"), JOptionPane.INFORMATION_MESSAGE);
     }
 
     public void limpiarCampos() {
@@ -51,22 +97,10 @@ public class UsuarioModificarView extends JInternalFrame{
         if (cbxRoles.getItemCount() > 0) {
             cbxRoles.setSelectedIndex(0);
         }
-        btnModificar.setEnabled(false);
-        txtContraseña.setEnabled(false);
-        cbxRoles.setEnabled(false);
         txtUsuario.setEditable(true);
         btnBuscar.setEnabled(true);
+        txtContraseña.setEnabled(false);
+        cbxRoles.setEnabled(false);
+        btnModificar.setEnabled(false);
     }
-
-    public void mostrarMensaje(String mensaje) {
-        JOptionPane.showMessageDialog(this, mensaje, "Información", JOptionPane.INFORMATION_MESSAGE);
-    }
-
-    public JPanel getPanelPrincipal() { return panelPrincipal; }
-    public JButton getBtnBuscar() { return btnBuscar; }
-    public JTextField getTxtContraseña() { return txtContraseña; }
-    public JButton getBtnModificar() { return btnModificar; }
-    public JLabel getLblUsuario() { return lblUsuario; }
-    public JLabel getLblContraseña() { return lblContraseña; }
-    public JLabel getLblRol() { return lblRol; }
 }

@@ -2,12 +2,15 @@ package ec.edu.ups.vista;
 
 import ec.edu.ups.modelo.Carrito;
 import ec.edu.ups.modelo.ItemCarrito;
+import ec.edu.ups.util.FormateadorUtils;
+import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
+import java.util.Locale;
 
 public class CarritoModificarView extends JInternalFrame {
     private JPanel panelPrincipal;
@@ -24,8 +27,13 @@ public class CarritoModificarView extends JInternalFrame {
     private DefaultTableModel modeloDetalles;
     private Carrito carritoActual;
 
-    public CarritoModificarView() {
-        super("Modificar Carrito", true, true, false, true);
+    private MensajeInternacionalizacionHandler mensajes;
+    private Locale locale;
+
+    public CarritoModificarView(MensajeInternacionalizacionHandler mensajes) {
+        this.mensajes = mensajes;
+        this.locale = new Locale(mensajes.get("locale.language"), mensajes.get("locale.country"));
+
         setContentPane(panelPrincipal);
         setSize(600, 400);
 
@@ -35,38 +43,65 @@ public class CarritoModificarView extends JInternalFrame {
                 return column == 3;
             }
         };
-
-        Object[] columnasDetalles = {"Cod. Producto", "Nombre", "Precio Unit.", "Cantidad", "Subtotal"};
-        modeloDetalles.setColumnIdentifiers(columnasDetalles);
         tblItems.setModel(modeloDetalles);
 
-        modeloDetalles.addTableModelListener(new TableModelListener() {
-            @Override
-            public void tableChanged(TableModelEvent e) {
-                if (e.getType() == TableModelEvent.UPDATE) {
-                    int row = e.getFirstRow();
-                    int column = e.getColumn();
-
-                    if (column == 3 && carritoActual != null) {
-                            int codigoProducto = (int) modeloDetalles.getValueAt(row, 0);
-                            int nuevaCantidad = Integer.parseInt(modeloDetalles.getValueAt(row, 3).toString());
-
-                            carritoActual.actualizarCantidadProducto(codigoProducto, nuevaCantidad);
-
-                            ItemCarrito itemActualizado = encontrarItem(codigoProducto);
-                            if (itemActualizado != null) {
-                                modeloDetalles.setValueAt(itemActualizado.getSubtotal(), row, 4);
-                            }
-
-                    }
-                }
-            }
-        });
+        actualizarTextos();
+        configurarListeners();
 
         btnModificar.setEnabled(false);
     }
 
+    public void actualizarTextos() {
+        setTitle(mensajes.get("carrito.modificar.titulo.app"));
+
+        lblCodigo.setText(mensajes.get("global.codigo") + ":");
+        lblUsuario.setText(mensajes.get("global.usuario") + ":");
+        lblFecha.setText(mensajes.get("global.fecha") + ":");
+        lblItems.setText(mensajes.get("global.item") + ":");
+
+        btnBuscar.setText(mensajes.get("global.boton.buscar"));
+        btnModificar.setText(mensajes.get("global.boton.modificar"));
+
+        Object[] columnasDetalles = {
+                mensajes.get("global.codigo"),
+                mensajes.get("global.nombre"),
+                mensajes.get("global.precio"),
+                mensajes.get("global.cantidad"),
+                mensajes.get("global.subtotal")
+        };
+        modeloDetalles.setColumnIdentifiers(columnasDetalles);
+    }
+
+    private void configurarListeners() {
+        modeloDetalles.addTableModelListener(e -> {
+            if (e.getType() == TableModelEvent.UPDATE && e.getColumn() == 3) {
+                actualizarSubtotalFila(e.getFirstRow());
+            }
+        });
+    }
+
+    private void actualizarSubtotalFila(int fila) {
+        if (carritoActual != null) {
+            try {
+                int codigoProducto = (int) modeloDetalles.getValueAt(fila, 0);
+                int nuevaCantidad = Integer.parseInt(modeloDetalles.getValueAt(fila, 3).toString());
+
+                carritoActual.actualizarCantidadProducto(codigoProducto, nuevaCantidad);
+
+                ItemCarrito itemActualizado = encontrarItem(codigoProducto);
+                if (itemActualizado != null) {
+                    modeloDetalles.setValueAt(
+                            FormateadorUtils.formatearMoneda(itemActualizado.getSubtotal(), locale),
+                            fila, 4);
+                }
+            } catch (NumberFormatException ex) {
+                mostrarMensaje(mensajes.get("mensaje.carrito.cantidadInvalida"));
+            }
+        }
+    }
+
     private ItemCarrito encontrarItem(int codigoProducto) {
+        if (carritoActual == null) return null;
         for (ItemCarrito item : carritoActual.obtenerItems()) {
             if (item.getProducto().getCodigo() == codigoProducto) {
                 return item;
@@ -75,32 +110,8 @@ public class CarritoModificarView extends JInternalFrame {
         return null;
     }
 
-    public JPanel getPanelPrincipal() { return panelPrincipal; }
-    public void setPanelPrincipal(JPanel panelPrincipal) { this.panelPrincipal = panelPrincipal; }
-    public JTextField getTxtCodigo() { return txtCodigo; }
-    public void setTxtCodigo(JTextField txtCodigo) { this.txtCodigo = txtCodigo; }
-    public JButton getBtnBuscar() { return btnBuscar; }
-    public void setBtnBuscar(JButton btnBuscar) { this.btnBuscar = btnBuscar; }
-    public JTextField getTxtUsuario() { return txtUsuario; }
-    public void setTxtUsuario(JTextField txtUsuario) { this.txtUsuario = txtUsuario; }
-    public JTextField getTxtFecha() { return txtFecha; }
-    public void setTxtFecha(JTextField txtFecha) { this.txtFecha = txtFecha; }
-    public JTable getTblItems() { return tblItems; }
-    public void setTblItems(JTable tblItems) { this.tblItems = tblItems; }
-    public JLabel getLblCodigo() { return lblCodigo; }
-    public void setLblCodigo(JLabel lblCodigo) { this.lblCodigo = lblCodigo; }
-    public JLabel getLblUsuario() { return lblUsuario; }
-    public void setLblUsuario(JLabel lblUsuario) { this.lblUsuario = lblUsuario; }
-    public JLabel getLblFecha() { return lblFecha; }
-    public void setLblFecha(JLabel lblFecha) { this.lblFecha = lblFecha; }
-    public JLabel getLblItems() { return lblItems; }
-    public void setLblItems(JLabel lblItems) { this.lblItems = lblItems; }
-    public JButton getBtnModificar() { return btnModificar; }
-    public void setBtnModificar(JButton btnModificar) { this.btnModificar = btnModificar; }
-
-
     public void mostrarItemsCarrito(Carrito carrito) {
-        this.carritoActual = carrito; // Guardar la referencia al carrito
+        this.carritoActual = carrito;
         modeloDetalles.setRowCount(0);
 
         if (carrito != null) {
@@ -109,16 +120,23 @@ public class CarritoModificarView extends JInternalFrame {
                 Object[] fila = {
                         item.getProducto().getCodigo(),
                         item.getProducto().getNombre(),
-                        item.getProducto().getPrecio(),
+                        FormateadorUtils.formatearMoneda(item.getProducto().getPrecio(), locale),
                         item.getCantidad(),
-                        item.getSubtotal()
+                        FormateadorUtils.formatearMoneda(item.getSubtotal(), locale)
                 };
                 modeloDetalles.addRow(fila);
             }
         }
     }
 
-    public void mostrarMensaje(String s) {
-        JOptionPane.showMessageDialog(this, s, "Información", JOptionPane.INFORMATION_MESSAGE);
+    public void mostrarMensaje(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje, mensajes.get("yesNo.app.titulo"), JOptionPane.INFORMATION_MESSAGE);
     }
+
+    public JTextField getTxtCodigo() { return txtCodigo; }
+    public JButton getBtnBuscar() { return btnBuscar; }
+    public JTextField getTxtUsuario() { return txtUsuario; }
+    public JTextField getTxtFecha() { return txtFecha; }
+    public JButton getBtnModificar() { return btnModificar; }
+    public Carrito getCarritoActual() { return carritoActual; }
 }

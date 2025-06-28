@@ -31,7 +31,7 @@
               <color color="-16777216"/>
             </border>
             <children>
-              <component id="8b152" class="javax.swing.JLabel">
+              <component id="8b152" class="javax.swing.JLabel" binding="lblCodigo">
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -39,7 +39,7 @@
                   <text value="Codigo"/>
                 </properties>
               </component>
-              <component id="da82b" class="javax.swing.JLabel">
+              <component id="da82b" class="javax.swing.JLabel" binding="lblNombre">
                 <constraints>
                   <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>

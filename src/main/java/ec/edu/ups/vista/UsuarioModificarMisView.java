@@ -1,8 +1,9 @@
 package ec.edu.ups.vista;
 
+import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 import javax.swing.*;
 
-public class UsuarioModificarMisView extends JInternalFrame{
+public class UsuarioModificarMisView extends JInternalFrame {
     private JLabel lblUsuario;
     private JLabel lblContraseña;
     private JTextField txtContraseña;
@@ -10,66 +11,49 @@ public class UsuarioModificarMisView extends JInternalFrame{
     private JTextField txtUsuario;
     private JPanel panelPrincipal;
 
-    public UsuarioModificarMisView(){
-        super("",true,true,false,true);
+    private MensajeInternacionalizacionHandler mensajes;
+
+    public UsuarioModificarMisView(MensajeInternacionalizacionHandler mensajes) {
+
+        super("", true, true, false, true);
+        this.mensajes = mensajes;
+
         setContentPane(panelPrincipal);
-        setSize(600,400);
+        setSize(600, 400);
+        setClosable(true);
+        setIconifiable(true);
+
+        txtUsuario.setEditable(false);
+
+        actualizarTextos();
     }
 
-    public JLabel getLblUsuario() {
-        return lblUsuario;
-    }
+    public void actualizarTextos() {
+        setTitle(mensajes.get("menu.usuario.modificarMis"));
 
-    public void setLblUsuario(JLabel lblUsuario) {
-        this.lblUsuario = lblUsuario;
-    }
-
-    public JLabel getLblContraseña() {
-        return lblContraseña;
-    }
-
-    public void setLblContraseña(JLabel lblContraseña) {
-        this.lblContraseña = lblContraseña;
+        lblUsuario.setText(mensajes.get("global.usuario") + ":");
+        lblContraseña.setText(mensajes.get("global.contraseña") + ":");
+        btnModificar.setText(mensajes.get("global.boton.modificar"));
     }
 
     public JTextField getTxtContraseña() {
         return txtContraseña;
     }
 
-    public void setTxtContraseña(JTextField txtContraseña) {
-        this.txtContraseña = txtContraseña;
-    }
-
     public JButton getBtnModificar() {
         return btnModificar;
-    }
-
-    public void setBtnModificar(JButton btnModificar) {
-        this.btnModificar = btnModificar;
     }
 
     public JTextField getTxtUsuario() {
         return txtUsuario;
     }
 
-    public void setTxtUsuario(JTextField txtUsuario) {
-        this.txtUsuario = txtUsuario;
-    }
-
-    public JPanel getPanelPrincipal() {
-        return panelPrincipal;
-    }
-
-    public void setPanelPrincipal(JPanel panelPrincipal) {
-        this.panelPrincipal = panelPrincipal;
-    }
     public void mostrarMensaje(String mensaje) {
-        JOptionPane.showMessageDialog(this, mensaje, "Información", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, mensaje, mensajes.get("yesNo.app.titulo"), JOptionPane.INFORMATION_MESSAGE);
     }
+
+
     public void limpiarCampos() {
-        txtUsuario.setText("");
         txtContraseña.setText("");
-        btnModificar.setEnabled(false);
-        txtUsuario.setEditable(true);
     }
 }

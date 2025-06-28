@@ -1,5 +1,7 @@
 package ec.edu.ups.vista;
 
+import ec.edu.ups.util.MensajeInternacionalizacionHandler;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,9 +32,117 @@ public class PrincipalView extends JFrame {
     private JMenuItem menuItemEspañol;
     private JMenuItem menuItemIngles;
     private JMenuItem menuItemNoruego;
+    private MensajeInternacionalizacionHandler mensajeInternacionalizacionHandler;
+
+    public PrincipalView(MensajeInternacionalizacionHandler mensajeInternacionalizacionHandler) {
+        this.mensajeInternacionalizacionHandler = mensajeInternacionalizacionHandler;
+
+        desktop = new JDesktopPane();
+        menubar = new JMenuBar();
+        menuCarrito = new JMenu();
+        menuProducto = new JMenu();
+        menuUsuario = new JMenu();
+        menuAdministrador = new JMenu();
+        menuIdiomas = new JMenu();
+
+        menuItemEliminarProducto = new JMenuItem();
+        menuItemModificarProducto = new JMenuItem();
+        menuItemActualizarProducto = new JMenuItem();
+        menuItemCargarProducto = new JMenuItem();
+        menuItemAñadirCarrito = new JMenuItem();
+        menuItemCerrarSesión = new JMenuItem();
+        menuItemListarCarritos = new JMenuItem();
+        menuItemEliminarCarrito = new JMenuItem();
+        menuItemModificarCarrito = new JMenuItem();
+        menuItemListarCarritoMis = new JMenuItem();
+        menuItemCrearUsuario = new JMenuItem();
+        menuItemEliminarUsuario = new JMenuItem();
+        menuItemListarUsuarios = new JMenuItem();
+        menuItemModificarUsuario = new JMenuItem();
+        menuItemModificarMisUsuario = new JMenuItem();
+        menuItemEspañol = new JMenuItem();
+        menuItemIngles = new JMenuItem();
+        menuItemNoruego = new JMenuItem();
+
+        actualizarTextos();
+
+        menubar.add(menuUsuario);
+        menuUsuario.add(menuItemCerrarSesión);
+        menuUsuario.add(menuItemModificarMisUsuario);
+
+        menubar.add(menuAdministrador);
+        menuAdministrador.add(menuItemCrearUsuario);
+        menuAdministrador.add(menuItemEliminarUsuario);
+        menuAdministrador.add(menuItemListarUsuarios);
+        menuAdministrador.add(menuItemModificarUsuario);
+
+        menubar.add(menuProducto);
+        menuProducto.add(menuItemCargarProducto);
+        menuProducto.add(menuItemActualizarProducto);
+        menuProducto.add(menuItemModificarProducto);
+        menuProducto.add(menuItemEliminarProducto);
 
 
+        menubar.add(menuCarrito);
+        menuCarrito.add(menuItemAñadirCarrito);
+        menuCarrito.add(menuItemListarCarritoMis);
+        menuCarrito.add(menuItemListarCarritos);
+        menuCarrito.add(menuItemEliminarCarrito);
+        menuCarrito.add(menuItemModificarCarrito);
 
+        menubar.add(menuIdiomas);
+        menuIdiomas.add(menuItemEspañol);
+        menuIdiomas.add(menuItemIngles);
+        menuIdiomas.add(menuItemNoruego);
+
+        // 4. Configurar el Frame
+        setJMenuBar(menubar);
+        setContentPane(desktop);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setSize(800, 600);
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+
+
+    public void actualizarTextos() {
+        setTitle(mensajeInternacionalizacionHandler.get("app.titulo"));
+
+        menuProducto.setText(mensajeInternacionalizacionHandler.get("menu.producto"));
+        menuItemCargarProducto.setText(mensajeInternacionalizacionHandler.get("menu.producto.crear"));
+        menuItemActualizarProducto.setText(mensajeInternacionalizacionHandler.get("menu.producto.buscar"));
+        menuItemModificarProducto.setText(mensajeInternacionalizacionHandler.get("menu.producto.actualizar"));
+        menuItemEliminarProducto.setText(mensajeInternacionalizacionHandler.get("menu.producto.eliminar"));
+
+        menuCarrito.setText(mensajeInternacionalizacionHandler.get("menu.carrito"));
+        menuItemAñadirCarrito.setText(mensajeInternacionalizacionHandler.get("menu.carrito.crear"));
+        menuItemListarCarritos.setText(mensajeInternacionalizacionHandler.get("menu.carrito.listar"));
+        menuItemEliminarCarrito.setText(mensajeInternacionalizacionHandler.get("menu.carrito.eliminar"));
+        menuItemModificarCarrito.setText(mensajeInternacionalizacionHandler.get("menu.carrito.actualizar"));
+        menuItemListarCarritoMis.setText(mensajeInternacionalizacionHandler.get("menu.carrito.listarMis"));
+
+        menuAdministrador.setText(mensajeInternacionalizacionHandler.get("menu.administrador"));
+        menuItemCrearUsuario.setText(mensajeInternacionalizacionHandler.get("menu.usuario.crear"));
+        menuItemListarUsuarios.setText(mensajeInternacionalizacionHandler.get("menu.usuario.listar"));
+        menuItemEliminarUsuario.setText(mensajeInternacionalizacionHandler.get("menu.usuario.eliminar"));
+        menuItemModificarUsuario.setText(mensajeInternacionalizacionHandler.get("menu.usuario.modificar"));
+
+        menuUsuario.setText(mensajeInternacionalizacionHandler.get("global.usuario")); // Usamos una clave genérica
+        menuItemModificarMisUsuario.setText(mensajeInternacionalizacionHandler.get("menu.usuario.modificarMis"));
+        menuItemCerrarSesión.setText(mensajeInternacionalizacionHandler.get("menu.salir.cerrar"));
+
+        menuIdiomas.setText(mensajeInternacionalizacionHandler.get("menu.idiomas"));
+        menuItemEspañol.setText(mensajeInternacionalizacionHandler.get("menu.idioma.es"));
+        menuItemIngles.setText(mensajeInternacionalizacionHandler.get("menu.idioma.en"));
+        menuItemNoruego.setText(mensajeInternacionalizacionHandler.get("menu.idioma.nw"));
+    }
+
+
+    public void setMensajeInternacionalizacionHandler(MensajeInternacionalizacionHandler mensajeInternacionalizacionHandler) {
+        this.mensajeInternacionalizacionHandler = mensajeInternacionalizacionHandler;
+        actualizarTextos();
+    }
 
     public JDesktopPane getDesktop() {
         return desktop;
@@ -40,74 +150,6 @@ public class PrincipalView extends JFrame {
 
     public void setDesktop(JDesktopPane desktop) {
         this.desktop = desktop;
-    }
-
-    public PrincipalView() {
-        desktop = new JDesktopPane();
-        menubar = new JMenuBar();
-        menuCarrito = new JMenu("Carrito");
-        menuProducto = new JMenu("Producto");
-        menuUsuario = new JMenu("Usuario");
-        menuAdministrador = new JMenu("Administrador");
-        menuIdiomas = new JMenu("Idiomas");
-
-        menuItemEliminarProducto = new JMenuItem("Eliminar");
-        menuItemModificarProducto = new JMenuItem("Modificar");
-        menuItemActualizarProducto = new JMenuItem("Actualizar");
-        menuItemCargarProducto = new JMenuItem("Cargar");
-        menuItemAñadirCarrito = new JMenuItem("Carrito Añadir");
-        menuItemCerrarSesión = new JMenuItem("Cerrar Sesión");
-        menuItemListarCarritos = new JMenuItem("Listar Carritos");
-        menuItemEliminarCarrito = new JMenuItem("Eliminar Carrito");
-        menuItemModificarCarrito = new JMenuItem("Modificar Carrito");
-        menuItemListarCarritoMis = new JMenuItem("Listar Mis Carritos");
-        menuItemCrearUsuario = new JMenuItem("Crear Usuario");
-        menuItemEliminarUsuario = new JMenuItem("Eliminar Usuario");
-        menuItemListarUsuarios = new JMenuItem("Listar Usuarios");
-        menuItemModificarUsuario = new JMenuItem("Modificar Usuario");
-        menuItemModificarMisUsuario = new JMenuItem("Modifica tu Usuario");
-        menuItemEspañol = new JMenuItem("Español");
-        menuItemIngles = new JMenuItem("Ingles");
-        menuItemNoruego = new JMenuItem("Noruego");
-
-
-        menubar.add(menuUsuario);
-        menuUsuario.add(menuItemCerrarSesión);
-        menuUsuario.add(menuItemModificarMisUsuario);
-        menubar.add(menuAdministrador);
-        menuAdministrador.add(menuItemCrearUsuario);
-        menuAdministrador.add(menuItemEliminarUsuario);
-        menuAdministrador.add(menuItemListarUsuarios);
-        menuAdministrador.add(menuItemModificarUsuario);
-        menubar.add(menuProducto);
-        menuProducto.add(menuItemEliminarProducto);
-        menuProducto.add(menuItemModificarProducto);
-        menuProducto.add(menuItemActualizarProducto);
-        menuProducto.add(menuItemCargarProducto);
-        menubar.add(menuCarrito);
-        menuCarrito.add(menuItemAñadirCarrito);
-        menuCarrito.add(menuItemListarCarritoMis);
-        menuCarrito.add(menuItemListarCarritos);
-        menuCarrito.add(menuItemEliminarCarrito);
-        menuCarrito.add(menuItemModificarCarrito);
-        menubar.add(menuIdiomas);
-        menuIdiomas.add(menuItemEspañol);
-        menuIdiomas.add(menuItemIngles);
-        menuIdiomas.add(menuItemNoruego);
-
-
-
-
-        setJMenuBar(menubar);
-        setContentPane(desktop);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setTitle("Sitema de CArrito de Compras En Linea");
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
-        setSize(800, 600);
-        setLocationRelativeTo(null);
-        setVisible(true);
-
-
     }
 
     public JMenuItem getMenuItemModificarMisUsuario() {

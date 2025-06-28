@@ -1,18 +1,16 @@
 package ec.edu.ups.vista;
 
-import ec.edu.ups.modelo.ItemCarrito;
-import ec.edu.ups.modelo.Producto;
+import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.util.List;
 
 public class CarritoAñadirView extends JInternalFrame {
     private JPanel panelPrincipal;
+    private JPanel txt;
     private JTextField txtCodigo;
     private JTextField txtNombre;
     private JTextField txtPrecio;
-    private JPanel txt;
     private JTextField txtSubtotal;
     private JTextField txtIVA;
     private JTextField txtTotal;
@@ -21,23 +19,59 @@ public class CarritoAñadirView extends JInternalFrame {
     private JButton btnBuscar;
     private JButton btnAñadir;
     private JButton btnLimpiar;
-    private JComboBox cbxCantidad;
+    private JComboBox<String> cbxCantidad;
+    private JLabel lblCodigo;
+    private JLabel lblNombre;
+    private JLabel lblPrecio;
+    private JLabel lblCantidad;
+    private JLabel lblSubtotal;
+    private JLabel IVA;
+    private JLabel lblTotal;
     private DefaultTableModel modelo;
 
-    public CarritoAñadirView() {
-        super("Carrito de Compras", true, true, false, true);
+    private MensajeInternacionalizacionHandler mensajes;
+
+    public CarritoAñadirView(MensajeInternacionalizacionHandler mensajes) {
+        this.mensajes = mensajes;
+
         setContentPane(panelPrincipal);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(500, 500);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setSize(600, 550);
+
         modelo = new DefaultTableModel();
-        Object[] columnas = {"Id", "Nombre", "Precio","cantidad","Subtotal"};
-        modelo.setColumnIdentifiers(columnas);
         tblItems.setModel(modelo);
+
+        actualizarTextos();
         cargarDatos();
     }
 
+    public void actualizarTextos() {
+        setTitle(mensajes.get("carrito.crear.titulo.app"));
 
-    private void cargarDatos(){
+        lblCodigo.setText(mensajes.get("global.codigo"));
+        lblNombre.setText(mensajes.get("global.nombre"));
+        lblPrecio.setText(mensajes.get("global.precio"));
+        lblCantidad.setText(mensajes.get("global.cantidad"));
+        lblSubtotal.setText(mensajes.get("global.subtotal"));
+        IVA.setText(mensajes.get("global.IVA"));
+        lblTotal.setText(mensajes.get("global.total"));
+
+        btnBuscar.setText(mensajes.get("global.boton.buscar"));
+        btnAñadir.setText(mensajes.get("global.añadir"));
+        btnGuardar.setText(mensajes.get("global.boton.guardar"));
+        btnLimpiar.setText(mensajes.get("global.boton.limpiar"));
+
+        Object[] columnas = {
+                mensajes.get("global.codigo"),
+                mensajes.get("global.nombre"),
+                mensajes.get("global.precio"),
+                mensajes.get("global.cantidad"),
+                mensajes.get("global.subtotal")
+        };
+        modelo.setColumnIdentifiers(columnas);
+    }
+
+    private void cargarDatos() {
         cbxCantidad.removeAllItems();
         for (int i = 1; i <= 20; i++) {
             cbxCantidad.addItem(String.valueOf(i));
@@ -48,99 +82,55 @@ public class CarritoAñadirView extends JInternalFrame {
         return txtCodigo;
     }
 
-    public void setTxtCodigo(JTextField txtCodigo) {
-        this.txtCodigo = txtCodigo;
-    }
-
     public JTextField getTxtNombre() {
         return txtNombre;
-    }
-
-    public void setTxtNombre(JTextField txtNombre) {
-        this.txtNombre = txtNombre;
     }
 
     public JTextField getTxtPrecio() {
         return txtPrecio;
     }
 
-    public void setTxtPrecio(JTextField txtPrecio) {
-        this.txtPrecio = txtPrecio;
-    }
-
     public JTextField getTxtSubtotal() {
         return txtSubtotal;
-    }
-
-    public void setTxtSubtotal(JTextField txtSubtotal) {
-        this.txtSubtotal = txtSubtotal;
     }
 
     public JTextField getTxtIVA() {
         return txtIVA;
     }
 
-    public void setTxtIVA(JTextField txtIVA) {
-        this.txtIVA = txtIVA;
-    }
-
     public JTextField getTxtTotal() {
         return txtTotal;
-    }
-
-    public void setTxtTotal(JTextField txtTotal) {
-        this.txtTotal = txtTotal;
     }
 
     public JButton getBtnGuardar() {
         return btnGuardar;
     }
 
-    public void setBtnGuardar(JButton btnGuardar) {
-        this.btnGuardar = btnGuardar;
-    }
-
     public JButton getBtnBuscar() {
         return btnBuscar;
-    }
-
-    public void setBtnBuscar(JButton btnBuscar) {
-        this.btnBuscar = btnBuscar;
     }
 
     public JButton getBtnAñadir() {
         return btnAñadir;
     }
 
-    public void setBtnAñadir(JButton btnAñadir) {
-        this.btnAñadir = btnAñadir;
-    }
-
     public JButton getBtnLimpiar() {
         return btnLimpiar;
     }
 
-    public void setBtnLimpiar(JButton btnLimpiar) {
-        this.btnLimpiar = btnLimpiar;
-    }
-
-    public JComboBox getCbxCantidad() {
+    public JComboBox<String> getCbxCantidad() {
         return cbxCantidad;
-    }
-
-    public void setCbxCantidad(JComboBox cbxCantidad) {
-        this.cbxCantidad = cbxCantidad;
     }
 
     public JTable getTblItems() {
         return tblItems;
     }
 
-    public void setTable1(JTable table1) {
-        this.tblItems = table1;
-    }
-    public void mostrarMensaje(String mensaje) {
-        JOptionPane.showMessageDialog(this, mensaje);
+    public DefaultTableModel getModelo() {
+        return modelo;
     }
 
+    public void mostrarMensaje(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje, mensajes.get("yesNo.app.titulo"), JOptionPane.INFORMATION_MESSAGE);
+    }
 }

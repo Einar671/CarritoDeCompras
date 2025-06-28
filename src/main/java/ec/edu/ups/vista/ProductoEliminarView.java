@@ -1,31 +1,93 @@
 package ec.edu.ups.vista;
 
-import ec.edu.ups.modelo.Producto;
+// 1. Importar el manejador de internacionalización
+import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import java.util.List;
 
 public class ProductoEliminarView extends JInternalFrame {
     private JPanel panelPrincipal;
+    private JTextField txtCodigo;
+    private JTextField txtPrecio;
+    private JButton btnBuscar;
+    private JLabel lblCodigo;
+    private JLabel lblNombre;
     private JTextField txtNombre;
+    private JLabel lblPrecio;
     private JButton btnEliminar;
-    private JTable tblProductos;
-    private DefaultTableModel modelo;
+    private JLabel lblTitulo;
 
-    public ProductoEliminarView() {
+    private MensajeInternacionalizacionHandler mensajes;
+
+    public ProductoEliminarView(MensajeInternacionalizacionHandler mensajes){
+
+        super(mensajes.get("producto.eliminar.titulo.app"),true,true,false,true);
         setContentPane(panelPrincipal);
-        setTitle("Eliminar Producto");
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setResizable(false);
-        //setVisible(true);
-        setSize(600, 400);
+        this.mensajes = mensajes;
+        actualizarTextos();
+
+        setSize(600,400);
+    }
 
 
-        modelo = new DefaultTableModel();
-        Object[] columnas = {"Id", "Nombre", "Precio"};
-        modelo.setColumnIdentifiers(columnas);
-        tblProductos.setModel(modelo);
+    public void actualizarTextos() {
+        setTitle(mensajes.get("producto.eliminar.titulo.app"));
+
+        lblTitulo.setText(mensajes.get("producto.eliminar.titulo"));
+        lblCodigo.setText(mensajes.get("global.codigo"));
+        lblNombre.setText(mensajes.get("global.nombre"));
+        lblPrecio.setText(mensajes.get("global.precio"));
+
+        btnBuscar.setText(mensajes.get("global.boton.buscar"));
+        btnEliminar.setText(mensajes.get("global.boton.eliminar"));
+    }
+
+    public JPanel getPanelPrincipal() {
+        return panelPrincipal;
+    }
+
+    public void setPanelPrincipal(JPanel panelPrincipal) {
+        this.panelPrincipal = panelPrincipal;
+    }
+
+    public JTextField getTxtCodigo() {
+        return txtCodigo;
+    }
+
+    public void setTxtCodigo(JTextField txtCodigo) {
+        this.txtCodigo = txtCodigo;
+    }
+
+    public JTextField getTxtPrecio() {
+        return txtPrecio;
+    }
+
+    public void setTxtPrecio(JTextField txtPrecio) {
+        this.txtPrecio = txtPrecio;
+    }
+
+    public JButton getBtnBuscar() {
+        return btnBuscar;
+    }
+
+    public void setBtnBuscar(JButton btnBuscar) {
+        this.btnBuscar = btnBuscar;
+    }
+
+    public JLabel getLblCodigo() {
+        return lblCodigo;
+    }
+
+    public void setLblCodigo(JLabel lblCodigo) {
+        this.lblCodigo = lblCodigo;
+    }
+
+    public JLabel getLblNombre() {
+        return lblNombre;
+    }
+
+    public void setLblNombre(JLabel lblNombre) {
+        this.lblNombre = lblNombre;
     }
 
     public JTextField getTxtNombre() {
@@ -36,6 +98,14 @@ public class ProductoEliminarView extends JInternalFrame {
         this.txtNombre = txtNombre;
     }
 
+    public JLabel getLblPrecio() {
+        return lblPrecio;
+    }
+
+    public void setLblPrecio(JLabel lblPrecio) {
+        this.lblPrecio = lblPrecio;
+    }
+
     public JButton getBtnEliminar() {
         return btnEliminar;
     }
@@ -44,26 +114,22 @@ public class ProductoEliminarView extends JInternalFrame {
         this.btnEliminar = btnEliminar;
     }
 
-    public JTable getTblProductos() {
-        return tblProductos;
+    public JLabel getLblTitulo() {
+        return lblTitulo;
     }
 
-    public void setTblProductos(JTable tblProductos) {
-        this.tblProductos = tblProductos;
+    public void setLblTitulo(JLabel lblTitulo) {
+        this.lblTitulo = lblTitulo;
+    }
+
+    public void limpiarCampos(){
+        txtCodigo.setText("");
+        txtNombre.setText("");
+        txtPrecio.setText("");
+        txtCodigo.setEnabled(true);
     }
 
     public void mostrarMensaje(String mensaje) {
-        JOptionPane.showMessageDialog(this, mensaje);
-    }
-    public void mostrarProductos(List<Producto> productos) {
-        modelo.setRowCount(0);
-        for(Producto producto: productos) {
-            Object[] fila = {
-                    producto.getCodigo(),
-                    producto.getNombre(),
-                    producto.getPrecio()};
-            modelo.addRow(fila);
-        }
-
+        JOptionPane.showMessageDialog(this, mensaje, mensajes.get("yesNo.app.titulo"), JOptionPane.INFORMATION_MESSAGE);
     }
 }

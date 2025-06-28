@@ -2,12 +2,13 @@ package ec.edu.ups.vista;
 
 import ec.edu.ups.modelo.Carrito;
 import ec.edu.ups.modelo.ItemCarrito;
+import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
 
-public class CarritoEliminarView extends JInternalFrame{
+public class CarritoEliminarView extends JInternalFrame {
     private JPanel panelPrincipal;
     private JTextField txtCodigo;
     private JButton btnBuscar;
@@ -22,124 +23,44 @@ public class CarritoEliminarView extends JInternalFrame{
     private DefaultTableModel modeloDetalles;
     private Carrito carritoActual;
 
-    public CarritoEliminarView(){
-        super("",true,true,false,true);
+    private MensajeInternacionalizacionHandler mensajes;
+
+    public CarritoEliminarView(MensajeInternacionalizacionHandler mensajes) {
+        this.mensajes = mensajes;
+
         setContentPane(panelPrincipal);
-        setSize(600,400);
+        setSize(600, 400);
+
         modeloDetalles = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return column == 3;
+                return false; // Generalmente, en una vista de eliminación, la tabla no es editable.
             }
         };
-
-        Object[] columnasDetalles = {"Cod. Producto", "Nombre", "Precio Unit.", "Cantidad", "Subtotal"};
-        modeloDetalles.setColumnIdentifiers(columnasDetalles);
         tblItems.setModel(modeloDetalles);
+
+        actualizarTextos();
     }
 
-    public JPanel getPanelPrincipal() {
-        return panelPrincipal;
-    }
+    public void actualizarTextos() {
+        setTitle(mensajes.get("carrito.eliminar.titulo.app"));
 
-    public void setPanelPrincipal(JPanel panelPrincipal) {
-        this.panelPrincipal = panelPrincipal;
-    }
+        lblCodigo.setText(mensajes.get("global.codigo"));
+        lblUsuario.setText(mensajes.get("global.usuario"));
+        lblFecha.setText(mensajes.get("global.fecha")); // Asegúrate de añadir la clave "global.fecha" a tus archivos .properties
+        lblItems.setText(mensajes.get("global.item"));
 
-    public JTextField getTxtCodigo() {
-        return txtCodigo;
-    }
+        btnBuscar.setText(mensajes.get("global.boton.buscar"));
+        btnEliminar.setText(mensajes.get("global.boton.eliminar"));
 
-    public void setTxtCodigo(JTextField txtCodigo) {
-        this.txtCodigo = txtCodigo;
-    }
-
-    public JButton getBtnBuscar() {
-        return btnBuscar;
-    }
-
-    public void setBtnBuscar(JButton btnBuscar) {
-        this.btnBuscar = btnBuscar;
-    }
-
-    public JTable getTblItems() {
-        return tblItems;
-    }
-
-    public void setTblItems(JTable tblItems) {
-        this.tblItems = tblItems;
-    }
-
-    public JTextField getTxtUsuario() {
-        return txtUsuario;
-    }
-
-    public void setTxtUsuario(JTextField txtUsuario) {
-        this.txtUsuario = txtUsuario;
-    }
-
-    public JTextField getTxtFecha() {
-        return txtFecha;
-    }
-
-    public void setTxtFecha(JTextField txtFecha) {
-        this.txtFecha = txtFecha;
-    }
-
-    public JButton getBtnEliminar() {
-        return btnEliminar;
-    }
-
-    public void setBtnEliminar(JButton btnEliminar) {
-        this.btnEliminar = btnEliminar;
-    }
-
-    public JLabel getLblCodigo() {
-        return lblCodigo;
-    }
-
-    public void setLblCodigo(JLabel lblCodigo) {
-        this.lblCodigo = lblCodigo;
-    }
-
-    public JLabel getLblUsuario() {
-        return lblUsuario;
-    }
-
-    public void setLblUsuario(JLabel lblUsuario) {
-        this.lblUsuario = lblUsuario;
-    }
-
-    public JLabel getLblFecha() {
-        return lblFecha;
-    }
-
-    public void setLblFecha(JLabel lblFecha) {
-        this.lblFecha = lblFecha;
-    }
-
-    public JLabel getLblItems() {
-        return lblItems;
-    }
-
-    public void setLblItems(JLabel lblItems) {
-        this.lblItems = lblItems;
-    }
-
-    public DefaultTableModel getModeloDetalles() {
-        return modeloDetalles;
-    }
-
-    public void setModeloDetalles(DefaultTableModel modeloDetalles) {
-        this.modeloDetalles = modeloDetalles;
-    }
-
-    public Carrito getCarritoActual() {
-        return carritoActual;
-    }
-
-    public void setCarritoActual(Carrito carritoActual) {
-        this.carritoActual = carritoActual;
+        Object[] columnasDetalles = {
+                mensajes.get("global.codigo"),
+                mensajes.get("global.nombre"),
+                mensajes.get("global.precio"),
+                mensajes.get("global.cantidad"),
+                mensajes.get("global.subtotal")
+        };
+        modeloDetalles.setColumnIdentifiers(columnasDetalles);
     }
 
     public void mostrarItemsCarrito(Carrito carrito) {
@@ -160,7 +81,36 @@ public class CarritoEliminarView extends JInternalFrame{
             }
         }
     }
-    public void mostrarMensaje(String s) {
-        JOptionPane.showMessageDialog(this, s, "Información", JOptionPane.INFORMATION_MESSAGE);
+
+    public void mostrarMensaje(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje, mensajes.get("yesNo.app.titulo"), JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public JTextField getTxtCodigo() {
+        return txtCodigo;
+    }
+
+    public JButton getBtnBuscar() {
+        return btnBuscar;
+    }
+
+    public JTable getTblItems() {
+        return tblItems;
+    }
+
+    public JTextField getTxtUsuario() {
+        return txtUsuario;
+    }
+
+    public JTextField getTxtFecha() {
+        return txtFecha;
+    }
+
+    public JButton getBtnEliminar() {
+        return btnEliminar;
+    }
+
+    public Carrito getCarritoActual() {
+        return carritoActual;
     }
 }
