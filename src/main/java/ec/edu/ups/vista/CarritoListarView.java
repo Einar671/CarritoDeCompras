@@ -22,11 +22,13 @@ public class CarritoListarView extends JInternalFrame {
     private JLabel lblTitulo;
     private JLabel lblCodigo;
     private JLabel lblDetalles;
-
+    private List<Carrito> listaActual;
+    private Carrito carritoActual;
     private MensajeInternacionalizacionHandler mensajes;
     private Locale locale;
 
     public CarritoListarView(MensajeInternacionalizacionHandler mensajes) {
+        super("", true, true, false, true);
         this.mensajes = mensajes;
         this.locale = new Locale(mensajes.get("locale.language"), mensajes.get("locale.country"));
 
@@ -73,10 +75,17 @@ public class CarritoListarView extends JInternalFrame {
                 mensajes.get("global.subtotal")
         };
         modeloDetalles.setColumnIdentifiers(columnasDetalles);
+        mostrarDetallesCarrito(carritoActual);
+        mostrarCarritos(listaActual);
+
     }
 
     public void mostrarCarritos(List<Carrito> carritos) {
+        this.listaActual=carritos;
         modelo.setRowCount(0);
+        if(carritos == null) {
+            return;
+        }
         limpiarTablaDetalles();
         for (Carrito carrito : carritos) {
             Object[] fila = {
@@ -93,6 +102,7 @@ public class CarritoListarView extends JInternalFrame {
     }
 
     public void mostrarDetallesCarrito(Carrito carrito) {
+        this.carritoActual=carrito;
         limpiarTablaDetalles();
         if (carrito != null) {
             List<ItemCarrito> items = carrito.obtenerItems();

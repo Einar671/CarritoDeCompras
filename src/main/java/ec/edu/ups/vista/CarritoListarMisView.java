@@ -20,6 +20,8 @@ public class CarritoListarMisView extends JInternalFrame {
     private JLabel lblTitulo;
     private JLabel lblListaCarrito;
     private JLabel lblCodigo;
+    private Carrito carritoActual;
+    private List<Carrito> listaActual;
 
     private DefaultTableModel modeloCarritos;
     private DefaultTableModel modeloDetalles;
@@ -28,6 +30,7 @@ public class CarritoListarMisView extends JInternalFrame {
     private Locale locale;
 
     public CarritoListarMisView(MensajeInternacionalizacionHandler mensajes) {
+        super("", true, true, false, true);
         this.mensajes = mensajes;
         this.locale = new Locale(mensajes.get("locale.language"), mensajes.get("locale.country"));
 
@@ -46,7 +49,6 @@ public class CarritoListarMisView extends JInternalFrame {
     }
 
     public void actualizarTextos() {
-        // Se actualiza el locale por si el idioma ha cambiado.
         this.locale = new Locale(mensajes.get("locale.language"), mensajes.get("locale.country"));
 
         setTitle(mensajes.get("menu.carrito.listarMis"));
@@ -73,12 +75,22 @@ public class CarritoListarMisView extends JInternalFrame {
                 mensajes.get("global.subtotal")
         };
         modeloDetalles.setColumnIdentifiers(columnasDetalles);
+
+        if (listaActual != null) {
+            mostrarCarritos(listaActual);
+        }
+        if (carritoActual != null) {
+            mostrarDetalles(carritoActual);
+        }
     }
 
     public void mostrarCarritos(List<Carrito> carritos) {
+        this.listaActual = carritos;
         modeloCarritos.setRowCount(0);
         modeloDetalles.setRowCount(0);
-
+        if (carritos == null) {
+            return;
+        }
         for (Carrito carrito : carritos) {
             modeloCarritos.addRow(new Object[]{
                     carrito.getCodigo(),
@@ -90,6 +102,7 @@ public class CarritoListarMisView extends JInternalFrame {
     }
 
     public void mostrarDetalles(Carrito carrito) {
+        this.carritoActual=carrito;
         modeloDetalles.setRowCount(0);
 
         if (carrito != null) {

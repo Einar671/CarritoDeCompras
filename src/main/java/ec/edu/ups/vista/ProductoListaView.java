@@ -2,11 +2,13 @@ package ec.edu.ups.vista;
 
 import ec.edu.ups.modelo.Producto;
 // 1. Importar el manejador de internacionalización
+import ec.edu.ups.util.FormateadorUtils;
 import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
+import java.util.Locale;
 
 public class ProductoListaView extends JInternalFrame {
     private JTextField txtBuscar;
@@ -17,12 +19,14 @@ public class ProductoListaView extends JInternalFrame {
     private JButton btnListar;
     private JLabel lblTitulo;
     private DefaultTableModel modelo;
+    private Locale locale;
 
     private MensajeInternacionalizacionHandler mensajes;
 
     public ProductoListaView(MensajeInternacionalizacionHandler mensajes) {
 
         super("",true,true,false,true);
+        this.locale = new Locale(mensajes.get("locale.language"), mensajes.get("locale.country"));
         setContentPane(panelPrincipal);
         this.mensajes = mensajes;
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -108,12 +112,13 @@ public class ProductoListaView extends JInternalFrame {
     }
 
     public void mostrarProductos(List<Producto> productos) {
+
         modelo.setRowCount(0);
         for(Producto producto: productos) {
             Object[] fila = {
                     producto.getCodigo(),
                     producto.getNombre(),
-                    producto.getPrecio()};
+                    FormateadorUtils.formatearMoneda(producto.getPrecio(), locale) };
             modelo.addRow(fila);
         }
     }

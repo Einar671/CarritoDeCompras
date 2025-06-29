@@ -13,6 +13,8 @@ public class ProductoDAOMemoria implements ProductoDAO {
 
     public ProductoDAOMemoria() {
         productos = new ArrayList<Producto>();
+        crear(new Producto(1,"Arroz",15));
+        crear(new Producto(2,"Platano",12));
     }
 
     @Override

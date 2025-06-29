@@ -17,7 +17,6 @@ import java.util.Locale;
 
 public class CarritoController {
 
-    // --- Dependencias (sin cambios) ---
     private final CarritoDAO carritoDAO;
     private final ProductoDAO productoDAO;
     private final Usuario usuarioLogueado;
@@ -28,10 +27,9 @@ public class CarritoController {
     private final CarritoListarMisView carritoListarMisView;
     private final MensajeInternacionalizacionHandler mensajes;
 
-    // --- Estado (sin cambios) ---
     private Carrito carritoActual;
     private Carrito carritoSeleccionado;
-    private final Locale locale; // Ya lo tenías, ¡perfecto!
+    private final Locale locale;
 
     public CarritoController(CarritoDAO carritoDAO, ProductoDAO productoDAO, CarritoAñadirView carritoAñadirView,
                              CarritoListarView carritoListarView, CarritoModificarView carritoModificarView,
@@ -47,14 +45,12 @@ public class CarritoController {
         this.carritoListarMisView = carritoListarMisView;
         this.mensajes = mensajes;
 
-        // Esta línea es la clave para que todo funcione
         this.locale = new Locale(mensajes.get("locale.language"), mensajes.get("locale.country"));
 
         iniciarNuevoCarrito();
         configurarEventosEnVistas();
     }
 
-    // ... (iniciarNuevoCarrito y configurarEventosEnVistas sin cambios) ...
     private void iniciarNuevoCarrito() {
         this.carritoActual = new Carrito();
         this.carritoActual.setUsuario(this.usuarioLogueado);
@@ -86,7 +82,6 @@ public class CarritoController {
 
             if (carritoSeleccionado != null) {
                 carritoEliminarView.getTxtUsuario().setText(carritoSeleccionado.getUsuario().getUsername());
-                // CAMBIO: Formatear la fecha
                 carritoEliminarView.getTxtFecha().setText(FormateadorUtils.formatearFecha(carritoSeleccionado.getFecha().getTime(), locale));
                 carritoEliminarView.mostrarItemsCarrito(carritoSeleccionado);
 
@@ -109,7 +104,6 @@ public class CarritoController {
 
             if (carritoSeleccionado != null) {
                 carritoModificarView.getTxtUsuario().setText(carritoSeleccionado.getUsuario().getUsername());
-                // CAMBIO: Formatear la fecha
                 carritoModificarView.getTxtFecha().setText(FormateadorUtils.formatearFecha(carritoSeleccionado.getFecha().getTime(), locale));
                 carritoModificarView.mostrarItemsCarrito(carritoSeleccionado);
 
@@ -125,7 +119,6 @@ public class CarritoController {
         }
     }
 
-    // ... (guardarModificacionCarrito, limpiar vistas, buscarYMostrarDetalles, etc. sin cambios) ...
     private void guardarModificacionCarrito() {
         if (carritoSeleccionado == null) {
             carritoModificarView.mostrarMensaje(mensajes.get("mensaje.carrito.noSeleccionado"));
@@ -143,21 +136,9 @@ public class CarritoController {
     }
 
     private void cargarProductosEnTabla() {
-        List<ItemCarrito> items = carritoActual.obtenerItems();
-        DefaultTableModel modelo = carritoAñadirView.getModelo();
-        modelo.setRowCount(0);
-        for (ItemCarrito item : items) {
-            modelo.addRow(new Object[]{
-                    item.getProducto().getCodigo(),
-                    item.getProducto().getNombre(),
-                    FormateadorUtils.formatearMoneda(item.getProducto().getPrecio(), locale),
-                    item.getCantidad(),
-                    FormateadorUtils.formatearMoneda(item.getSubtotal(), locale)
-            });
-        }
+        carritoAñadirView.mostrarCarrito(carritoActual);
     }
 
-    // CAMBIO CLAVE: Este método ahora formatea todos los totales.
     private void mostrarTotales() {
         carritoAñadirView.getTxtSubtotal().setText(FormateadorUtils.formatearMoneda(carritoActual.calcularSubtotal(), locale));
         carritoAñadirView.getTxtIVA().setText(FormateadorUtils.formatearMoneda(carritoActual.calcularIVA(), locale));

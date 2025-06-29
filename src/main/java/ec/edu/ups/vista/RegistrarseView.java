@@ -4,24 +4,22 @@ import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
 
-public class LogInView extends JFrame {
+public class RegistrarseView extends JFrame {
     private JPanel panelPrincipal;
     private JPanel panelSecundario;
-    private JTextField txtUsername;
-    private JPasswordField psfContraseña;
-    private JButton btnIniciarSesion;
-    private JButton btnRegistrarse;
     private JLabel lblUsername;
     private JLabel lblPassword;
+    private JTextField txtUsername;
+    private JPasswordField txtContraseña;
+    private JButton btnRegistrarse;
     private JLabel lblTitulo;
-    private JButton btnOlvidoContraseña;
-
+    private JPasswordField txtRepContra;
+    private JLabel lblRepContra;
 
     private MensajeInternacionalizacionHandler mensajes;
 
-    public LogInView(MensajeInternacionalizacionHandler mensajes) {
-        this.mensajes = mensajes;
-
+    public RegistrarseView(MensajeInternacionalizacionHandler mensajes) {
+        this.mensajes=mensajes;
         setContentPane(panelPrincipal);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(500, 500);
@@ -31,16 +29,13 @@ public class LogInView extends JFrame {
         actualizarTextos();
     }
 
-    public void actualizarTextos() {
-        setTitle(mensajes.get("login.app.titulo"));
+    void actualizarTextos() {
+        setTitle(mensajes.get("login.boton.reg"));
+        lblTitulo.setText(mensajes.get("login.boton.reg"));
         lblUsername.setText(mensajes.get("global.usuario"));
-
         lblPassword.setText(mensajes.get("global.contraseña"));
-
-        btnIniciarSesion.setText(mensajes.get("login.app.titulo"));
+        lblRepContra.setText(mensajes.get("register.app.rep"));
         btnRegistrarse.setText(mensajes.get("login.boton.reg"));
-        lblTitulo.setText(mensajes.get("login.app.titulo"));
-        btnOlvidoContraseña.setText(mensajes.get("login.app.olvido"));
     }
 
     public JTextField getTxtUsername() {
@@ -51,20 +46,12 @@ public class LogInView extends JFrame {
         this.txtUsername = txtUsername;
     }
 
-    public JPasswordField getPsfContraseña() {
-        return psfContraseña;
+    public JPasswordField getTxtContraseña() {
+        return txtContraseña;
     }
 
-    public void setPsfContraseña(JPasswordField psfContraseña) {
-        this.psfContraseña = psfContraseña;
-    }
-
-    public JButton getBtnIniciarSesion() {
-        return btnIniciarSesion;
-    }
-
-    public void setBtnIniciarSesion(JButton btnIniciarSesion) {
-        this.btnIniciarSesion = btnIniciarSesion;
+    public void setTxtContraseña(JPasswordField txtContraseña) {
+        this.txtContraseña = txtContraseña;
     }
 
     public JButton getBtnRegistrarse() {
@@ -75,15 +62,21 @@ public class LogInView extends JFrame {
         this.btnRegistrarse = btnRegistrarse;
     }
 
-    public JButton getBtnOlvidoContraseña() {
-        return btnOlvidoContraseña;
+    public JPasswordField getTxtRepContra() {
+        return txtRepContra;
     }
 
-    public void setBtnOlvidoContraseña(JButton btnOlvidoContraseña) {
-        this.btnOlvidoContraseña = btnOlvidoContraseña;
+    public void setTxtRepContra(JPasswordField txtRepContra) {
+        this.txtRepContra = txtRepContra;
     }
 
     public void mostrarMensaje(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje, mensajes.get("yesNo.app.titulo"), JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public void limpiarCampos() {
+        txtUsername.setText("");
+        txtContraseña.setText("");
+        txtRepContra.setText("");
     }
 }

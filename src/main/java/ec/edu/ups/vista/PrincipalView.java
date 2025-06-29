@@ -17,7 +17,7 @@ public class PrincipalView extends JFrame {
     private JMenuItem menuItemModificarProducto;
     private JMenuItem menuItemActualizarProducto;
     private JMenuItem menuItemCargarProducto;
-    private JDesktopPane desktop;
+    private MiJDesktopPane desktop;
     private JMenuItem menuItemAñadirCarrito;
     private JMenuItem menuItemListarCarritos;
     private JMenuItem menuItemEliminarCarrito;
@@ -37,7 +37,7 @@ public class PrincipalView extends JFrame {
     public PrincipalView(MensajeInternacionalizacionHandler mensajeInternacionalizacionHandler) {
         this.mensajeInternacionalizacionHandler = mensajeInternacionalizacionHandler;
 
-        desktop = new JDesktopPane();
+        desktop = new MiJDesktopPane(mensajeInternacionalizacionHandler);
         menubar = new JMenuBar();
         menuCarrito = new JMenu();
         menuProducto = new JMenu();
@@ -95,7 +95,6 @@ public class PrincipalView extends JFrame {
         menuIdiomas.add(menuItemIngles);
         menuIdiomas.add(menuItemNoruego);
 
-        // 4. Configurar el Frame
         setJMenuBar(menubar);
         setContentPane(desktop);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -108,7 +107,7 @@ public class PrincipalView extends JFrame {
 
     public void actualizarTextos() {
         setTitle(mensajeInternacionalizacionHandler.get("app.titulo"));
-
+        desktop.actualizarTextos();
         menuProducto.setText(mensajeInternacionalizacionHandler.get("menu.producto"));
         menuItemCargarProducto.setText(mensajeInternacionalizacionHandler.get("menu.producto.crear"));
         menuItemActualizarProducto.setText(mensajeInternacionalizacionHandler.get("menu.producto.buscar"));
@@ -128,7 +127,7 @@ public class PrincipalView extends JFrame {
         menuItemEliminarUsuario.setText(mensajeInternacionalizacionHandler.get("menu.usuario.eliminar"));
         menuItemModificarUsuario.setText(mensajeInternacionalizacionHandler.get("menu.usuario.modificar"));
 
-        menuUsuario.setText(mensajeInternacionalizacionHandler.get("global.usuario")); // Usamos una clave genérica
+        menuUsuario.setText(mensajeInternacionalizacionHandler.get("global.usuario"));
         menuItemModificarMisUsuario.setText(mensajeInternacionalizacionHandler.get("menu.usuario.modificarMis"));
         menuItemCerrarSesión.setText(mensajeInternacionalizacionHandler.get("menu.salir.cerrar"));
 
@@ -139,16 +138,13 @@ public class PrincipalView extends JFrame {
     }
 
 
-    public void setMensajeInternacionalizacionHandler(MensajeInternacionalizacionHandler mensajeInternacionalizacionHandler) {
-        this.mensajeInternacionalizacionHandler = mensajeInternacionalizacionHandler;
-        actualizarTextos();
-    }
+
 
     public JDesktopPane getDesktop() {
         return desktop;
     }
 
-    public void setDesktop(JDesktopPane desktop) {
+    public void setDesktop(MiJDesktopPane desktop) {
         this.desktop = desktop;
     }
 

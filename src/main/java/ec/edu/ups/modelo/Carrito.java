@@ -52,6 +52,7 @@ public class Carrito {
     }
 
     public void setFecha(GregorianCalendar fecha) {
+
         this.fecha = fecha;
     }
 

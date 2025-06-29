@@ -2,11 +2,13 @@ package ec.edu.ups.vista;
 
 import ec.edu.ups.modelo.Carrito;
 import ec.edu.ups.modelo.ItemCarrito;
+import ec.edu.ups.util.FormateadorUtils;
 import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
+import java.util.Locale;
 
 public class CarritoEliminarView extends JInternalFrame {
     private JPanel panelPrincipal;
@@ -20,21 +22,27 @@ public class CarritoEliminarView extends JInternalFrame {
     private JLabel lblUsuario;
     private JLabel lblFecha;
     private JLabel lblItems;
+    private JLabel lblTitulo;
     private DefaultTableModel modeloDetalles;
     private Carrito carritoActual;
 
     private MensajeInternacionalizacionHandler mensajes;
+    private Locale locale;
 
     public CarritoEliminarView(MensajeInternacionalizacionHandler mensajes) {
+        super("", true, true, false, true);
         this.mensajes = mensajes;
+        this.locale = new Locale(mensajes.get("locale.language"), mensajes.get("locale.country"));
 
         setContentPane(panelPrincipal);
         setSize(600, 400);
+        setClosable(true);
+        setIconifiable(true);
 
         modeloDetalles = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; // Generalmente, en una vista de eliminación, la tabla no es editable.
+                return false;
             }
         };
         tblItems.setModel(modeloDetalles);
@@ -43,11 +51,14 @@ public class CarritoEliminarView extends JInternalFrame {
     }
 
     public void actualizarTextos() {
+        this.locale = new Locale(mensajes.get("locale.language"), mensajes.get("locale.country"));
+
         setTitle(mensajes.get("carrito.eliminar.titulo.app"));
 
+        lblTitulo.setText(mensajes.get("carrito.eliminar.titulo.app"));
         lblCodigo.setText(mensajes.get("global.codigo"));
         lblUsuario.setText(mensajes.get("global.usuario"));
-        lblFecha.setText(mensajes.get("global.fecha")); // Asegúrate de añadir la clave "global.fecha" a tus archivos .properties
+        lblFecha.setText(mensajes.get("global.fecha"));
         lblItems.setText(mensajes.get("global.item"));
 
         btnBuscar.setText(mensajes.get("global.boton.buscar"));
@@ -61,6 +72,7 @@ public class CarritoEliminarView extends JInternalFrame {
                 mensajes.get("global.subtotal")
         };
         modeloDetalles.setColumnIdentifiers(columnasDetalles);
+        mostrarItemsCarrito(carritoActual);
     }
 
     public void mostrarItemsCarrito(Carrito carrito) {
@@ -73,9 +85,9 @@ public class CarritoEliminarView extends JInternalFrame {
                 Object[] fila = {
                         item.getProducto().getCodigo(),
                         item.getProducto().getNombre(),
-                        item.getProducto().getPrecio(),
+                        FormateadorUtils.formatearMoneda(item.getProducto().getPrecio(), locale),
                         item.getCantidad(),
-                        item.getSubtotal()
+                        FormateadorUtils.formatearMoneda(item.getSubtotal(), locale)
                 };
                 modeloDetalles.addRow(fila);
             }
@@ -86,31 +98,11 @@ public class CarritoEliminarView extends JInternalFrame {
         JOptionPane.showMessageDialog(this, mensaje, mensajes.get("yesNo.app.titulo"), JOptionPane.INFORMATION_MESSAGE);
     }
 
-    public JTextField getTxtCodigo() {
-        return txtCodigo;
-    }
-
-    public JButton getBtnBuscar() {
-        return btnBuscar;
-    }
-
-    public JTable getTblItems() {
-        return tblItems;
-    }
-
-    public JTextField getTxtUsuario() {
-        return txtUsuario;
-    }
-
-    public JTextField getTxtFecha() {
-        return txtFecha;
-    }
-
-    public JButton getBtnEliminar() {
-        return btnEliminar;
-    }
-
-    public Carrito getCarritoActual() {
-        return carritoActual;
-    }
+    public JTextField getTxtCodigo() { return txtCodigo; }
+    public JButton getBtnBuscar() { return btnBuscar; }
+    public JTable getTblItems() { return tblItems; }
+    public JTextField getTxtUsuario() { return txtUsuario; }
+    public JTextField getTxtFecha() { return txtFecha; }
+    public JButton getBtnEliminar() { return btnEliminar; }
+    public Carrito getCarritoActual() { return carritoActual; }
 }

@@ -7,7 +7,6 @@ import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
 import java.util.Locale;
@@ -24,6 +23,7 @@ public class CarritoModificarView extends JInternalFrame {
     private JLabel lblFecha;
     private JLabel lblItems;
     private JButton btnModificar;
+    private JLabel lblTitulo;
     private DefaultTableModel modeloDetalles;
     private Carrito carritoActual;
 
@@ -31,11 +31,14 @@ public class CarritoModificarView extends JInternalFrame {
     private Locale locale;
 
     public CarritoModificarView(MensajeInternacionalizacionHandler mensajes) {
+        super("", true, true, false, true);
         this.mensajes = mensajes;
         this.locale = new Locale(mensajes.get("locale.language"), mensajes.get("locale.country"));
 
         setContentPane(panelPrincipal);
         setSize(600, 400);
+        setClosable(true);
+        setIconifiable(true);
 
         modeloDetalles = new DefaultTableModel() {
             @Override
@@ -52,8 +55,10 @@ public class CarritoModificarView extends JInternalFrame {
     }
 
     public void actualizarTextos() {
-        setTitle(mensajes.get("carrito.modificar.titulo.app"));
+        this.locale = new Locale(mensajes.get("locale.language"), mensajes.get("locale.country"));
 
+        setTitle(mensajes.get("carrito.modificar.titulo.app"));
+        lblTitulo.setText(mensajes.get("carrito.modificar.titulo.app"));
         lblCodigo.setText(mensajes.get("global.codigo") + ":");
         lblUsuario.setText(mensajes.get("global.usuario") + ":");
         lblFecha.setText(mensajes.get("global.fecha") + ":");
@@ -70,6 +75,7 @@ public class CarritoModificarView extends JInternalFrame {
                 mensajes.get("global.subtotal")
         };
         modeloDetalles.setColumnIdentifiers(columnasDetalles);
+        mostrarItemsCarrito(carritoActual);
     }
 
     private void configurarListeners() {

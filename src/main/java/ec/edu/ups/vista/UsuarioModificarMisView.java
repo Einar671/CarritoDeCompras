@@ -10,6 +10,9 @@ public class UsuarioModificarMisView extends JInternalFrame {
     private JButton btnModificar;
     private JTextField txtUsuario;
     private JPanel panelPrincipal;
+    private JLabel lblTitulo;
+    private JTextField txtNuevoUser;
+    private JLabel lblNuevoUser;
 
     private MensajeInternacionalizacionHandler mensajes;
 
@@ -30,10 +33,19 @@ public class UsuarioModificarMisView extends JInternalFrame {
 
     public void actualizarTextos() {
         setTitle(mensajes.get("menu.usuario.modificarMis"));
-
+        lblTitulo.setText(mensajes.get("menu.usuario.modificarMis"));
+        lblNuevoUser.setText(mensajes.get("global.nuevoUsuario"));
         lblUsuario.setText(mensajes.get("global.usuario") + ":");
         lblContraseña.setText(mensajes.get("global.contraseña") + ":");
         btnModificar.setText(mensajes.get("global.boton.modificar"));
+    }
+
+    public JTextField getTxtNuevoUser() {
+        return txtNuevoUser;
+    }
+
+    public void setTxtNuevoUser(JTextField txtNuevoUser) {
+        this.txtNuevoUser = txtNuevoUser;
     }
 
     public JTextField getTxtContraseña() {

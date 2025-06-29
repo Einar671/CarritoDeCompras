@@ -32,6 +32,7 @@ public class ProductoController {
         this.productoListaView = productoListaView;
         this.productoAnadirView = productoAnadirView;
 
+
         configurarEventos();
     }
 
@@ -57,7 +58,7 @@ public class ProductoController {
             String nombre = productoAnadirView.getTxtNombre().getText();
             double precio = Double.parseDouble(productoAnadirView.getTxtPrecio().getText());
 
-            if (nombre.trim().isEmpty()) {
+            if (nombre.isEmpty()) {
                 productoAnadirView.mostrarMensaje(mensajes.get("mensaje.usuario.error.camposVacios"));
                 return;
             }

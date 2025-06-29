@@ -22,7 +22,7 @@ public class Main {
     private static final ProductoDAO productoDAO = new ProductoDAOMemoria();
     private static final CarritoDAO carritoDAO = new CarritoDAOMemoria();
 
-    private static final MensajeInternacionalizacionHandler mensajes = new MensajeInternacionalizacionHandler("es", "EC");
+    private static final MensajeInternacionalizacionHandler mensajes = new MensajeInternacionalizacionHandler("en", "US");
     private static PrincipalView principalView;
 
     public static void main(String[] args) {
@@ -36,15 +36,17 @@ public class Main {
         UsuarioEliminarView usuarioEliminarView = new UsuarioEliminarView(mensajes);
         UsuarioListarView usuarioListarView = new UsuarioListarView(mensajes);
         UsuarioModificarMisView usuarioModificarMisView = new UsuarioModificarMisView(mensajes);
-
-        UsuarioController usuarioController = new UsuarioController(usuarioCrearView, usuarioDAO, loginView, usuarioModificarView, usuarioEliminarView, usuarioModificarMisView, usuarioListarView, mensajes);
+        RegistrarseView registrarseView = new RegistrarseView(mensajes);
+        PreguntasRegisterView preguntasView = new PreguntasRegisterView(mensajes);
+        PreguntasModificarView preguntasModificarView = new PreguntasModificarView(mensajes);
+        UsuarioController usuarioController = new UsuarioController(usuarioCrearView, usuarioDAO, loginView, usuarioModificarView, usuarioEliminarView, usuarioModificarMisView, usuarioListarView, mensajes,registrarseView,preguntasView,preguntasModificarView);
 
         loginView.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
                 Usuario usuarioAutenticado = usuarioController.getUsuarioAutentificado();
                 if (usuarioAutenticado != null) {
-                    iniciarAplicacionPrincipal(loginView,usuarioAutenticado, usuarioCrearView, usuarioModificarView, usuarioEliminarView, usuarioModificarMisView, usuarioListarView);
+                    iniciarAplicacionPrincipal(loginView,usuarioAutenticado, usuarioCrearView, usuarioModificarView, usuarioEliminarView, usuarioModificarMisView, usuarioListarView,registrarseView, preguntasView,preguntasModificarView);
                 } else {
                     System.exit(0);
                 }
@@ -54,7 +56,7 @@ public class Main {
         loginView.setVisible(true);
     }
 
-    public static void iniciarAplicacionPrincipal(LogInView logInView, Usuario usuarioAutenticado, UsuarioCrearView usuarioCrearView, UsuarioModificarView usuarioModificarView, UsuarioEliminarView usuarioEliminarView, UsuarioModificarMisView usuarioModificarMisView, UsuarioListarView usuarioListarView) {
+    public static void iniciarAplicacionPrincipal(LogInView logInView, Usuario usuarioAutenticado, UsuarioCrearView usuarioCrearView, UsuarioModificarView usuarioModificarView, UsuarioEliminarView usuarioEliminarView, UsuarioModificarMisView usuarioModificarMisView, UsuarioListarView usuarioListarView, RegistrarseView registrarseView, PreguntasRegisterView preguntasView, PreguntasModificarView preguntasModificarView) {
 
         principalView = new PrincipalView(mensajes);
         ProductoModificarView productoModificarView = new ProductoModificarView(mensajes);
@@ -77,7 +79,8 @@ public class Main {
 
         configurarMenu(principalView, carritoAñadirView, productoAnadirView, productoListaView, productoEliminarView,
                 productoModificarView, carritoListarView, carritoModificarView, carritoEliminarView, carritoListarMisView,
-                usuarioCrearView, usuarioModificarView, usuarioEliminarView, usuarioModificarMisView, usuarioListarView,logInView);
+                usuarioCrearView, usuarioModificarView, usuarioEliminarView, usuarioModificarMisView, usuarioListarView,logInView,
+                registrarseView,preguntasView);
 
         principalView.setVisible(true);
     }
@@ -95,11 +98,9 @@ public class Main {
                                        ProductoModificarView productoModificarView, CarritoListarView carritoListarView,
                                        CarritoModificarView carritoModificarView, CarritoEliminarView carritoEliminarView, CarritoListarMisView carritoListarMisView,
                                        UsuarioCrearView usuarioCrearView, UsuarioModificarView usuarioModificarView, UsuarioEliminarView usuarioEliminarView,
-                                       UsuarioModificarMisView usuarioModificarMisView, UsuarioListarView usuarioListarView,LogInView logInView) {
+                                       UsuarioModificarMisView usuarioModificarMisView, UsuarioListarView usuarioListarView,LogInView logInView, RegistrarseView registrarseView, PreguntasRegisterView preguntasView) {
 
-        principalView.getMenuItemEspañol().addActionListener(e -> cambiarIdioma("es", "EC"));
-        principalView.getMenuItemIngles().addActionListener(e -> cambiarIdioma("en", "US"));
-        principalView.getMenuItemNoruego().addActionListener(e -> cambiarIdioma("nk", "NW"));
+
 
         principalView.getMenuItemCerrarSesión().addActionListener(e -> {
             principalView.dispose();
@@ -224,6 +225,8 @@ public class Main {
             usuarioModificarView.actualizarTextos();
             logInView.actualizarTextos();
 
+
+
         });
         principalView.getMenuItemNoruego().addActionListener(e->{
             cambiarIdioma("nk","NK");
@@ -243,7 +246,30 @@ public class Main {
             usuarioModificarMisView.actualizarTextos();
             usuarioModificarView.actualizarTextos();
             logInView.actualizarTextos();
+            preguntasView.actualizarTextos();
+            registrarseView.actualizarTextos();
 
+        });
+        principalView.getMenuItemEspañol().addActionListener(e->{
+        cambiarIdioma("es","EC");
+            principalView.actualizarTextos();
+            carritoAñadirView.actualizarTextos();
+            carritoEliminarView.actualizarTextos();
+            carritoListarView.actualizarTextos();
+            carritoListarMisView.actualizarTextos();
+            carritoModificarView.actualizarTextos();
+            productoAnadirView.actualizarTextos();
+            productoEliminarView.actualizarTextos();
+            productoListaView.actualizarTextos();
+            productoModificarView.actualizarTextos();
+            usuarioCrearView.actualizarTextos();
+            usuarioEliminarView.actualizarTextos();
+            usuarioListarView.actualizarTextos();
+            usuarioModificarMisView.actualizarTextos();
+            usuarioModificarView.actualizarTextos();
+            logInView.actualizarTextos();
+            preguntasView.actualizarTextos();
+            registrarseView.actualizarTextos();
         });
     }
 }
