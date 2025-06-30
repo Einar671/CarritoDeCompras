@@ -34,7 +34,7 @@ public class ProductoEliminarView extends JInternalFrame {
 
         actualizarTextos();
 
-        setSize(600,400);
+        setSize(500,500);
     }
 
 

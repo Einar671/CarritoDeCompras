@@ -8,6 +8,7 @@ import ec.edu.ups.modelo.Producto;
 import ec.edu.ups.modelo.Usuario;
 import ec.edu.ups.util.FormateadorUtils;
 import ec.edu.ups.util.MensajeInternacionalizacionHandler;
+import ec.edu.ups.util.Sonido;
 import ec.edu.ups.vista.*;
 
 import javax.swing.*;
@@ -231,6 +232,9 @@ public class CarritoController {
             carritoAñadirView.mostrarMensaje(mensajes.get("mensaje.carrito.vacio"));
             return;
         }
+        Sonido sonido = new Sonido();
+        sonido.cargarSonido("/sonidoCompra.wav");
+        sonido.reproducir();
         carritoDAO.crear(carritoActual);
         carritoAñadirView.mostrarMensaje(mensajes.get("mensaje.carrito.guardado") + " " + usuarioLogueado.getUsername());
 
@@ -240,6 +244,8 @@ public class CarritoController {
         carritoAñadirView.getTxtCodigo().setText("");
         carritoAñadirView.getTxtNombre().setText("");
         carritoAñadirView.getTxtPrecio().setText("");
+
+
     }
 
     private void añadirProducto() {

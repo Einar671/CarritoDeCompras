@@ -16,6 +16,7 @@ public class UsuarioCrearView extends JInternalFrame {
     private JButton btnCrear;
     private JComboBox<Rol> cbxRoles;
     private JPanel panelPrincipal;
+    private JLabel lblTitulo;
 
     private MensajeInternacionalizacionHandler mensajes;
 
@@ -35,7 +36,7 @@ public class UsuarioCrearView extends JInternalFrame {
 
     public void actualizarTextos() {
         setTitle(mensajes.get("usuario.crear.titulo.app"));
-
+        lblTitulo.setText(mensajes.get("usuario.crear.titulo.app"));
         lblUsuarioA.setText(mensajes.get("global.usuario")+": ");
         lblContraseña.setText(mensajes.get("global.contraseña") + ":");
         lblRol.setText(mensajes.get("global.rol") + ":");

@@ -16,6 +16,7 @@ public class UsuarioEliminarView extends JInternalFrame {
     private JTextField txtRol;
     private JPanel paneltitulo;
     private JPanel panelPrincipal;
+    private JLabel lblTitulo;
 
     private MensajeInternacionalizacionHandler mensajes;
 
@@ -37,7 +38,7 @@ public class UsuarioEliminarView extends JInternalFrame {
 
     public void actualizarTextos() {
         setTitle(mensajes.get("usuario.eliminar.titulo.app"));
-
+        lblTitulo.setText(mensajes.get("usuario.eliminar.titulo.app"));
         lblUsuario.setText(mensajes.get("global.usuario") + ":");
         lblContraseña.setText(mensajes.get("global.contraseña") + ":");
         lblRol.setText(mensajes.get("global.rol") + ":");

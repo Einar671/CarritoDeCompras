@@ -14,6 +14,7 @@ public class ProductoModificarView extends JInternalFrame {
     private JButton btnModificar;
     private JTextField txtNombre;
     private JTextField txtPrecio;
+    private JLabel lblTitulo;
 
     private MensajeInternacionalizacionHandler mensajes;
 
@@ -34,7 +35,7 @@ public class ProductoModificarView extends JInternalFrame {
 
     public void actualizarTextos() {
         setTitle(mensajes.get("producto.modificar.titulo.app"));
-
+        lblTitulo.setText(mensajes.get("producto.modificar.titulo.app"));
         lblCodigo.setText(mensajes.get("global.codigo"));
         lblNombre.setText(mensajes.get("global.nombre"));
         lblPrecio.setText(mensajes.get("global.precio"));

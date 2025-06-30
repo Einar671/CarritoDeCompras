@@ -19,7 +19,6 @@ public class LogInView extends JFrame {
     private JButton btnOlvidoContraseña;
 
 
-
     private MensajeInternacionalizacionHandler mensajes;
 
     public LogInView(MensajeInternacionalizacionHandler mensajes) {

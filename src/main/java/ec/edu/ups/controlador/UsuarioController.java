@@ -6,6 +6,7 @@ import ec.edu.ups.modelo.RespuestaSeguridad;
 import ec.edu.ups.modelo.Rol;
 import ec.edu.ups.modelo.Usuario;
 import ec.edu.ups.util.MensajeInternacionalizacionHandler;
+import ec.edu.ups.util.Sonido;
 import ec.edu.ups.vista.*;
 
 import javax.swing.*;
@@ -162,6 +163,9 @@ public class UsuarioController {
             logInView.mostrarMensaje(mensajes.get("mensaje.usuario.login.error"));
         } else {
             logInView.dispose();
+            Sonido sonido = new Sonido();
+            sonido.cargarSonido("/sonidoInicio.wav");
+            sonido.reproducir();
         }
     }
 
