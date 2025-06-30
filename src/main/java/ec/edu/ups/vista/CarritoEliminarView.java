@@ -7,6 +7,7 @@ import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.net.URL;
 import java.util.List;
 import java.util.Locale;
 
@@ -33,11 +34,13 @@ public class CarritoEliminarView extends JInternalFrame {
         super("", true, true, false, true);
         this.mensajes = mensajes;
         this.locale = new Locale(mensajes.get("locale.language"), mensajes.get("locale.country"));
-
+        URL urlBuscar= getClass().getResource("/search.png");
+        URL urlEliminar = getClass().getResource("/trash.png");
         setContentPane(panelPrincipal);
+        btnBuscar.setIcon(new ImageIcon(urlBuscar));
+        btnEliminar.setIcon(new ImageIcon(urlEliminar));
         setSize(600, 400);
-        setClosable(true);
-        setIconifiable(true);
+
 
         modeloDetalles = new DefaultTableModel() {
             @Override
@@ -60,6 +63,7 @@ public class CarritoEliminarView extends JInternalFrame {
         lblUsuario.setText(mensajes.get("global.usuario"));
         lblFecha.setText(mensajes.get("global.fecha"));
         lblItems.setText(mensajes.get("global.item"));
+        txtCodigo.setToolTipText(mensajes.get("carrito.top.codigo"));
 
         btnBuscar.setText(mensajes.get("global.boton.buscar"));
         btnEliminar.setText(mensajes.get("global.boton.eliminar"));

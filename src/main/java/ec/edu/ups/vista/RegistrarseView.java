@@ -3,6 +3,7 @@ package ec.edu.ups.vista;
 import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
+import java.net.URL;
 
 public class RegistrarseView extends JFrame {
     private JPanel panelPrincipal;
@@ -20,9 +21,11 @@ public class RegistrarseView extends JFrame {
 
     public RegistrarseView(MensajeInternacionalizacionHandler mensajes) {
         this.mensajes=mensajes;
+        URL urlReg = getClass().getResource("/add.png");
         setContentPane(panelPrincipal);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(500, 500);
+        btnRegistrarse.setIcon(new ImageIcon(urlReg));
         setLocationRelativeTo(null);
         setResizable(false);
 

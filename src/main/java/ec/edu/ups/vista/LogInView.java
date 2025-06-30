@@ -3,6 +3,8 @@ package ec.edu.ups.vista;
 import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
+import java.net.URI;
+import java.net.URL;
 
 public class LogInView extends JFrame {
     private JPanel panelPrincipal;
@@ -17,17 +19,22 @@ public class LogInView extends JFrame {
     private JButton btnOlvidoContraseña;
 
 
+
     private MensajeInternacionalizacionHandler mensajes;
 
     public LogInView(MensajeInternacionalizacionHandler mensajes) {
         this.mensajes = mensajes;
-
+        URL urlLog = getClass().getResource("/log-in.png");
+        URL urlReg = getClass().getResource("/add.png");
+        URL urlOlvido = getClass().getResource("/question-sign.png");
         setContentPane(panelPrincipal);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(500, 500);
         setLocationRelativeTo(null);
         setResizable(false);
-
+        btnIniciarSesion.setIcon(new ImageIcon(urlLog));
+        btnRegistrarse.setIcon(new ImageIcon(urlReg));
+        btnOlvidoContraseña.setIcon(new ImageIcon(urlOlvido));
         actualizarTextos();
     }
 

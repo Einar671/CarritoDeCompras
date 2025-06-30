@@ -7,6 +7,7 @@ import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.net.URL;
 import java.util.Locale;
 
 public class CarritoAñadirView extends JInternalFrame {
@@ -31,6 +32,7 @@ public class CarritoAñadirView extends JInternalFrame {
     private JLabel lblSubtotal;
     private JLabel IVA;
     private JLabel lblTotal;
+    private JLabel lblTitulo;
     private DefaultTableModel modelo;
     private Carrito carritoActual;
 
@@ -48,10 +50,16 @@ public class CarritoAñadirView extends JInternalFrame {
         setSize(600, 550);
         setClosable(true);
         setIconifiable(true);
-
+        URL urlBuscar = getClass().getResource("/search.png");
+        URL urlAñadir= getClass().getResource("/plus.png");
+        URL urlGuardar=getClass().getResource("/check.png");
+        URL urlLimpiar=getClass().getResource("/clean.png");
         modelo = new DefaultTableModel();
         tblItems.setModel(modelo);
-
+        btnBuscar.setIcon(new ImageIcon(urlBuscar));
+        btnAñadir.setIcon(new ImageIcon(urlAñadir));
+        btnGuardar.setIcon(new ImageIcon(urlGuardar));
+        btnLimpiar.setIcon(new ImageIcon(urlLimpiar));
         actualizarTextos();
         cargarDatos();
     }
@@ -60,7 +68,7 @@ public class CarritoAñadirView extends JInternalFrame {
         this.locale = new Locale(mensajes.get("locale.language"), mensajes.get("locale.country"));
 
         setTitle(mensajes.get("carrito.crear.titulo.app"));
-
+        lblTitulo.setText(mensajes.get("carrito.crear.titulo"));
         lblCodigo.setText(mensajes.get("global.codigo"));
         lblNombre.setText(mensajes.get("global.nombre"));
         lblPrecio.setText(mensajes.get("global.precio"));
@@ -68,11 +76,12 @@ public class CarritoAñadirView extends JInternalFrame {
         lblSubtotal.setText(mensajes.get("global.subtotal"));
         IVA.setText(mensajes.get("global.IVA"));
         lblTotal.setText(mensajes.get("global.total"));
-
+        txtCodigo.setToolTipText(mensajes.get("producto.top.codigo"));
         btnBuscar.setText(mensajes.get("global.boton.buscar"));
         btnAñadir.setText(mensajes.get("global.añadir"));
         btnGuardar.setText(mensajes.get("global.boton.guardar"));
         btnLimpiar.setText(mensajes.get("global.boton.limpiar"));
+        cbxCantidad.setToolTipText(mensajes.get("carrito.top.cantidad"));
 
         Object[] columnas = {
                 mensajes.get("global.codigo"),

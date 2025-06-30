@@ -5,6 +5,7 @@ import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
 import java.awt.*;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,6 +29,9 @@ public class PreguntasRegisterView extends JFrame {
 
         setContentPane(panelPrincipal);
         setSize(600, 500);
+
+        URL urlGuardar = getClass().getResource("/check.png");
+        btnGuardar.setIcon(new ImageIcon(urlGuardar));
 
 
         generarCamposDePreguntas();

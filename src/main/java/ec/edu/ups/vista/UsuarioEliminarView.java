@@ -3,6 +3,7 @@ package ec.edu.ups.vista;
 import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
+import java.net.URL;
 
 public class UsuarioEliminarView extends JInternalFrame {
     private JLabel lblUsuario;
@@ -25,8 +26,11 @@ public class UsuarioEliminarView extends JInternalFrame {
 
         setSize(600, 400);
         setContentPane(panelPrincipal);
-        setClosable(true);
-        setIconifiable(true);
+        URL urlBuscar = getClass().getResource("/search.png");
+        btnBuscar.setIcon(new ImageIcon(urlBuscar));
+        URL urlEliminar = getClass().getResource("/trash.png");
+        btnEliminar.setIcon(new ImageIcon(urlEliminar));
+
 
         actualizarTextos();
     }
@@ -37,7 +41,7 @@ public class UsuarioEliminarView extends JInternalFrame {
         lblUsuario.setText(mensajes.get("global.usuario") + ":");
         lblContraseña.setText(mensajes.get("global.contraseña") + ":");
         lblRol.setText(mensajes.get("global.rol") + ":");
-
+        txtUsuario.setToolTipText(mensajes.get("usuario.crear.nombre"));
         btnBuscar.setText(mensajes.get("global.boton.buscar"));
         btnEliminar.setText(mensajes.get("global.boton.eliminar"));
     }

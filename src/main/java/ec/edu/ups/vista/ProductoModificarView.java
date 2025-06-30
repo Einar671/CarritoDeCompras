@@ -2,6 +2,7 @@ package ec.edu.ups.vista;
 
 import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 import javax.swing.*;
+import java.net.URL;
 
 public class ProductoModificarView extends JInternalFrame {
     private JPanel panelPrincipal;
@@ -22,8 +23,11 @@ public class ProductoModificarView extends JInternalFrame {
 
         setContentPane(panelPrincipal);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        URL urlBuscar = getClass().getResource("/search.png");
+        URL urlModificar = getClass().getResource("/edit.png");
+        btnModificar.setIcon(new ImageIcon(urlModificar));
+        btnBuscar.setIcon(new ImageIcon(urlBuscar));
         setSize(500, 500);
-        setResizable(false);
 
         actualizarTextos();
     }
@@ -34,7 +38,7 @@ public class ProductoModificarView extends JInternalFrame {
         lblCodigo.setText(mensajes.get("global.codigo"));
         lblNombre.setText(mensajes.get("global.nombre"));
         lblPrecio.setText(mensajes.get("global.precio"));
-
+        txtCodigo.setToolTipText(mensajes.get("producto.top.codigo"));
         btnBuscar.setText(mensajes.get("global.boton.buscar"));
         btnModificar.setText(mensajes.get("global.boton.modificar"));
     }

@@ -2,6 +2,7 @@ package ec.edu.ups.vista;
 
 import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 import javax.swing.*;
+import java.net.URL;
 
 public class UsuarioModificarMisView extends JInternalFrame {
     private JLabel lblUsuario;
@@ -20,6 +21,9 @@ public class UsuarioModificarMisView extends JInternalFrame {
 
         super("", true, true, false, true);
         this.mensajes = mensajes;
+
+        URL urlModificar = getClass().getResource("/edit.png");
+        btnModificar.setIcon(new ImageIcon(urlModificar));
 
         setContentPane(panelPrincipal);
         setSize(600, 400);

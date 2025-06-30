@@ -7,6 +7,7 @@ import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.net.URL;
 import java.util.List;
 import java.util.Locale;
 
@@ -20,6 +21,7 @@ public class ProductoListaView extends JInternalFrame {
     private JLabel lblTitulo;
     private DefaultTableModel modelo;
     private Locale locale;
+    private List<Producto> productosActuales;
 
     private MensajeInternacionalizacionHandler mensajes;
 
@@ -31,6 +33,10 @@ public class ProductoListaView extends JInternalFrame {
         this.mensajes = mensajes;
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(500, 500);
+        URL urlBuscar = getClass().getResource("/search.png");
+        URL urlListar= getClass().getResource("/list.png");
+        btnBuscar.setIcon(new ImageIcon(urlBuscar));
+        btnListar.setIcon(new ImageIcon(urlListar));
 
         modelo = new DefaultTableModel();
         tblProductos.setModel(modelo);
@@ -39,13 +45,14 @@ public class ProductoListaView extends JInternalFrame {
     }
 
     public void actualizarTextos() {
+        this.locale = new Locale(mensajes.get("locale.language"), mensajes.get("locale.country"));
         setTitle(mensajes.get("producto.listar.titulo.app"));
 
         lblTitulo.setText(mensajes.get("producto.listar.titulo"));
         lblBuscar.setText(mensajes.get("global.boton.buscar") + ":");
-
+        txtBuscar.setToolTipText(mensajes.get("producto.top.nombre"));
         btnBuscar.setText(mensajes.get("global.boton.buscar"));
-        btnListar.setText(mensajes.get("menu.usuario.listar"));
+        btnListar.setText(mensajes.get("producto.listar.titulo.app"));
 
         Object[] columnas = {
                 mensajes.get("global.codigo"),
@@ -53,6 +60,7 @@ public class ProductoListaView extends JInternalFrame {
                 mensajes.get("global.precio")
         };
         modelo.setColumnIdentifiers(columnas);
+        mostrarProductos(productosActuales);
     }
 
     public JLabel getLblTitulo() {
@@ -112,7 +120,8 @@ public class ProductoListaView extends JInternalFrame {
     }
 
     public void mostrarProductos(List<Producto> productos) {
-
+        productosActuales = productos;
+        if(productos==null) return;
         modelo.setRowCount(0);
         for(Producto producto: productos) {
             Object[] fila = {

@@ -8,6 +8,7 @@ import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
+import java.net.URL;
 import java.util.List;
 import java.util.Locale;
 
@@ -35,10 +36,12 @@ public class CarritoModificarView extends JInternalFrame {
         this.mensajes = mensajes;
         this.locale = new Locale(mensajes.get("locale.language"), mensajes.get("locale.country"));
 
+
         setContentPane(panelPrincipal);
         setSize(600, 400);
-        setClosable(true);
-        setIconifiable(true);
+
+        URL urlBuscar=getClass().getResource("/search.png");
+        URL urlModificar=getClass().getResource("/edit.png");
 
         modeloDetalles = new DefaultTableModel() {
             @Override
@@ -47,6 +50,9 @@ public class CarritoModificarView extends JInternalFrame {
             }
         };
         tblItems.setModel(modeloDetalles);
+
+        btnBuscar.setIcon(new ImageIcon(urlBuscar));
+        btnModificar.setIcon(new ImageIcon(urlModificar));
 
         actualizarTextos();
         configurarListeners();
@@ -63,6 +69,8 @@ public class CarritoModificarView extends JInternalFrame {
         lblUsuario.setText(mensajes.get("global.usuario") + ":");
         lblFecha.setText(mensajes.get("global.fecha") + ":");
         lblItems.setText(mensajes.get("global.item") + ":");
+
+        txtCodigo.setToolTipText(mensajes.get("carrito.top.codigo"));
 
         btnBuscar.setText(mensajes.get("global.boton.buscar"));
         btnModificar.setText(mensajes.get("global.boton.modificar"));

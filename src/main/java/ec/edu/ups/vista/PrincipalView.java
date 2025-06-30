@@ -5,6 +5,7 @@ import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URL;
 
 public class PrincipalView extends JFrame {
     private JMenuBar menubar;
@@ -44,7 +45,8 @@ public class PrincipalView extends JFrame {
         menuUsuario = new JMenu();
         menuAdministrador = new JMenu();
         menuIdiomas = new JMenu();
-
+        URL urlUsuario = getClass().getResource("/user.png");
+        menuUsuario.setIcon(new ImageIcon(urlUsuario));
         menuItemEliminarProducto = new JMenuItem();
         menuItemModificarProducto = new JMenuItem();
         menuItemActualizarProducto = new JMenuItem();
@@ -67,8 +69,8 @@ public class PrincipalView extends JFrame {
         actualizarTextos();
 
         menubar.add(menuUsuario);
-        menuUsuario.add(menuItemCerrarSesión);
         menuUsuario.add(menuItemModificarMisUsuario);
+        menuUsuario.add(menuItemCerrarSesión);
 
         menubar.add(menuAdministrador);
         menuAdministrador.add(menuItemCrearUsuario);
@@ -127,7 +129,6 @@ public class PrincipalView extends JFrame {
         menuItemEliminarUsuario.setText(mensajeInternacionalizacionHandler.get("menu.usuario.eliminar"));
         menuItemModificarUsuario.setText(mensajeInternacionalizacionHandler.get("menu.usuario.modificar"));
 
-        menuUsuario.setText(mensajeInternacionalizacionHandler.get("global.usuario"));
         menuItemModificarMisUsuario.setText(mensajeInternacionalizacionHandler.get("menu.usuario.modificarMis"));
         menuItemCerrarSesión.setText(mensajeInternacionalizacionHandler.get("menu.salir.cerrar"));
 

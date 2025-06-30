@@ -5,6 +5,7 @@ import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
 import java.awt.*;
+import java.net.URL;
 
 public class UsuarioModificarView extends JInternalFrame {
     private JPanel panelPrincipal;
@@ -16,6 +17,7 @@ public class UsuarioModificarView extends JInternalFrame {
     private JLabel lblRol;
     private JComboBox<Rol> cbxRoles;
     private JButton btnModificar;
+    private JLabel lblTitulo;
 
     private MensajeInternacionalizacionHandler mensajes;
 
@@ -26,8 +28,11 @@ public class UsuarioModificarView extends JInternalFrame {
 
         setContentPane(panelPrincipal);
         setSize(600, 400);
-        setClosable(true);
-        setIconifiable(true);
+        URL urlBuscar = getClass().getResource("/search.png");
+        URL urlEliminar=getClass().getResource("/trash.png");
+
+        btnBuscar.setIcon(new ImageIcon(urlBuscar));
+        btnModificar.setIcon(new ImageIcon(urlEliminar));
 
         actualizarTextos();
         cargarRoles();
@@ -39,9 +44,12 @@ public class UsuarioModificarView extends JInternalFrame {
         lblUsuario.setText(mensajes.get("global.usuario") + ":");
         lblContraseña.setText(mensajes.get("global.contraseña") + ":");
         lblRol.setText(mensajes.get("global.rol") + ":");
-
+        lblTitulo.setText(mensajes.get("usuario.modificar.titulo.app"));
         btnBuscar.setText(mensajes.get("global.boton.buscar"));
         btnModificar.setText(mensajes.get("global.boton.modificar"));
+        txtUsuario.setToolTipText(mensajes.get("mensaje.usuario.buscar.vacio"));
+        cbxRoles.setToolTipText(mensajes.get("usuario.crear.rol"));
+        txtContraseña.setToolTipText(mensajes.get("usuario.crear.contraseña"));
 
         cbxRoles.setRenderer(new DefaultListCellRenderer() {
             @Override

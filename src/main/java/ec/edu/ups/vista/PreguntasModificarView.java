@@ -6,6 +6,7 @@ import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
 import java.awt.*;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,9 +28,12 @@ public class PreguntasModificarView extends JFrame {
 
         this.camposDeRespuesta = new HashMap<>();
         this.respuestasActuales = null;
+        URL urlVerificar = getClass().getResource("/check.png");
 
         containerPanel = new JPanel();
         scrollPane.setViewportView(containerPanel);
+
+        btnVerificar.setIcon(new ImageIcon(urlVerificar));
 
         setContentPane(panelPrincipal);
         setSize(600, 400);

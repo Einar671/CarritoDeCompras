@@ -7,6 +7,7 @@ import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.net.URL;
 import java.util.List;
 import java.util.Locale;
 
@@ -36,11 +37,15 @@ public class CarritoListarMisView extends JInternalFrame {
 
         setContentPane(panelPrincipal);
         setSize(600, 450);
-        setClosable(true);
-        setIconifiable(true);
+
+        URL urlListar=getClass().getResource("/list.png");
+        URL urlBuscar=getClass().getResource("/search.png");
 
         modeloCarritos = new DefaultTableModel();
         tblCarritos.setModel(modeloCarritos);
+
+        btnListar.setIcon(new ImageIcon(urlListar));
+        btBuscar.setIcon(new ImageIcon(urlBuscar));
 
         modeloDetalles = new DefaultTableModel();
         tblDetalles.setModel(modeloDetalles);
@@ -56,6 +61,8 @@ public class CarritoListarMisView extends JInternalFrame {
         lblTitulo.setText(mensajes.get("menu.carrito.listarMis"));
         lblListaCarrito.setText(mensajes.get("menu.carrito.listar"));
         lblCodigo.setText(mensajes.get("global.codigo") + ":");
+
+        txtCodigo.setToolTipText(mensajes.get("carrito.top.codigo"));
 
         btnListar.setText(mensajes.get("menu.carrito.listarMis"));
         btBuscar.setText(mensajes.get("global.boton.buscar"));

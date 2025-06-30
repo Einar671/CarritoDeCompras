@@ -5,6 +5,7 @@ import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
 import java.awt.*;
+import java.net.URL;
 
 public class UsuarioCrearView extends JInternalFrame {
     private JLabel lblUsuarioA;
@@ -19,8 +20,10 @@ public class UsuarioCrearView extends JInternalFrame {
     private MensajeInternacionalizacionHandler mensajes;
 
     public UsuarioCrearView(MensajeInternacionalizacionHandler mensajes) {
+        super("", true, true, false, true);
         this.mensajes = mensajes;
-
+        URL urlCrear = getClass().getResource("/plus.png");
+        btnCrear.setIcon(new ImageIcon(urlCrear));
         setContentPane(panelPrincipal);
         setSize(600, 400);
         setClosable(true);
@@ -36,7 +39,9 @@ public class UsuarioCrearView extends JInternalFrame {
         lblUsuarioA.setText(mensajes.get("global.usuario")+": ");
         lblContraseña.setText(mensajes.get("global.contraseña") + ":");
         lblRol.setText(mensajes.get("global.rol") + ":");
-
+        txtUsuario.setToolTipText(mensajes.get("usuario.crear.nombre"));
+        txtContraseña.setToolTipText(mensajes.get("usuario.crear.contraseña"));
+        cbxRoles.setToolTipText(mensajes.get("usuario.crear.rol"));
         btnCrear.setText(mensajes.get("global.crear"));
 
 
