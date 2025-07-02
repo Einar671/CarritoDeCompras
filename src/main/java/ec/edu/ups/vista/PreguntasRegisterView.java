@@ -73,6 +73,7 @@ public class PreguntasRegisterView extends JFrame {
         }
     }
 
+
     public List<String> getRespuestas() {
         return camposDeRespuesta.stream()
                 .map(JTextField::getText)
@@ -82,4 +83,7 @@ public class PreguntasRegisterView extends JFrame {
     public JButton getBtnGuardar() {
         return btnGuardar;
     }
+
+
+
 }

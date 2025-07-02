@@ -1,6 +1,7 @@
 package ec.edu.ups.dao.impl;
 
 import ec.edu.ups.dao.UsuarioDAO;
+import ec.edu.ups.modelo.Genero;
 import ec.edu.ups.modelo.Rol;
 import ec.edu.ups.modelo.Usuario;
 
@@ -14,8 +15,8 @@ public class UsuarioDAOMemoria implements UsuarioDAO {
 
     public UsuarioDAOMemoria() {
         usuarios = new ArrayList<Usuario>();
-        crear(new Usuario("admin",Rol.ADMINISTRADOR,"12345"));
-        crear(new Usuario("usuario",Rol.USUARIO,"12345"));
+        crear(new Usuario("admin",Rol.ADMINISTRADOR,"12345","Lars Einar",18, Genero.MASCULINO,"0995421872","lars@gmail.com"));
+        crear(new Usuario("usuario",Rol.USUARIO,"12345","Lars Einar",18, Genero.MASCULINO,"0995421872","lars@gmail.com"));
     }
 
     @Override

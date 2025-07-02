@@ -1,6 +1,7 @@
 package ec.edu.ups.modelo;
 
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Objects;
 
@@ -9,13 +10,63 @@ public class Usuario {
     private String username;
     private Rol rol;
     private String password;
+    private String nombreCompleto;
+    private int edad;
+    private Genero genero;
+    private String telefono;
+    private String email ;
     private List<RespuestaSeguridad> respuestasSeguridad;
 
-    public Usuario(String username, Rol rol, String password) {
+    public Usuario(String username, Rol rol, String password, String nombreCompleto, int edad, Genero genero, String telefono, String email) {
+        this.nombreCompleto = nombreCompleto;
+        this.edad = edad;
+        this.genero = genero;
+        this.telefono = telefono;
+        this.email = email;
         this.username = username;
         this.rol = rol;
         this.password = password;
         this.respuestasSeguridad = new ArrayList<>();
+    }
+
+    public String getNombreCompleto() {
+        return nombreCompleto;
+    }
+
+    public void setNombreCompleto(String nombreCompleto) {
+        this.nombreCompleto = nombreCompleto;
+    }
+
+    public int getEdad() {
+        return edad;
+    }
+
+    public void setEdad(int edad) {
+        this.edad = edad;
+    }
+
+    public Genero getGenero() {
+        return genero;
+    }
+
+    public void setGenero(Genero genero) {
+        this.genero = genero;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getUsername() {

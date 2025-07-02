@@ -62,11 +62,16 @@ public class UsuarioController {
         registrarseView.getBtnRegistrarse().addActionListener(e -> {
             procesarDatosDeRegistro();
         });
-        preguntasView.getBtnGuardar().addActionListener(e->{
+        registrarseView.getBtnAtras().addActionListener(e -> {
+            registrarseView.setVisible(false);
+            logInView.setVisible(true);
+        });
+        preguntasView.getBtnGuardar().addActionListener(e -> {
             guardarUsuarioConPreguntas();
         });
+
         logInView.getBtnOlvidoContraseña().addActionListener(e -> iniciarRecuperacionContraseña());
-        preguntasModificarView.getBtnVerificar().addActionListener(e->verificarRespuestasYCambiarContraseña());
+        preguntasModificarView.getBtnVerificar().addActionListener(e -> verificarRespuestasYCambiarContraseña());
         usuarioCrearView.getBtnCrear().addActionListener(e -> crearUsuario());
         usuarioModificarView.getBtnBuscar().addActionListener(e -> buscarUsuarioParaModificar());
         usuarioModificarView.getBtnModificar().addActionListener(e -> modificarUsuario());
@@ -83,6 +88,7 @@ public class UsuarioController {
         });
         usuarioModificarMisView.getBtnModificar().addActionListener(e -> modificarMisDatos());
     }
+
     private void verificarRespuestasYCambiarContraseña() {
         if (usuarioEnRecuperacion == null) return;
 
@@ -193,17 +199,29 @@ public class UsuarioController {
         JOptionPane.showMessageDialog(preguntasView, mensajes.get("mensaje.usuario.registrado"));
         preguntasView.dispose();
         registrarseView.limpiarCampos();
-        logInView.setVisible(true);
-        this.usuarioTemporal = null;
+        if (usuarioTemporal != usuarioAutentificado) {
+            logInView.setVisible(true);
+            this.usuarioTemporal = null;
+        }
     }
 
     private void procesarDatosDeRegistro() {
         String username = registrarseView.getTxtUsername().getText().trim();
         String contraseña = new String(registrarseView.getTxtContraseña().getPassword());
         String repeContra = new String(registrarseView.getTxtRepContra().getPassword());
+        String nombreCompleto = registrarseView.getTxtNombreCom().getText().trim();
+        String email = registrarseView.getTxtEmail().getText().trim();
+        String telefono = registrarseView.getTxtTelefono().getText().trim();
 
-        if (username.isEmpty() || contraseña.isEmpty()) {
-            registrarseView.mostrarMensaje(mensajes.get("mensaje.usuario.registrar.datos"));
+        int edad = (int) registrarseView.getSpnEdad().getValue();
+        ec.edu.ups.modelo.Genero genero = (ec.edu.ups.modelo.Genero) registrarseView.getCbxGenero().getSelectedItem();
+
+        if (username.isEmpty() || contraseña.isEmpty() || nombreCompleto.isEmpty() || email.isEmpty() || telefono.isEmpty()) {
+            registrarseView.mostrarMensaje(mensajes.get("mensaje.usuario.modificarMis.incompleto"));
+            return;
+        }
+        if (genero == null) {
+            registrarseView.mostrarMensaje("Por favor, seleccione un género.");
             return;
         }
         if (!contraseña.equals(repeContra)) {
@@ -215,11 +233,11 @@ public class UsuarioController {
             return;
         }
 
-        this.usuarioTemporal = new Usuario(username, Rol.USUARIO, contraseña);
+        this.usuarioTemporal = new Usuario(username, Rol.USUARIO, contraseña, nombreCompleto, edad, genero, telefono, email);
+
         preguntasView.setVisible(true);
         registrarseView.setVisible(false);
     }
-
 
 
     private void crearUsuario() {
@@ -240,7 +258,7 @@ public class UsuarioController {
             return;
         }
 
-        Usuario nuevoUsuario = new Usuario(username, rolSeleccionado, contraseña);
+        Usuario nuevoUsuario = new Usuario(username, rolSeleccionado, contraseña, null, 0, null, null, null);
         usuarioDAO.crear(nuevoUsuario);
         usuarioCrearView.mostrarMensaje(mensajes.get("mensaje.usuario.creado"));
         usuarioCrearView.limpiarCampos();
@@ -350,13 +368,17 @@ public class UsuarioController {
     }
 
 
-
     private void cargarDatosUsuarioActual() {
         if (usuarioAutentificado != null) {
             usuarioModificarMisView.getTxtUsuario().setText(usuarioAutentificado.getUsername());
             usuarioModificarMisView.getTxtUsuario().setEditable(true);
             usuarioModificarMisView.getBtnModificar().setEnabled(true);
             usuarioModificarMisView.getTxtContraseña().setText(usuarioAutentificado.getPassword());
+            usuarioModificarMisView.getSprEdad().setModel(new SpinnerNumberModel(usuarioAutentificado.getEdad(), 18, 120, 1));
+            usuarioModificarMisView.getCbxGenero().setSelectedItem(usuarioAutentificado.getGenero());
+            usuarioModificarMisView.getTxtTelefono().setText(usuarioAutentificado.getTelefono());
+            usuarioModificarMisView.getTxtEmail().setText(usuarioAutentificado.getEmail());
+            usuarioModificarMisView.getTxtNombreCom().setText(usuarioAutentificado.getNombreCompleto());
         }
     }
 
@@ -365,16 +387,25 @@ public class UsuarioController {
             return;
         }
 
-        String nuevoUsername = usuarioModificarMisView.getTxtUsuario().getText().trim();
+        String nuevoUsername = usuarioModificarMisView.getTxtNuevoUser().getText().trim();
         String nuevaPassword = usuarioModificarMisView.getTxtContraseña().getText().trim();
+        String nombreCompleto = usuarioModificarMisView.getTxtNombreCom().getText().trim();
+        String email = usuarioModificarMisView.getTxtEmail().getText().trim();
+        String telefono = usuarioModificarMisView.getTxtTelefono().getText().trim();
+        int edad = (int) usuarioModificarMisView.getSprEdad().getValue();
+        ec.edu.ups.modelo.Genero genero = (ec.edu.ups.modelo.Genero) usuarioModificarMisView.getCbxGenero().getSelectedItem();
         String usernameOriginal = usuarioAutentificado.getUsername();
 
-        if (nuevoUsername.isEmpty() || nuevaPassword.isEmpty()) {
+        if (nuevoUsername.isEmpty() || nuevaPassword.isEmpty() || nombreCompleto.isEmpty() || email.isEmpty() || telefono.isEmpty()) {
             usuarioModificarMisView.mostrarMensaje(mensajes.get("mensaje.usuario.modificarMis.incompleto"));
             return;
         }
+        if (genero == null) {
+            usuarioModificarMisView.mostrarMensaje(mensajes.get("mensaje.genero"));
+            return;
+        }
 
-        if (!nuevoUsername.equals(usernameOriginal) && usuarioDAO.buscarPorUsuario(nuevoUsername) != null) {
+        if (!nuevoUsername.equalsIgnoreCase(usernameOriginal) && usuarioDAO.buscarPorUsuario(nuevoUsername) != null) {
             usuarioModificarMisView.mostrarMensaje(mensajes.get("mensaje.usuario.error.nombreUsado"));
             return;
         }
@@ -382,12 +413,15 @@ public class UsuarioController {
         List<RespuestaSeguridad> respuestasGuardadas = usuarioAutentificado.getRespuestasSeguridad();
         if (respuestasGuardadas == null || respuestasGuardadas.isEmpty()) {
             usuarioModificarMisView.mostrarMensaje(mensajes.get("mensaje.pregunta.recuperar.sinPreguntas"));
+            usuarioTemporal=usuarioAutentificado;
+            preguntasView.setVisible(true);
+            preguntasView.toFront();
             return;
         }
 
         JPanel panelPreguntas = new JPanel(new GridLayout(respuestasGuardadas.size() + 1, 2, 10, 5));
-        panelPreguntas.add(new JLabel("Para confirmar, responda sus preguntas:"));
-        panelPreguntas.add(new JLabel("")); // Espacio en blanco
+        panelPreguntas.add(new JLabel(mensajes.get("mensajes.preguntas")));
+        panelPreguntas.add(new JLabel(""));
 
         List<JTextField> camposDeRespuesta = new ArrayList<>();
         for (RespuestaSeguridad resp : respuestasGuardadas) {
@@ -416,11 +450,19 @@ public class UsuarioController {
             }
 
             if (todasCorrectas) {
-                if (!usernameOriginal.equals(nuevoUsername)) {
+                if (!usernameOriginal.equalsIgnoreCase(nuevoUsername)) {
                     usuarioDAO.eliminar(usernameOriginal);
                 }
+
                 usuarioAutentificado.setUsername(nuevoUsername);
                 usuarioAutentificado.setPassword(nuevaPassword);
+                usuarioAutentificado.setNombreCompleto(nombreCompleto);
+                usuarioAutentificado.setEdad(edad);
+                usuarioAutentificado.setGenero(genero);
+                usuarioAutentificado.setTelefono(telefono);
+                usuarioAutentificado.setEmail(email);
+
+
                 usuarioDAO.crear(usuarioAutentificado);
 
                 usuarioModificarMisView.mostrarMensaje(mensajes.get("mensaje.usuario.modificarMis.exito"));
@@ -429,10 +471,10 @@ public class UsuarioController {
                 usuarioModificarMisView.mostrarMensaje(mensajes.get("mensaje.pregunta.recuperar.error"));
             }
         }
+
     }
 
-
-    public Usuario getUsuarioAutentificado() {
+    public Usuario getUsuarioAutentificado(){
         return usuarioAutentificado;
     }
 }

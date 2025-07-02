@@ -33,7 +33,6 @@ public class UsuarioModificarView extends JInternalFrame {
 
         btnBuscar.setIcon(new ImageIcon(urlBuscar));
         btnModificar.setIcon(new ImageIcon(urlEliminar));
-
         actualizarTextos();
         cargarRoles();
     }
