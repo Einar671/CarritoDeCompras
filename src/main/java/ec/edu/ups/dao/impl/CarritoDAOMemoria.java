@@ -5,26 +5,28 @@ import ec.edu.ups.modelo.Carrito;
 import ec.edu.ups.modelo.Usuario;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CarritoDAOMemoria implements CarritoDAO {
-    private List<Carrito> listaCarritos;
 
+    private final List<Carrito> listaCarritos;
+    private int proximoCodigo = 1;
     public CarritoDAOMemoria() {
-        this.listaCarritos = new ArrayList<>(); // Inicializamos la lista aquí
+        this.listaCarritos = new ArrayList<>();
     }
 
     @Override
     public void crear(Carrito carrito) {
+        carrito.setCodigo(proximoCodigo++);
         listaCarritos.add(carrito);
     }
 
     @Override
     public void actualizar(Carrito carrito) {
-        for(int i = 0; i<listaCarritos.size();i++){
-            if(listaCarritos.get(i).getCodigo() == carrito.getCodigo()){
-                listaCarritos.set(i,carrito);
+        for (int i = 0; i < listaCarritos.size(); i++) {
+            if (listaCarritos.get(i).getCodigo() == carrito.getCodigo()) {
+                listaCarritos.set(i, carrito);
                 break;
             }
         }
@@ -32,36 +34,41 @@ public class CarritoDAOMemoria implements CarritoDAO {
 
     @Override
     public void eliminar(int codigo) {
-        Iterator<Carrito> iterator = listaCarritos.iterator();
-        while(iterator.hasNext()){
-            Carrito carrito = iterator.next();
-            if (carrito.getCodigo()==codigo) {
-                iterator.remove();
-                break;
-            }
-        }
+        listaCarritos.removeIf(carrito -> carrito.getCodigo() == codigo);
     }
+
 
     @Override
     public Carrito buscarPorCodigo(int codigo) {
         for (Carrito carrito : listaCarritos) {
-            if(carrito.getCodigo() == codigo){ return carrito;}
+            if (carrito.getCodigo() == codigo) {
+                return carrito;
+            }
         }
         return null;
     }
 
     @Override
     public List<Carrito> listarTodos() {
-        return listaCarritos;
+        return new ArrayList<>(listaCarritos);
     }
 
     @Override
     public List<Carrito> buscarPorUsuario(Usuario usuario) {
-        List<Carrito> carritoUsuario = new ArrayList<>();
-        for(Carrito carrito : listaCarritos){
-            if(carrito.getUsuario().equals(usuario));
-            carritoUsuario.add(carrito);
+        return listaCarritos.stream()
+                .filter(carrito -> carrito.getUsuario().equals(usuario))
+                .collect(Collectors.toList());
+    }
+
+
+    @Override
+    public Carrito buscarPorCodigoYUsuario(int codigo, Usuario usuario) {
+        Carrito carritoEncontrado = this.buscarPorCodigo(codigo);
+
+        if (carritoEncontrado != null && carritoEncontrado.getUsuario().equals(usuario)) {
+            return carritoEncontrado;
         }
-        return carritoUsuario;
+
+        return null;
     }
 }

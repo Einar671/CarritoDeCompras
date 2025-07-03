@@ -2,10 +2,7 @@ package ec.edu.ups.controlador;
 
 import ec.edu.ups.dao.CarritoDAO;
 import ec.edu.ups.dao.ProductoDAO;
-import ec.edu.ups.modelo.Carrito;
-import ec.edu.ups.modelo.ItemCarrito;
-import ec.edu.ups.modelo.Producto;
-import ec.edu.ups.modelo.Usuario;
+import ec.edu.ups.modelo.*;
 import ec.edu.ups.util.FormateadorUtils;
 import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 import ec.edu.ups.util.Sonido;
@@ -79,7 +76,11 @@ public class CarritoController {
     private void buscarCarritoParaEliminar() {
         try {
             int codigo = Integer.parseInt(carritoEliminarView.getTxtCodigo().getText());
-            this.carritoSeleccionado = carritoDAO.buscarPorCodigo(codigo);
+            if(usuarioLogueado.getRol()== Rol.ADMINISTRADOR) {
+                this.carritoSeleccionado = carritoDAO.buscarPorCodigo(codigo);
+            }else{
+                this.carritoSeleccionado=carritoDAO.buscarPorCodigoYUsuario(codigo,usuarioLogueado);
+            }
 
             if (carritoSeleccionado != null) {
                 carritoEliminarView.getTxtUsuario().setText(carritoSeleccionado.getUsuario().getUsername());
@@ -100,9 +101,12 @@ public class CarritoController {
 
     private void buscarCarritoParaModificar() {
         try {
-            int codigo = Integer.parseInt(carritoModificarView.getTxtCodigo().getText().trim());
-            this.carritoSeleccionado = carritoDAO.buscarPorCodigo(codigo);
-
+            int codigo = Integer.parseInt(carritoModificarView.getTxtCodigo().getText());
+            if(usuarioLogueado.getRol()== Rol.ADMINISTRADOR) {
+                this.carritoSeleccionado = carritoDAO.buscarPorCodigo(codigo);
+            }else{
+                this.carritoSeleccionado=carritoDAO.buscarPorCodigoYUsuario(codigo,usuarioLogueado);
+            }
             if (carritoSeleccionado != null) {
                 carritoModificarView.getTxtUsuario().setText(carritoSeleccionado.getUsuario().getUsername());
                 carritoModificarView.getTxtFecha().setText(FormateadorUtils.formatearFecha(carritoSeleccionado.getFecha().getTime(), locale));
@@ -118,6 +122,7 @@ public class CarritoController {
         } catch (NumberFormatException ex) {
             carritoModificarView.mostrarMensaje(mensajes.get("mensaje.carrito.codigoInvalido"));
         }
+
     }
 
     private void guardarModificacionCarrito() {
@@ -134,6 +139,7 @@ public class CarritoController {
             carritoModificarView.mostrarMensaje(mensajes.get("mensaje.carrito.guardado"));
             limpiarVistaModificar();
         }
+
     }
 
     private void cargarProductosEnTabla() {

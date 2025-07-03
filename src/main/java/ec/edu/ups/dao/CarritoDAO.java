@@ -12,4 +12,5 @@ public interface CarritoDAO {
     Carrito buscarPorCodigo(int codigo);
     List<Carrito> listarTodos();
     List<Carrito> buscarPorUsuario(Usuario usuario);
+    Carrito buscarPorCodigoYUsuario(int codigo, Usuario usuario);
 }

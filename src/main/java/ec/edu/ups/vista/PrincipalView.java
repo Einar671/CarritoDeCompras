@@ -346,14 +346,11 @@ public class PrincipalView extends JFrame {
     }
 
     public void desactivar() {
-        getMenuProducto().setVisible(false);
         getMenuAdministrador().setVisible(false);
-        getMenuItemEliminarCarrito().setEnabled(false);
-        getMenuItemModificarCarrito().setEnabled(false);
-        getMenuItemListarCarritos().setEnabled(false);
-        getMenuItemEliminarProducto().setEnabled(false);
-        getMenuItemModificarProducto().setEnabled(false);
-        getMenuItemActualizarProducto().setEnabled(false);
-        getMenuItemCargarProducto().setEnabled(false);
+        getMenuItemModificarCarrito().setVisible(true);
+        getMenuItemListarCarritos().setVisible(false);
+        getMenuItemEliminarProducto().setVisible(false);
+        getMenuItemModificarProducto().setVisible(false);
+        getMenuItemCargarProducto().setVisible(false);
     }
 }
