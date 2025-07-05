@@ -13,16 +13,14 @@ import java.util.Locale;
 
 public class CarritoListarView extends JInternalFrame {
     private JPanel panelPrincipal;
-    private JTextField txtCodigo;
-    private JButton btnBuscar;
     private JTable tblCarritos;
     private JButton btnListar;
     private JTable tblDetalles;
     private DefaultTableModel modelo;
     private DefaultTableModel modeloDetalles;
     private JLabel lblTitulo;
-    private JLabel lblCodigo;
     private JLabel lblDetalles;
+    private JLabel lblDetallesCar;
     private List<Carrito> listaActual;
     private Carrito carritoActual;
     private MensajeInternacionalizacionHandler mensajes;
@@ -38,13 +36,11 @@ public class CarritoListarView extends JInternalFrame {
         setSize(800, 600);
 
         URL urlListar=getClass().getResource("/list.png");
-        URL urlBuscar=getClass().getResource("/search.png");
 
         modelo = new DefaultTableModel();
         tblCarritos.setModel(modelo);
 
         btnListar.setIcon(new ImageIcon(urlListar));
-        btnBuscar.setIcon(new ImageIcon(urlBuscar));
 
         modeloDetalles = new DefaultTableModel();
         tblDetalles.setModel(modeloDetalles);
@@ -54,15 +50,12 @@ public class CarritoListarView extends JInternalFrame {
 
     public void actualizarTextos() {
         this.locale = new Locale(mensajes.get("locale.language"), mensajes.get("locale.country"));
-
+        lblDetallesCar.setText(mensajes.get("global.detalles"));
         setTitle(mensajes.get("carrito.listar.titulo.app"));
         lblTitulo.setText(mensajes.get("carrito.listar.titulo.app"));
-        lblCodigo.setText(mensajes.get("global.codigo") + ":");
         lblDetalles.setText(mensajes.get("global.detalles"));
 
-        txtCodigo.setToolTipText(mensajes.get("carrito.top.codigo"));
 
-        btnBuscar.setText(mensajes.get("global.boton.buscar"));
         btnListar.setText(mensajes.get("menu.carrito.listar"));
 
         Object[] columnas = {
@@ -127,6 +120,21 @@ public class CarritoListarView extends JInternalFrame {
             }
         }
     }
+    public void mostrarDetalles(Carrito carrito) {
+        this.carritoActual=carrito;
+        modeloDetalles.setRowCount(0);
+
+        if (carrito != null) {
+            for (ItemCarrito item : carrito.obtenerItems()) {
+                modeloDetalles.addRow(new Object[]{
+                        item.getProducto().getNombre(),
+                        item.getCantidad(),
+                        FormateadorUtils.formatearMoneda(item.getProducto().getPrecio(), locale),
+                        FormateadorUtils.formatearMoneda(item.getSubtotal(), locale)
+                });
+            }
+        }
+    }
 
     public void limpiarTablaDetalles() {
         modeloDetalles.setRowCount(0);
@@ -136,13 +144,6 @@ public class CarritoListarView extends JInternalFrame {
         JOptionPane.showMessageDialog(this, mensaje, mensajes.get("yesNo.app.titulo"), JOptionPane.INFORMATION_MESSAGE);
     }
 
-    public JTextField getTxtCodigo() {
-        return txtCodigo;
-    }
-
-    public JButton getBtBuscar() {
-        return btnBuscar;
-    }
 
     public JButton getBtnListar() {
         return btnListar;

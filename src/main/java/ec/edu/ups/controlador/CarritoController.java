@@ -60,7 +60,22 @@ public class CarritoController {
         carritoAñadirView.getBtnLimpiar().addActionListener(e -> limpiarCarrito());
 
         carritoListarView.getBtnListar().addActionListener(e -> listarTodosLosCarritos());
-        carritoListarView.getBtBuscar().addActionListener(e -> buscarYMostrarDetalles());
+        ListSelectionModel selectionModelMis = carritoListarMisView.getTblCarritos().getSelectionModel();
+        selectionModelMis.addListSelectionListener(e->{
+            if (!e.getValueIsAdjusting()) {
+                int selectedRow = carritoListarMisView.getTblCarritos().getSelectedRow();
+
+                if (selectedRow != -1) {
+                    int codigo = (int) carritoListarMisView.getTblCarritos().getValueAt(selectedRow, 0);
+
+                    Carrito carritoEncontrado = carritoDAO.buscarPorCodigo(codigo);
+
+                    if (carritoEncontrado != null && carritoEncontrado.getUsuario().equals(usuarioLogueado)) {
+                        carritoListarMisView.mostrarDetalles(carritoEncontrado);
+                    }
+                }
+            }
+        });
 
         carritoModificarView.getBtnBuscar().addActionListener(e -> buscarCarritoParaModificar());
         carritoModificarView.getBtnModificar().addActionListener(e -> guardarModificacionCarrito());
@@ -68,8 +83,23 @@ public class CarritoController {
         carritoEliminarView.getBtnBuscar().addActionListener(e -> buscarCarritoParaEliminar());
         carritoEliminarView.getBtnEliminar().addActionListener(e -> eliminarCarrito());
 
-        carritoListarMisView.getBtnListar().addActionListener(e -> listarMisCarritos());
-        carritoListarMisView.getBtBuscar().addActionListener(e -> buscarYMostrarDetallesMis());
+        carritoListarMisView.getBtnListar().addActionListener(e-> listarMisCarritos());
+        ListSelectionModel selectionModel = carritoListarView.getTblCarritos().getSelectionModel();
+        selectionModel.addListSelectionListener(e->{
+            if (!e.getValueIsAdjusting()) {
+                int selectedRow = carritoListarView.getTblCarritos().getSelectedRow();
+
+                if (selectedRow != -1) {
+                    int codigo = (int) carritoListarView.getTblCarritos().getValueAt(selectedRow, 0);
+
+                    Carrito carritoEncontrado = carritoDAO.buscarPorCodigo(codigo);
+
+                    if (carritoEncontrado != null && carritoEncontrado.getUsuario().equals(usuarioLogueado)) {
+                        carritoListarView.mostrarDetalles(carritoEncontrado);
+                    }
+                }
+            }
+        });
     }
 
 
@@ -195,35 +225,7 @@ public class CarritoController {
         this.carritoSeleccionado = null;
     }
 
-    private void buscarYMostrarDetallesMis() {
-        try {
-            int codigo = Integer.parseInt(carritoListarMisView.getTxtCodigo().getText());
-            Carrito carritoEncontrado = carritoDAO.buscarPorCodigo(codigo);
 
-            if (carritoEncontrado != null && carritoEncontrado.getUsuario().equals(usuarioLogueado)) {
-                carritoListarMisView.mostrarDetalles(carritoEncontrado);
-            } else {
-                carritoListarMisView.mostrarMensaje(mensajes.get("mensaje.carrito.noEncontrado") + " " + codigo);
-            }
-        } catch (NumberFormatException ex) {
-            carritoListarMisView.mostrarMensaje(mensajes.get("mensaje.carrito.codigoInvalido"));
-        }
-    }
-
-    private void buscarYMostrarDetalles() {
-        try {
-            int codigo = Integer.parseInt(carritoListarView.getTxtCodigo().getText());
-            Carrito carritoEncontrado = carritoDAO.buscarPorCodigo(codigo);
-
-            if (carritoEncontrado != null) {
-                carritoListarView.mostrarDetallesCarrito(carritoEncontrado);
-            } else {
-                carritoListarView.mostrarMensaje(mensajes.get("mensaje.carrito.noEncontrado") + " " + codigo);
-            }
-        } catch (NumberFormatException ex) {
-            carritoListarView.mostrarMensaje(mensajes.get("mensaje.carrito.codigoInvalido"));
-        }
-    }
 
     private void listarTodosLosCarritos() {
         List<Carrito> carritos = carritoDAO.listarTodos();

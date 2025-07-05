@@ -121,12 +121,12 @@ public class MiJDesktopPane extends JDesktopPane {
         g2.fillOval(183, height - 33, 4, 4);
         for (int i = 0; i < 80; i++) {
             int fx = (int) (Math.random() * width);
-            int fy = height - 100 + (int)(Math.random() * 80); // sobre el césped
+            int fy = height - 100 + (int)(Math.random() * 80);
 
             g2.setColor(Color.GREEN);
             g2.drawLine(fx + 2, fy + 5, fx + 2, fy + 15);
 
-            g2.setColor(new Color(255, 105, 180)); // rosa fuerte
+            g2.setColor(new Color(255, 105, 180));
             g2.fillOval(fx, fy, 4, 4);
             g2.fillOval(fx + 4, fy, 4, 4);
             g2.fillOval(fx, fy + 4, 4, 4);
@@ -139,10 +139,53 @@ public class MiJDesktopPane extends JDesktopPane {
         g2.setFont(new Font("SansSerif", Font.BOLD, 20));
         FontMetrics metrics = g2.getFontMetrics();
         int textWidth = metrics.stringWidth(mensaje);
-        int x = (width - textWidth) / 2;
-        int y = metrics.getHeight();
+        int carritoX = width / 2 - 70;
+        int carritoY = height - 220;
+
+        g2.setColor(new Color(0, 0, 0, 50));
+        g2.fillOval(carritoX + 20, carritoY + 80, 100, 20);
+
 
         g2.setColor(Color.BLACK);
-        g2.drawString(mensaje, x, y);
+        g2.fillOval(carritoX + 10, carritoY + 70, 20, 20);
+        g2.fillOval(carritoX + 100, carritoY + 70, 20, 20);
+        g2.setColor(Color.GRAY);
+        g2.fillOval(carritoX + 15, carritoY + 75, 10, 10);
+        g2.fillOval(carritoX + 105, carritoY + 75, 10, 10);
+
+        g2.setColor(new Color(169, 169, 169));
+        g2.setStroke(new BasicStroke(3));
+        g2.drawRect(carritoX, carritoY, 120, 60);
+
+        for (int i = 1; i < 5; i++) {
+            int y = carritoY + i * 12;
+            g2.drawLine(carritoX, y, carritoX + 120, y);
+        }
+
+        for (int i = 1; i < 6; i++) {
+            int x = carritoX + i * 20;
+            g2.drawLine(x, carritoY, x, carritoY + 60);
+        }
+
+        g2.setColor(new Color(105, 105, 105));
+        g2.setStroke(new BasicStroke(4));
+        g2.drawLine(carritoX + 110, carritoY, carritoX + 130, carritoY - 20);
+        g2.drawLine(carritoX + 130, carritoY - 20, carritoX + 130, carritoY - 40);
+
+        g2.setStroke(new BasicStroke(2));
+        g2.drawRect(carritoX + 90, carritoY - 10, 30, 10);
+
+        g2.setColor(new Color(255, 182, 193)); // Caja rosa
+        g2.fillRect(carritoX + 10, carritoY + 10, 15, 20);
+
+        g2.setColor(new Color(173, 216, 230)); // Botella azul
+        g2.fillRoundRect(carritoX + 40, carritoY + 5, 10, 30, 5, 5);
+
+        g2.setColor(new Color(255, 255, 0)); // Caja amarilla
+        g2.fillRect(carritoX + 70, carritoY + 20, 20, 15);
+
+        g2.setColor(Color.DARK_GRAY); // Tapas
+        g2.fillRect(carritoX + 40, carritoY + 5, 10, 3);
+
     }
 }

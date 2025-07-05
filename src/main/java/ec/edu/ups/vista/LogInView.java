@@ -7,6 +7,11 @@ import java.net.URI;
 import java.net.URL;
 
 public class LogInView extends JFrame {
+    private JMenuBar menubar;
+    private JMenu menuIdiomas;
+    private JMenuItem menuItemEspañol;
+    private JMenuItem menuItemIngles;
+    private JMenuItem menuItemNoruego;
     private JPanel panelPrincipal;
     private JPanel panelSecundario;
     private JTextField txtUsername;
@@ -23,6 +28,11 @@ public class LogInView extends JFrame {
 
     public LogInView(MensajeInternacionalizacionHandler mensajes) {
         this.mensajes = mensajes;
+        menubar = new JMenuBar();
+        menuIdiomas = new JMenu();
+        menuItemEspañol = new JMenuItem();
+        menuItemIngles = new JMenuItem();
+        menuItemNoruego = new JMenuItem();
         URL urlLog = getClass().getResource("/log-in.png");
         URL urlReg = getClass().getResource("/add.png");
         URL urlOlvido = getClass().getResource("/question-sign.png");
@@ -35,6 +45,11 @@ public class LogInView extends JFrame {
         btnRegistrarse.setIcon(new ImageIcon(urlReg));
         btnOlvidoContraseña.setIcon(new ImageIcon(urlOlvido));
         actualizarTextos();
+        menubar.add(menuIdiomas);
+        menuIdiomas.add(menuItemIngles);
+        menuIdiomas.add(menuItemEspañol);
+        menuIdiomas.add(menuItemNoruego);
+        setJMenuBar(menubar);
     }
 
     public void actualizarTextos() {
@@ -47,6 +62,11 @@ public class LogInView extends JFrame {
         btnRegistrarse.setText(mensajes.get("login.boton.reg"));
         lblTitulo.setText(mensajes.get("login.app.titulo"));
         btnOlvidoContraseña.setText(mensajes.get("login.app.olvido"));
+
+        menuIdiomas.setText(mensajes.get("menu.idiomas"));
+        menuItemEspañol.setText(mensajes.get("menu.idioma.es"));
+        menuItemIngles.setText(mensajes.get("menu.idioma.en"));
+        menuItemNoruego.setText(mensajes.get("menu.idioma.nw"));
     }
 
     public JTextField getTxtUsername() {
@@ -91,5 +111,21 @@ public class LogInView extends JFrame {
 
     public void mostrarMensaje(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje, mensajes.get("yesNo.app.titulo"), JOptionPane.INFORMATION_MESSAGE);
+    }
+    public void limpiarCampos(){
+        txtUsername.setText("");
+        psfContraseña.setText("");
+    }
+
+    public JMenuItem getMenuItemEspañol() {
+        return menuItemEspañol;
+    }
+
+    public JMenuItem getMenuItemIngles() {
+        return menuItemIngles;
+    }
+
+    public JMenuItem getMenuItemNoruego() {
+        return menuItemNoruego;
     }
 }

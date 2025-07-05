@@ -2,13 +2,13 @@ package ec.edu.ups.controlador;
 
 import ec.edu.ups.dao.UsuarioDAO;
 import ec.edu.ups.modelo.Pregunta;
-import ec.edu.ups.modelo.RespuestaSeguridad;
+import ec.edu.ups.modelo.Respuesta;
 import ec.edu.ups.modelo.Rol;
 import ec.edu.ups.modelo.Usuario;
 import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 import ec.edu.ups.util.Sonido;
 import ec.edu.ups.vista.*;
-
+import java.util.Random;
 import javax.swing.*;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
@@ -61,8 +61,10 @@ public class UsuarioController {
         });
         registrarseView.getBtnRegistrarse().addActionListener(e -> {
             procesarDatosDeRegistro();
+            logInView.limpiarCampos();
         });
         registrarseView.getBtnAtras().addActionListener(e -> {
+            logInView.limpiarCampos();
             registrarseView.setVisible(false);
             logInView.setVisible(true);
         });
@@ -89,28 +91,75 @@ public class UsuarioController {
         usuarioModificarMisView.getBtnModificar().addActionListener(e -> modificarMisDatos());
     }
 
+
+    private void iniciarRecuperacionContraseña() {
+        String username = JOptionPane.showInputDialog(
+                logInView,
+                mensajes.get("mensaje.pregunta.recuperar.instrucciones"),
+                mensajes.get("pregunta.recuperar.titulo"),
+                JOptionPane.QUESTION_MESSAGE
+        );
+
+        if (username == null || username.isEmpty()) {
+            return;
+        }
+
+        this.usuarioEnRecuperacion = usuarioDAO.buscarPorUsuario(username);
+
+        if (usuarioEnRecuperacion == null) {
+            logInView.mostrarMensaje(mensajes.get("mensaje.pregunta.recuperar.noUsuario"));
+            return;
+        }
+
+        List<Respuesta> respuestas = usuarioEnRecuperacion.getRespuestasSeguridad();
+        if (respuestas == null || respuestas.isEmpty()) {
+            usuarioTemporal = usuarioDAO.buscarPorUsuario(username);
+            logInView.mostrarMensaje(mensajes.get("mensaje.pregunta.recuperar.sinPreguntas"));
+            preguntasView.setVisible(true);
+            preguntasView.toFront();
+            return;
+        }
+
+        Random random = new Random();
+        int indiceAleatorio = random.nextInt(respuestas.size());
+        Respuesta preguntaAleatoria = respuestas.get(indiceAleatorio);
+
+        List<Respuesta> listaConUnaPregunta = new ArrayList<>();
+        listaConUnaPregunta.add(preguntaAleatoria);
+
+        preguntasModificarView.mostrarPreguntasDelUsuario(listaConUnaPregunta);
+        preguntasModificarView.setVisible(true);
+    }
+
+
     private void verificarRespuestasYCambiarContraseña() {
         if (usuarioEnRecuperacion == null) return;
 
         Map<Pregunta, String> respuestasIngresadas = preguntasModificarView.getRespuestasIngresadas();
-        List<RespuestaSeguridad> respuestasGuardadas = usuarioEnRecuperacion.getRespuestasSeguridad();
 
-        boolean todasCorrectas = true;
-        for (RespuestaSeguridad guardada : respuestasGuardadas) {
-            String respuestaIngresada = respuestasIngresadas.get(guardada.getPregunta());
-            if (!guardada.esRespuestaCorrecta(respuestaIngresada)) {
-                todasCorrectas = false;
+        if (respuestasIngresadas.isEmpty()) {
+            return;
+        }
+
+        Map.Entry<Pregunta, String> unicaRespuestaEntry = respuestasIngresadas.entrySet().iterator().next();
+        Pregunta preguntaMostrada = unicaRespuestaEntry.getKey();
+        String respuestaIngresada = unicaRespuestaEntry.getValue();
+
+        Respuesta respuestaOriginal = null;
+        for (Respuesta guardada : usuarioEnRecuperacion.getRespuestasSeguridad()) {
+            if (guardada.getPregunta().equals(preguntaMostrada)) {
+                respuestaOriginal = guardada;
                 break;
             }
         }
 
-        if (todasCorrectas) {
+        if (respuestaOriginal != null && respuestaOriginal.esRespuestaCorrecta(respuestaIngresada)) {
             String nuevaPassword = JOptionPane.showInputDialog(
                     preguntasModificarView,
                     mensajes.get("mensaje.pregunta.recuperar.exito")
             );
 
-            if (nuevaPassword != null && !nuevaPassword.trim().isEmpty()) {
+            if (nuevaPassword != null && !nuevaPassword.isEmpty()) {
                 usuarioEnRecuperacion.setPassword(nuevaPassword.trim());
                 usuarioDAO.actualizar(usuarioEnRecuperacion);
                 JOptionPane.showMessageDialog(preguntasModificarView, mensajes.get("mensaje.contraseña.actualizada"));
@@ -125,38 +174,103 @@ public class UsuarioController {
                     mensajes.get("mensaje.pregunta.recuperar.error"),
                     "Error",
                     JOptionPane.ERROR_MESSAGE
+
             );
+            List<Respuesta> respuestas = usuarioEnRecuperacion.getRespuestasSeguridad();
+            Random random = new Random();
+            int indiceAleatorio = random.nextInt(respuestas.size());
+            Respuesta preguntaAleatoria = respuestas.get(indiceAleatorio);
+
+            List<Respuesta> listaConUnaPregunta = new ArrayList<>();
+            listaConUnaPregunta.add(preguntaAleatoria);
+
+            preguntasModificarView.mostrarPreguntasDelUsuario(listaConUnaPregunta);
+            preguntasModificarView.setVisible(true);
+
         }
     }
 
 
-    private void iniciarRecuperacionContraseña() {
-        String username = JOptionPane.showInputDialog(
-                logInView,
-                mensajes.get("mensaje.pregunta.recuperar.instrucciones"),
-                mensajes.get("pregunta.recuperar.titulo"),
-                JOptionPane.QUESTION_MESSAGE
-        );
-
-        if (username == null || username.isEmpty()) {
+    private void modificarMisDatos() {
+        if (usuarioAutentificado == null) {
             return;
         }
 
-        this.usuarioEnRecuperacion = usuarioDAO.buscarPorUsuario(username.trim());
+        // 1. Recolección y validación de datos (esta parte no cambia)
+        String nuevoUsername = usuarioModificarMisView.getTxtNuevoUser().getText().trim();
+        String nuevaPassword = usuarioModificarMisView.getTxtContraseña().getText().trim();
+        String nombreCompleto = usuarioModificarMisView.getTxtNombreCom().getText().trim();
+        String email = usuarioModificarMisView.getTxtEmail().getText().trim();
+        String telefono = usuarioModificarMisView.getTxtTelefono().getText().trim();
+        int edad = (int) usuarioModificarMisView.getSprEdad().getValue();
+        ec.edu.ups.modelo.Genero genero = (ec.edu.ups.modelo.Genero) usuarioModificarMisView.getCbxGenero().getSelectedItem();
+        String usernameOriginal = usuarioAutentificado.getUsername();
 
-        if (usuarioEnRecuperacion == null) {
-            logInView.mostrarMensaje(mensajes.get("mensaje.pregunta.recuperar.noUsuario"));
+        if (nuevoUsername.isEmpty() || nuevaPassword.isEmpty() || nombreCompleto.isEmpty() || email.isEmpty() || telefono.isEmpty()) {
+            usuarioModificarMisView.mostrarMensaje(mensajes.get("mensaje.usuario.modificarMis.incompleto"));
+            return;
+        }
+        if (genero == null) {
+            usuarioModificarMisView.mostrarMensaje(mensajes.get("mensaje.genero"));
+            return;
+        }
+        if (!nuevoUsername.equalsIgnoreCase(usernameOriginal) && usuarioDAO.buscarPorUsuario(nuevoUsername) != null) {
+            usuarioModificarMisView.mostrarMensaje(mensajes.get("mensaje.usuario.error.nombreUsado"));
             return;
         }
 
-        List<RespuestaSeguridad> respuestas = usuarioEnRecuperacion.getRespuestasSeguridad();
-        if (respuestas == null || respuestas.isEmpty()) {
-            logInView.mostrarMensaje(mensajes.get("mensaje.pregunta.recuperar.sinPreguntas"));
+        List<Respuesta> respuestasGuardadas = usuarioAutentificado.getRespuestasSeguridad();
+        if (respuestasGuardadas == null || respuestasGuardadas.isEmpty()) {
+            usuarioModificarMisView.mostrarMensaje(mensajes.get("mensaje.pregunta.recuperar.sinPreguntas"));
+            usuarioTemporal = usuarioAutentificado;
+            preguntasView.setVisible(true);
+            preguntasView.toFront();
             return;
         }
 
-        preguntasModificarView.mostrarPreguntasDelUsuario(respuestas);
-        preguntasModificarView.setVisible(true);
+        Random random = new Random();
+        while (true) {
+            int indiceAleatorio = random.nextInt(respuestasGuardadas.size());
+            Respuesta preguntaAleatoria = respuestasGuardadas.get(indiceAleatorio);
+
+            JPanel panelPregunta = new JPanel(new GridLayout(2, 1, 10, 5));
+            panelPregunta.add(new JLabel(preguntaAleatoria.getPregunta().getTexto()));
+            JTextField campoRespuesta = new JTextField();
+            panelPregunta.add(campoRespuesta);
+
+            int resultado = JOptionPane.showConfirmDialog(
+                    usuarioModificarMisView,
+                    panelPregunta,
+                    mensajes.get("yesNo.app.titulo"),
+                    JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.PLAIN_MESSAGE
+            );
+
+            if (resultado == JOptionPane.OK_OPTION) {
+                String respuestaIngresada = campoRespuesta.getText();
+                if (preguntaAleatoria.esRespuestaCorrecta(respuestaIngresada)) {
+                    if (!usernameOriginal.equalsIgnoreCase(nuevoUsername)) {
+                        usuarioDAO.eliminar(usernameOriginal);
+                    }
+                    usuarioAutentificado.setUsername(nuevoUsername);
+                    usuarioAutentificado.setPassword(nuevaPassword);
+                    usuarioAutentificado.setNombreCompleto(nombreCompleto);
+                    usuarioAutentificado.setEdad(edad);
+                    usuarioAutentificado.setGenero(genero);
+                    usuarioAutentificado.setTelefono(telefono);
+                    usuarioAutentificado.setEmail(email);
+                    usuarioDAO.crear(usuarioAutentificado);
+
+                    usuarioModificarMisView.mostrarMensaje(mensajes.get("mensaje.usuario.modificarMis.exito"));
+                    usuarioModificarMisView.dispose();
+                    break;
+                } else {
+                    usuarioModificarMisView.mostrarMensaje(mensajes.get("mensaje.pregunta.recuperar.error"));
+                }
+            } else {
+                break;
+            }
+        }
     }
 
 
@@ -382,97 +496,6 @@ public class UsuarioController {
         }
     }
 
-    private void modificarMisDatos() {
-        if (usuarioAutentificado == null) {
-            return;
-        }
-
-        String nuevoUsername = usuarioModificarMisView.getTxtNuevoUser().getText().trim();
-        String nuevaPassword = usuarioModificarMisView.getTxtContraseña().getText().trim();
-        String nombreCompleto = usuarioModificarMisView.getTxtNombreCom().getText().trim();
-        String email = usuarioModificarMisView.getTxtEmail().getText().trim();
-        String telefono = usuarioModificarMisView.getTxtTelefono().getText().trim();
-        int edad = (int) usuarioModificarMisView.getSprEdad().getValue();
-        ec.edu.ups.modelo.Genero genero = (ec.edu.ups.modelo.Genero) usuarioModificarMisView.getCbxGenero().getSelectedItem();
-        String usernameOriginal = usuarioAutentificado.getUsername();
-
-        if (nuevoUsername.isEmpty() || nuevaPassword.isEmpty() || nombreCompleto.isEmpty() || email.isEmpty() || telefono.isEmpty()) {
-            usuarioModificarMisView.mostrarMensaje(mensajes.get("mensaje.usuario.modificarMis.incompleto"));
-            return;
-        }
-        if (genero == null) {
-            usuarioModificarMisView.mostrarMensaje(mensajes.get("mensaje.genero"));
-            return;
-        }
-
-        if (!nuevoUsername.equalsIgnoreCase(usernameOriginal) && usuarioDAO.buscarPorUsuario(nuevoUsername) != null) {
-            usuarioModificarMisView.mostrarMensaje(mensajes.get("mensaje.usuario.error.nombreUsado"));
-            return;
-        }
-
-        List<RespuestaSeguridad> respuestasGuardadas = usuarioAutentificado.getRespuestasSeguridad();
-        if (respuestasGuardadas == null || respuestasGuardadas.isEmpty()) {
-            usuarioModificarMisView.mostrarMensaje(mensajes.get("mensaje.pregunta.recuperar.sinPreguntas"));
-            usuarioTemporal=usuarioAutentificado;
-            preguntasView.setVisible(true);
-            preguntasView.toFront();
-            return;
-        }
-
-        JPanel panelPreguntas = new JPanel(new GridLayout(respuestasGuardadas.size() + 1, 2, 10, 5));
-        panelPreguntas.add(new JLabel(mensajes.get("mensajes.preguntas")));
-        panelPreguntas.add(new JLabel(""));
-
-        List<JTextField> camposDeRespuesta = new ArrayList<>();
-        for (RespuestaSeguridad resp : respuestasGuardadas) {
-            panelPreguntas.add(new JLabel(resp.getPregunta().getTexto()));
-            JTextField campoRespuesta = new JTextField();
-            camposDeRespuesta.add(campoRespuesta);
-            panelPreguntas.add(campoRespuesta);
-        }
-
-        int resultado = JOptionPane.showConfirmDialog(
-                usuarioModificarMisView,
-                panelPreguntas,
-                mensajes.get("yesNo.app.titulo"),
-                JOptionPane.OK_CANCEL_OPTION,
-                JOptionPane.PLAIN_MESSAGE
-        );
-
-        if (resultado == JOptionPane.OK_OPTION) {
-            boolean todasCorrectas = true;
-            for (int i = 0; i < respuestasGuardadas.size(); i++) {
-                String respuestaIngresada = camposDeRespuesta.get(i).getText();
-                if (!respuestasGuardadas.get(i).esRespuestaCorrecta(respuestaIngresada)) {
-                    todasCorrectas = false;
-                    break;
-                }
-            }
-
-            if (todasCorrectas) {
-                if (!usernameOriginal.equalsIgnoreCase(nuevoUsername)) {
-                    usuarioDAO.eliminar(usernameOriginal);
-                }
-
-                usuarioAutentificado.setUsername(nuevoUsername);
-                usuarioAutentificado.setPassword(nuevaPassword);
-                usuarioAutentificado.setNombreCompleto(nombreCompleto);
-                usuarioAutentificado.setEdad(edad);
-                usuarioAutentificado.setGenero(genero);
-                usuarioAutentificado.setTelefono(telefono);
-                usuarioAutentificado.setEmail(email);
-
-
-                usuarioDAO.crear(usuarioAutentificado);
-
-                usuarioModificarMisView.mostrarMensaje(mensajes.get("mensaje.usuario.modificarMis.exito"));
-                usuarioModificarMisView.dispose();
-            } else {
-                usuarioModificarMisView.mostrarMensaje(mensajes.get("mensaje.pregunta.recuperar.error"));
-            }
-        }
-
-    }
 
     public Usuario getUsuarioAutentificado(){
         return usuarioAutentificado;

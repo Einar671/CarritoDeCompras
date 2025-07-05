@@ -29,27 +29,45 @@ public class RegistrarseView extends JFrame {
     private JLabel lblTelefono;
     private JLabel lblEmail;
     private JButton btnAtras;
+    private JMenuBar menubar;
+    private JMenu menuIdiomas;
+    private JMenuItem menuItemEspañol;
+    private JMenuItem menuItemIngles;
+    private JMenuItem menuItemNoruego;
 
     private MensajeInternacionalizacionHandler mensajes;
 
     public RegistrarseView(MensajeInternacionalizacionHandler mensajes) {
         this.mensajes=mensajes;
+        menubar = new JMenuBar();
+        menuIdiomas = new JMenu();
+        menuItemEspañol = new JMenuItem();
+        menuItemIngles = new JMenuItem();
+        menuItemNoruego = new JMenuItem();
         URL urlReg = getClass().getResource("/add.png");
         URL urlAtras = getClass().getResource("/back.png");
         setContentPane(panelPrincipal);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(600, 600);
+        setSize(600, 700);
         btnRegistrarse.setIcon(new ImageIcon(urlReg));
         btnAtras.setIcon(new ImageIcon(urlAtras));
         setLocationRelativeTo(null);
         setResizable(false);
         spnEdad.setModel(new SpinnerNumberModel(18, 18, 120, 1));
-
+        menubar.add(menuIdiomas);
+        menuIdiomas.add(menuItemIngles);
+        menuIdiomas.add(menuItemEspañol);
+        menuIdiomas.add(menuItemNoruego);
+        setJMenuBar(menubar);
         actualizarTextos();
         actualizarComboBox();
     }
 
     void actualizarTextos() {
+        menuIdiomas.setText(mensajes.get("menu.idiomas"));
+        menuItemEspañol.setText(mensajes.get("menu.idioma.es"));
+        menuItemIngles.setText(mensajes.get("menu.idioma.en"));
+        menuItemNoruego.setText(mensajes.get("menu.idioma.nw"));
         setTitle(mensajes.get("login.boton.reg"));
         btnAtras.setText(mensajes.get("global.atras"));
         lblTitulo.setText(mensajes.get("login.boton.reg"));
@@ -167,6 +185,18 @@ public class RegistrarseView extends JFrame {
 
     public void mostrarMensaje(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje, mensajes.get("yesNo.app.titulo"), JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public JMenuItem getMenuItemEspañol() {
+        return menuItemEspañol;
+    }
+
+    public JMenuItem getMenuItemIngles() {
+        return menuItemIngles;
+    }
+
+    public JMenuItem getMenuItemNoruego() {
+        return menuItemNoruego;
     }
 
     public void limpiarCampos() {

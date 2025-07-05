@@ -14,13 +14,12 @@ import java.util.Locale;
 public class CarritoListarMisView extends JInternalFrame {
     private JTable tblCarritos;
     private JButton btnListar;
-    private JTextField txtCodigo;
-    private JButton btBuscar;
+
     private JTable tblDetalles;
     private JPanel panelPrincipal;
     private JLabel lblTitulo;
     private JLabel lblListaCarrito;
-    private JLabel lblCodigo;
+    private JLabel lblDetalles;
     private Carrito carritoActual;
     private List<Carrito> listaActual;
 
@@ -39,13 +38,11 @@ public class CarritoListarMisView extends JInternalFrame {
         setSize(600, 450);
 
         URL urlListar=getClass().getResource("/list.png");
-        URL urlBuscar=getClass().getResource("/search.png");
 
         modeloCarritos = new DefaultTableModel();
         tblCarritos.setModel(modeloCarritos);
 
         btnListar.setIcon(new ImageIcon(urlListar));
-        btBuscar.setIcon(new ImageIcon(urlBuscar));
 
         modeloDetalles = new DefaultTableModel();
         tblDetalles.setModel(modeloDetalles);
@@ -57,15 +54,12 @@ public class CarritoListarMisView extends JInternalFrame {
         this.locale = new Locale(mensajes.get("locale.language"), mensajes.get("locale.country"));
 
         setTitle(mensajes.get("menu.carrito.listarMis"));
-
+        lblDetalles.setText(mensajes.get("global.detalles"));
         lblTitulo.setText(mensajes.get("menu.carrito.listarMis"));
         lblListaCarrito.setText(mensajes.get("menu.carrito.listar"));
-        lblCodigo.setText(mensajes.get("global.codigo") + ":");
 
-        txtCodigo.setToolTipText(mensajes.get("carrito.top.codigo"));
 
         btnListar.setText(mensajes.get("menu.carrito.listarMis"));
-        btBuscar.setText(mensajes.get("global.boton.buscar"));
 
         Object[] columnasCarritos = {
                 mensajes.get("global.codigo"),
@@ -134,14 +128,6 @@ public class CarritoListarMisView extends JInternalFrame {
 
     public JButton getBtnListar() {
         return btnListar;
-    }
-
-    public JTextField getTxtCodigo() {
-        return txtCodigo;
-    }
-
-    public JButton getBtBuscar() {
-        return btBuscar;
     }
 
     public JTable getTblDetalles() {

@@ -11,10 +11,13 @@ import ec.edu.ups.dao.impl.ProductoDAOMemoria;
 import ec.edu.ups.dao.impl.UsuarioDAOMemoria;
 import ec.edu.ups.modelo.Rol;
 import ec.edu.ups.modelo.Usuario;
-import ec.edu.ups.util.MensajeInternacionalizacionHandler; // Importar el handler
+import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
+import javax.swing.*; // Importar JInternalFrame
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Arrays; // Importar Arrays
+import java.util.List;   // Importar List
 
 public class Main {
 
@@ -39,14 +42,57 @@ public class Main {
         RegistrarseView registrarseView = new RegistrarseView(mensajes);
         PreguntasRegisterView preguntasView = new PreguntasRegisterView(mensajes);
         PreguntasModificarView preguntasModificarView = new PreguntasModificarView(mensajes);
-        UsuarioController usuarioController = new UsuarioController(usuarioCrearView, usuarioDAO, loginView, usuarioModificarView, usuarioEliminarView, usuarioModificarMisView, usuarioListarView, mensajes,registrarseView,preguntasView,preguntasModificarView);
+
+        registrarseView.getMenuItemEspañol().addActionListener(e -> {
+            mensajes.setLenguaje("es", "EC");
+            loginView.actualizarTextos();
+            registrarseView.actualizarTextos();
+            preguntasView.actualizarTextos();
+            preguntasModificarView.actualizarTextos();
+        });
+        registrarseView.getMenuItemIngles().addActionListener(e -> {
+            mensajes.setLenguaje("en", "US");
+            loginView.actualizarTextos();
+            registrarseView.actualizarTextos();
+            preguntasView.actualizarTextos();
+            preguntasModificarView.actualizarTextos();
+        });
+        registrarseView.getMenuItemNoruego().addActionListener(e -> {
+            mensajes.setLenguaje("nk", "NK");
+            loginView.actualizarTextos();
+            registrarseView.actualizarTextos();
+            preguntasView.actualizarTextos();
+            preguntasModificarView.actualizarTextos();        });
+
+        loginView.getMenuItemEspañol().addActionListener(e -> {
+            mensajes.setLenguaje("es", "EC");
+            loginView.actualizarTextos();
+            registrarseView.actualizarTextos();
+            preguntasView.actualizarTextos();
+            preguntasModificarView.actualizarTextos();
+        });
+        loginView.getMenuItemIngles().addActionListener(e -> {
+            mensajes.setLenguaje("en", "US");
+            loginView.actualizarTextos();
+            registrarseView.actualizarTextos();
+            preguntasView.actualizarTextos();
+            preguntasModificarView.actualizarTextos();
+        });
+        loginView.getMenuItemNoruego().addActionListener(e -> {
+            mensajes.setLenguaje("nk", "NK");
+            loginView.actualizarTextos();
+            registrarseView.actualizarTextos();
+            preguntasView.actualizarTextos();
+            preguntasModificarView.actualizarTextos();        });
+
+        UsuarioController usuarioController = new UsuarioController(usuarioCrearView, usuarioDAO, loginView, usuarioModificarView, usuarioEliminarView, usuarioModificarMisView, usuarioListarView, mensajes, registrarseView, preguntasView, preguntasModificarView);
 
         loginView.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
                 Usuario usuarioAutenticado = usuarioController.getUsuarioAutentificado();
                 if (usuarioAutenticado != null) {
-                    iniciarAplicacionPrincipal(loginView,usuarioAutenticado, usuarioCrearView, usuarioModificarView, usuarioEliminarView, usuarioModificarMisView, usuarioListarView,registrarseView, preguntasView,preguntasModificarView);
+                    iniciarAplicacionPrincipal(usuarioAutenticado, usuarioCrearView, usuarioModificarView, usuarioEliminarView, usuarioModificarMisView, usuarioListarView, registrarseView, preguntasView, preguntasModificarView);
                 } else {
                     System.exit(0);
                 }
@@ -56,7 +102,7 @@ public class Main {
         loginView.setVisible(true);
     }
 
-    public static void iniciarAplicacionPrincipal(LogInView logInView, Usuario usuarioAutenticado, UsuarioCrearView usuarioCrearView, UsuarioModificarView usuarioModificarView, UsuarioEliminarView usuarioEliminarView, UsuarioModificarMisView usuarioModificarMisView, UsuarioListarView usuarioListarView, RegistrarseView registrarseView, PreguntasRegisterView preguntasView, PreguntasModificarView preguntasModificarView) {
+    public static void iniciarAplicacionPrincipal(Usuario usuarioAutenticado, UsuarioCrearView usuarioCrearView, UsuarioModificarView usuarioModificarView, UsuarioEliminarView usuarioEliminarView, UsuarioModificarMisView usuarioModificarMisView, UsuarioListarView usuarioListarView, RegistrarseView registrarseView, PreguntasRegisterView preguntasView, PreguntasModificarView preguntasModificarView) {
 
         principalView = new PrincipalView(mensajes);
         ProductoModificarView productoModificarView = new ProductoModificarView(mensajes);
@@ -69,6 +115,13 @@ public class Main {
         CarritoEliminarView carritoEliminarView = new CarritoEliminarView(mensajes);
         CarritoListarMisView carritoListarMisView = new CarritoListarMisView(mensajes);
 
+        List<JInternalFrame> vistasInternas = Arrays.asList(
+                carritoAñadirView, productoAnadirView, productoListaView, productoEliminarView,
+                productoModificarView, carritoListarView, carritoModificarView, carritoEliminarView,
+                carritoListarMisView, usuarioCrearView, usuarioModificarView, usuarioEliminarView,
+                usuarioModificarMisView, usuarioListarView
+        );
+
         CarritoController carritoController = new CarritoController(carritoDAO, productoDAO, carritoAñadirView, carritoListarView, carritoModificarView, carritoEliminarView, carritoListarMisView, usuarioAutenticado, mensajes);
         ProductoController productoController = new ProductoController(productoDAO, carritoAñadirView, productoModificarView, productoEliminarView, productoListaView, productoAnadirView, mensajes);
 
@@ -79,18 +132,34 @@ public class Main {
 
         configurarMenu(principalView, carritoAñadirView, productoAnadirView, productoListaView, productoEliminarView,
                 productoModificarView, carritoListarView, carritoModificarView, carritoEliminarView, carritoListarMisView,
-                usuarioCrearView, usuarioModificarView, usuarioEliminarView, usuarioModificarMisView, usuarioListarView,logInView,
-                registrarseView,preguntasView);
+                usuarioCrearView, usuarioModificarView, usuarioEliminarView, usuarioModificarMisView, usuarioListarView,
+                registrarseView,preguntasView, vistasInternas);
 
         principalView.setVisible(true);
     }
 
-    private static void cambiarIdioma(String idioma, String pais) {
-        mensajes.setLenguaje(idioma, pais);
+
+    private static void actualizarTodasLasVistas(List<JInternalFrame> vistas) {
         if (principalView != null) {
             principalView.actualizarTextos();
         }
+        for (JInternalFrame vista : vistas) {
+            if (vista instanceof CarritoAñadirView) ((CarritoAñadirView) vista).actualizarTextos();
+            else if (vista instanceof CarritoEliminarView) ((CarritoEliminarView) vista).actualizarTextos();
+            else if (vista instanceof CarritoListarView) ((CarritoListarView) vista).actualizarTextos();
+            else if (vista instanceof CarritoListarMisView) ((CarritoListarMisView) vista).actualizarTextos();
+            else if (vista instanceof CarritoModificarView) ((CarritoModificarView) vista).actualizarTextos();
+            else if (vista instanceof ProductoAnadirView) ((ProductoAnadirView) vista).actualizarTextos();
+            else if (vista instanceof ProductoEliminarView) ((ProductoEliminarView) vista).actualizarTextos();
+            else if (vista instanceof ProductoListaView) ((ProductoListaView) vista).actualizarTextos();
+            else if (vista instanceof ProductoModificarView) ((ProductoModificarView) vista).actualizarTextos();
+            else if (vista instanceof UsuarioCrearView) ((UsuarioCrearView) vista).actualizarTextos();
+            else if (vista instanceof UsuarioEliminarView) ((UsuarioEliminarView) vista).actualizarTextos();
+            else if (vista instanceof UsuarioListarView) ((UsuarioListarView) vista).actualizarTextos();
+            else if (vista instanceof UsuarioModificarMisView) ((UsuarioModificarMisView) vista).actualizarTextos();
+            else if (vista instanceof UsuarioModificarView) ((UsuarioModificarView) vista).actualizarTextos();
 
+        }
     }
 
     private static void configurarMenu(PrincipalView principalView, CarritoAñadirView carritoAñadirView, ProductoAnadirView productoAnadirView,
@@ -98,10 +167,19 @@ public class Main {
                                        ProductoModificarView productoModificarView, CarritoListarView carritoListarView,
                                        CarritoModificarView carritoModificarView, CarritoEliminarView carritoEliminarView, CarritoListarMisView carritoListarMisView,
                                        UsuarioCrearView usuarioCrearView, UsuarioModificarView usuarioModificarView, UsuarioEliminarView usuarioEliminarView,
-                                       UsuarioModificarMisView usuarioModificarMisView, UsuarioListarView usuarioListarView,LogInView logInView, RegistrarseView registrarseView, PreguntasRegisterView preguntasView) {
-
-
-
+                                       UsuarioModificarMisView usuarioModificarMisView, UsuarioListarView usuarioListarView, RegistrarseView registrarseView, PreguntasRegisterView preguntasView, List<JInternalFrame> vistas) {
+        principalView.getMenuItemCerrarSesión().addActionListener(e -> {
+            principalView.dispose();
+            mostrarVentanaDeLogin();
+        });
+        principalView.getMenuItemAñadirCarrito().addActionListener(e -> {
+            JInternalFrame vista = vistas.stream().filter(v -> v instanceof CarritoAñadirView).findFirst().get();
+            if (!vista.isVisible()) {
+                principalView.getDesktop().add(vista);
+                vista.setVisible(true);
+            }
+            vista.toFront();
+        });
         principalView.getMenuItemCerrarSesión().addActionListener(e -> {
             principalView.dispose();
             mostrarVentanaDeLogin();
@@ -205,71 +283,17 @@ public class Main {
             }
             usuarioModificarMisView.toFront();
         });
-
-        principalView.getMenuItemIngles().addActionListener(e->{
-            cambiarIdioma("en","US");
-            principalView.actualizarTextos();
-            carritoAñadirView.actualizarTextos();
-            carritoEliminarView.actualizarTextos();
-            carritoListarView.actualizarTextos();
-            carritoListarMisView.actualizarTextos();
-            carritoModificarView.actualizarTextos();
-            productoAnadirView.actualizarTextos();
-            productoEliminarView.actualizarTextos();
-            productoListaView.actualizarTextos();
-            productoModificarView.actualizarTextos();
-            usuarioCrearView.actualizarTextos();
-            usuarioEliminarView.actualizarTextos();
-            usuarioListarView.actualizarTextos();
-            usuarioModificarMisView.actualizarTextos();
-            usuarioModificarView.actualizarTextos();
-            logInView.actualizarTextos();
-
-
-
+        principalView.getMenuItemIngles().addActionListener(e -> {
+            mensajes.setLenguaje("en", "US");
+            actualizarTodasLasVistas(vistas);
         });
-        principalView.getMenuItemNoruego().addActionListener(e->{
-            cambiarIdioma("nk","NK");
-            principalView.actualizarTextos();
-            carritoAñadirView.actualizarTextos();
-            carritoEliminarView.actualizarTextos();
-            carritoListarView.actualizarTextos();
-            carritoListarMisView.actualizarTextos();
-            carritoModificarView.actualizarTextos();
-            productoAnadirView.actualizarTextos();
-            productoEliminarView.actualizarTextos();
-            productoListaView.actualizarTextos();
-            productoModificarView.actualizarTextos();
-            usuarioCrearView.actualizarTextos();
-            usuarioEliminarView.actualizarTextos();
-            usuarioListarView.actualizarTextos();
-            usuarioModificarMisView.actualizarTextos();
-            usuarioModificarView.actualizarTextos();
-            logInView.actualizarTextos();
-            preguntasView.actualizarTextos();
-            registrarseView.actualizarTextos();
-
+        principalView.getMenuItemNoruego().addActionListener(e -> {
+            mensajes.setLenguaje("no", "NO");
+            actualizarTodasLasVistas(vistas);
         });
-        principalView.getMenuItemEspañol().addActionListener(e->{
-        cambiarIdioma("es","EC");
-            principalView.actualizarTextos();
-            carritoAñadirView.actualizarTextos();
-            carritoEliminarView.actualizarTextos();
-            carritoListarView.actualizarTextos();
-            carritoListarMisView.actualizarTextos();
-            carritoModificarView.actualizarTextos();
-            productoAnadirView.actualizarTextos();
-            productoEliminarView.actualizarTextos();
-            productoListaView.actualizarTextos();
-            productoModificarView.actualizarTextos();
-            usuarioCrearView.actualizarTextos();
-            usuarioEliminarView.actualizarTextos();
-            usuarioListarView.actualizarTextos();
-            usuarioModificarMisView.actualizarTextos();
-            usuarioModificarView.actualizarTextos();
-            logInView.actualizarTextos();
-            preguntasView.actualizarTextos();
-            registrarseView.actualizarTextos();
+        principalView.getMenuItemEspañol().addActionListener(e -> {
+            mensajes.setLenguaje("es", "EC");
+            actualizarTodasLasVistas(vistas);
         });
     }
 }

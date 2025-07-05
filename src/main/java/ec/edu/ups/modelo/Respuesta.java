@@ -1,12 +1,12 @@
 package ec.edu.ups.modelo;
 
 
-public class RespuestaSeguridad {
+public class Respuesta {
 
     private Pregunta pregunta;
     private String respuesta;
 
-    public RespuestaSeguridad(Pregunta pregunta, String respuesta) {
+    public Respuesta(Pregunta pregunta, String respuesta) {
         this.pregunta = pregunta;
         this.respuesta = respuesta;
     }

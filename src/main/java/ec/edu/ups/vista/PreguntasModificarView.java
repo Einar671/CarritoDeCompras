@@ -1,7 +1,7 @@
 package ec.edu.ups.vista;
 
 import ec.edu.ups.modelo.Pregunta;
-import ec.edu.ups.modelo.RespuestaSeguridad;
+import ec.edu.ups.modelo.Respuesta;
 import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
@@ -19,7 +19,7 @@ public class PreguntasModificarView extends JFrame {
     private JPanel containerPanel;
 
     private final Map<Pregunta, JTextField> camposDeRespuesta;
-    private List<RespuestaSeguridad> respuestasActuales;
+    private List<Respuesta> respuestasActuales;
 
     private final MensajeInternacionalizacionHandler mensajes;
 
@@ -41,7 +41,7 @@ public class PreguntasModificarView extends JFrame {
         actualizarTextos();
     }
 
-    public void mostrarPreguntasDelUsuario(List<RespuestaSeguridad> respuestasDelUsuario) {
+    public void mostrarPreguntasDelUsuario(List<Respuesta> respuestasDelUsuario) {
         this.respuestasActuales = respuestasDelUsuario;
 
         containerPanel.removeAll();
@@ -55,7 +55,7 @@ public class PreguntasModificarView extends JFrame {
 
         containerPanel.setLayout(new GridLayout(respuestasDelUsuario.size(), 2, 10, 10));
 
-        for (RespuestaSeguridad respuesta : respuestasDelUsuario) {
+        for (Respuesta respuesta : respuestasDelUsuario) {
             Pregunta pregunta = respuesta.getPregunta();
             JLabel etiqueta = new JLabel(pregunta.getTexto());
             JTextField campoTexto = new JTextField();

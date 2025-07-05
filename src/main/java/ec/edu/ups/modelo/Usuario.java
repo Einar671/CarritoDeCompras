@@ -1,7 +1,6 @@
 package ec.edu.ups.modelo;
 
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Objects;
 
@@ -15,7 +14,7 @@ public class Usuario {
     private Genero genero;
     private String telefono;
     private String email ;
-    private List<RespuestaSeguridad> respuestasSeguridad;
+    private List<Respuesta> respuestasSeguridad;
 
     public Usuario(String username, Rol rol, String password, String nombreCompleto, int edad, Genero genero, String telefono, String email) {
         this.nombreCompleto = nombreCompleto;
@@ -94,11 +93,11 @@ public class Usuario {
     }
 
 
-    public List<RespuestaSeguridad> getRespuestasSeguridad() {
+    public List<Respuesta> getRespuestasSeguridad() {
         return respuestasSeguridad;
     }
 
-    public void setRespuestasSeguridad(List<RespuestaSeguridad> respuestasSeguridad) {
+    public void setRespuestasSeguridad(List<Respuesta> respuestasSeguridad) {
         this.respuestasSeguridad = respuestasSeguridad;
     }
 
@@ -107,7 +106,7 @@ public class Usuario {
         if (this.respuestasSeguridad == null) {
             this.respuestasSeguridad = new ArrayList<>();
         }
-        this.respuestasSeguridad.add(new RespuestaSeguridad(pregunta, respuestaTexto));
+        this.respuestasSeguridad.add(new Respuesta(pregunta, respuestaTexto));
     }
 
     public int preguntasAsignadas(){

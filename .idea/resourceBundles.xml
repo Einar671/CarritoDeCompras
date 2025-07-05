@@ -6,6 +6,7 @@
     <custom-resource-bundle>
       <file value="file://$PROJECT_DIR$/src/main/resources/mensajes_en_US.properties" />
       <file value="file://$PROJECT_DIR$/src/main/resources/mensajes_es_EC.properties" />
+      <file value="file://$PROJECT_DIR$/src/main/resources/mensajes_nk_NK.properties" />
       <base-name>mensajes</base-name>
     </custom-resource-bundle>
     <custom-resource-bundle>
