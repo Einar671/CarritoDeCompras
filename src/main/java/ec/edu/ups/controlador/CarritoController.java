@@ -94,7 +94,7 @@ public class CarritoController {
 
                     Carrito carritoEncontrado = carritoDAO.buscarPorCodigo(codigo);
 
-                    if (carritoEncontrado != null && carritoEncontrado.getUsuario().equals(usuarioLogueado)) {
+                    if (carritoEncontrado != null) {
                         carritoListarView.mostrarDetalles(carritoEncontrado);
                     }
                 }

@@ -288,7 +288,7 @@ public class Main {
             actualizarTodasLasVistas(vistas);
         });
         principalView.getMenuItemNoruego().addActionListener(e -> {
-            mensajes.setLenguaje("no", "NO");
+            mensajes.setLenguaje("nk", "NK");
             actualizarTodasLasVistas(vistas);
         });
         principalView.getMenuItemEspañol().addActionListener(e -> {

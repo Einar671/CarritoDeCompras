@@ -130,6 +130,7 @@ public class CarritoListarView extends JInternalFrame {
                         item.getProducto().getNombre(),
                         item.getCantidad(),
                         FormateadorUtils.formatearMoneda(item.getProducto().getPrecio(), locale),
+                        item.getCantidad(),
                         FormateadorUtils.formatearMoneda(item.getSubtotal(), locale)
                 });
             }
