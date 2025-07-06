@@ -148,7 +148,7 @@ public class ProductoController {
                 Producto productoActualizado = new Producto(codigo, nombre, precio);
                 productoDAO.actualizar(productoActualizado);
 
-                productoModificarView.mostrarMensaje(mensajes.get("mensaje.producto.modificado"));
+                productoModificarView.mostrarMensaje(mensajes.get("mensaje.producto.guardado"));
                 productoModificarView.getTxtCodigo().setText("");
                 productoModificarView.getTxtNombre().setText("");
                 productoModificarView.getTxtPrecio().setText("");
