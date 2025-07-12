@@ -33,10 +33,11 @@ public class UsuarioModificarMisView extends JInternalFrame {
     public UsuarioModificarMisView(MensajeInternacionalizacionHandler mensajes) {
 
         super("", true, true, false, true);
-        this.mensajes = mensajes;
 
         URL urlModificar = getClass().getResource("/edit.png");
         btnModificar.setIcon(new ImageIcon(urlModificar));
+        this.mensajes = mensajes;
+
 
         setContentPane(panelPrincipal);
         setSize(600, 400);

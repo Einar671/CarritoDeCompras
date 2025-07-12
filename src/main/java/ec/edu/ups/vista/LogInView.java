@@ -27,6 +27,7 @@ public class LogInView extends JFrame {
     private MensajeInternacionalizacionHandler mensajes;
 
     public LogInView(MensajeInternacionalizacionHandler mensajes) {
+        setContentPane(panelPrincipal);
         this.mensajes = mensajes;
         menubar = new JMenuBar();
         menuIdiomas = new JMenu();
@@ -36,7 +37,6 @@ public class LogInView extends JFrame {
         URL urlLog = getClass().getResource("/log-in.png");
         URL urlReg = getClass().getResource("/add.png");
         URL urlOlvido = getClass().getResource("/question-sign.png");
-        setContentPane(panelPrincipal);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(500, 500);
         setLocationRelativeTo(null);

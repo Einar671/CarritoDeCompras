@@ -196,7 +196,6 @@ public class UsuarioController {
             return;
         }
 
-        // 1. Recolección y validación de datos (esta parte no cambia)
         String nuevoUsername = usuarioModificarMisView.getTxtNuevoUser().getText().trim();
         String nuevaPassword = usuarioModificarMisView.getTxtContraseña().getText().trim();
         String nombreCompleto = usuarioModificarMisView.getTxtNombreCom().getText().trim();
@@ -249,9 +248,8 @@ public class UsuarioController {
             if (resultado == JOptionPane.OK_OPTION) {
                 String respuestaIngresada = campoRespuesta.getText();
                 if (preguntaAleatoria.esRespuestaCorrecta(respuestaIngresada)) {
-                    if (!usernameOriginal.equalsIgnoreCase(nuevoUsername)) {
-                        usuarioDAO.eliminar(usernameOriginal);
-                    }
+
+
                     usuarioAutentificado.setUsername(nuevoUsername);
                     usuarioAutentificado.setPassword(nuevaPassword);
                     usuarioAutentificado.setNombreCompleto(nombreCompleto);
@@ -259,11 +257,19 @@ public class UsuarioController {
                     usuarioAutentificado.setGenero(genero);
                     usuarioAutentificado.setTelefono(telefono);
                     usuarioAutentificado.setEmail(email);
-                    usuarioDAO.crear(usuarioAutentificado);
+
+
+                    if (!usernameOriginal.equalsIgnoreCase(nuevoUsername)) {
+                        usuarioDAO.eliminar(usernameOriginal);
+                        usuarioDAO.crear(usuarioAutentificado);
+                    } else {
+                        usuarioDAO.actualizar(usuarioAutentificado);
+                    }
 
                     usuarioModificarMisView.mostrarMensaje(mensajes.get("mensaje.usuario.modificarMis.exito"));
                     usuarioModificarMisView.dispose();
                     break;
+
                 } else {
                     usuarioModificarMisView.mostrarMensaje(mensajes.get("mensaje.pregunta.recuperar.error"));
                 }

@@ -44,7 +44,6 @@ public class UsuarioDAOMemoria implements UsuarioDAO {
         return null;
     }
 
-    // ... resto de los métodos sin cambios ...
     @Override
     public void eliminar(String username) {
         Iterator<Usuario> iterator = usuarios.iterator();

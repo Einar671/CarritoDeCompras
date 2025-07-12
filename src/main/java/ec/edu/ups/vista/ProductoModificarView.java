@@ -21,7 +21,6 @@ public class ProductoModificarView extends JInternalFrame {
     public ProductoModificarView(MensajeInternacionalizacionHandler mensajes) {
         super("",true,true,false,true);
         this.mensajes = mensajes;
-
         setContentPane(panelPrincipal);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         URL urlBuscar = getClass().getResource("/search.png");

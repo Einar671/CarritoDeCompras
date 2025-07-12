@@ -23,8 +23,8 @@ public class ProductoEliminarView extends JInternalFrame {
     public ProductoEliminarView(MensajeInternacionalizacionHandler mensajes){
 
         super(mensajes.get("producto.eliminar.titulo.app"),true,true,false,true);
-        setContentPane(panelPrincipal);
         this.mensajes = mensajes;
+        setContentPane(panelPrincipal);
 
         URL urlBuscar=getClass().getResource("/search.png");
         URL urlEliminar=getClass().getResource("/trash.png");

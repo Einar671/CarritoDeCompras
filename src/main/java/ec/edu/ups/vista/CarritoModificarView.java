@@ -35,9 +35,9 @@ public class CarritoModificarView extends JInternalFrame {
         super("", true, true, false, true);
         this.mensajes = mensajes;
         this.locale = new Locale(mensajes.get("locale.language"), mensajes.get("locale.country"));
-
-
         setContentPane(panelPrincipal);
+
+
         setSize(600, 400);
 
         URL urlBuscar=getClass().getResource("/search.png");

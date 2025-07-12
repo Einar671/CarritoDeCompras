@@ -33,8 +33,8 @@ public class CarritoListarMisView extends JInternalFrame {
         super("", true, true, false, true);
         this.mensajes = mensajes;
         this.locale = new Locale(mensajes.get("locale.language"), mensajes.get("locale.country"));
-
         setContentPane(panelPrincipal);
+
         setSize(600, 450);
 
         URL urlListar=getClass().getResource("/list.png");

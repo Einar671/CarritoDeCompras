@@ -23,11 +23,11 @@ public class PreguntasRegisterView extends JFrame {
 
     public PreguntasRegisterView(MensajeInternacionalizacionHandler mensajes) {
         this.mensajes = mensajes;
+        setContentPane(panelPrincipal);
 
         this.etiquetasDePregunta = new ArrayList<>();
         this.camposDeRespuesta = new ArrayList<>();
 
-        setContentPane(panelPrincipal);
         setSize(600, 500);
 
         URL urlGuardar = getClass().getResource("/check.png");

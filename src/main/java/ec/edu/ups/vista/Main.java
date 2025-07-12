@@ -6,9 +6,7 @@ import ec.edu.ups.controlador.UsuarioController;
 import ec.edu.ups.dao.CarritoDAO;
 import ec.edu.ups.dao.ProductoDAO;
 import ec.edu.ups.dao.UsuarioDAO;
-import ec.edu.ups.dao.impl.CarritoDAOMemoria;
-import ec.edu.ups.dao.impl.ProductoDAOMemoria;
-import ec.edu.ups.dao.impl.UsuarioDAOMemoria;
+import ec.edu.ups.dao.impl.*;
 import ec.edu.ups.modelo.Rol;
 import ec.edu.ups.modelo.Usuario;
 import ec.edu.ups.util.MensajeInternacionalizacionHandler;
@@ -21,9 +19,9 @@ import java.util.List;   // Importar List
 
 public class Main {
 
-    private static final UsuarioDAO usuarioDAO = new UsuarioDAOMemoria();
+    private static final UsuarioDAO usuarioDAO = new UsuarioDAOArchivoTexto();
     private static final ProductoDAO productoDAO = new ProductoDAOMemoria();
-    private static final CarritoDAO carritoDAO = new CarritoDAOMemoria();
+    private static final CarritoDAO carritoDAO = new CarritoDAOArchivoTexto(usuarioDAO,productoDAO);
 
     private static final MensajeInternacionalizacionHandler mensajes = new MensajeInternacionalizacionHandler("en", "US");
     private static PrincipalView principalView;

@@ -33,10 +33,10 @@ public class CarritoEliminarView extends JInternalFrame {
     public CarritoEliminarView(MensajeInternacionalizacionHandler mensajes) {
         super("", true, true, false, true);
         this.mensajes = mensajes;
+        setContentPane(panelPrincipal);
         this.locale = new Locale(mensajes.get("locale.language"), mensajes.get("locale.country"));
         URL urlBuscar= getClass().getResource("/search.png");
         URL urlEliminar = getClass().getResource("/trash.png");
-        setContentPane(panelPrincipal);
         btnBuscar.setIcon(new ImageIcon(urlBuscar));
         btnEliminar.setIcon(new ImageIcon(urlEliminar));
         setSize(600, 400);

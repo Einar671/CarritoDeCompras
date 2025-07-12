@@ -24,9 +24,8 @@ public class UsuarioEliminarView extends JInternalFrame {
 
         super("", true, true, false, true);
         this.mensajes = mensajes;
-
-        setSize(600, 400);
         setContentPane(panelPrincipal);
+        setSize(600, 400);
         URL urlBuscar = getClass().getResource("/search.png");
         btnBuscar.setIcon(new ImageIcon(urlBuscar));
         URL urlEliminar = getClass().getResource("/trash.png");

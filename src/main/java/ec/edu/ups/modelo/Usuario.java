@@ -68,7 +68,7 @@ public class Usuario {
         this.email = email;
     }
 
-    public String getUsername() {
+    public String    getUsername() {
         return username;
     }
 

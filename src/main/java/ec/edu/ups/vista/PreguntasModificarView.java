@@ -25,13 +25,12 @@ public class PreguntasModificarView extends JFrame {
 
     public PreguntasModificarView(MensajeInternacionalizacionHandler mensajes) {
         this.mensajes = mensajes;
-
+        scrollPane.setViewportView(containerPanel);
         this.camposDeRespuesta = new HashMap<>();
         this.respuestasActuales = null;
         URL urlVerificar = getClass().getResource("/check.png");
 
         containerPanel = new JPanel();
-        scrollPane.setViewportView(containerPanel);
 
         btnVerificar.setIcon(new ImageIcon(urlVerificar));
 

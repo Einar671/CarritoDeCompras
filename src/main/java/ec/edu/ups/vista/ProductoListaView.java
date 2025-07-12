@@ -28,8 +28,8 @@ public class ProductoListaView extends JInternalFrame {
     public ProductoListaView(MensajeInternacionalizacionHandler mensajes) {
 
         super("",true,true,false,true);
-        this.locale = new Locale(mensajes.get("locale.language"), mensajes.get("locale.country"));
         setContentPane(panelPrincipal);
+        this.locale = new Locale(mensajes.get("locale.language"), mensajes.get("locale.country"));
         this.mensajes = mensajes;
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(500, 500);

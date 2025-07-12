@@ -39,6 +39,7 @@ public class RegistrarseView extends JFrame {
 
     public RegistrarseView(MensajeInternacionalizacionHandler mensajes) {
         this.mensajes=mensajes;
+        setContentPane(panelPrincipal);
         menubar = new JMenuBar();
         menuIdiomas = new JMenu();
         menuItemEspañol = new JMenuItem();
@@ -46,7 +47,6 @@ public class RegistrarseView extends JFrame {
         menuItemNoruego = new JMenuItem();
         URL urlReg = getClass().getResource("/add.png");
         URL urlAtras = getClass().getResource("/back.png");
-        setContentPane(panelPrincipal);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(600, 700);
         btnRegistrarse.setIcon(new ImageIcon(urlReg));

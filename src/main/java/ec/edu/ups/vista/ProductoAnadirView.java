@@ -30,10 +30,10 @@ public class ProductoAnadirView extends JInternalFrame {
         this.mensajes = mensajes;
         URL urlAñadir = getClass().getResource("/check.png");
         URL urlLimpiar = getClass().getResource("/clean.png");
+        setContentPane(panelPrincipal);
 
         btnAceptar.setIcon(new ImageIcon(urlAñadir));
         btnLimpiar.setIcon(new ImageIcon(urlLimpiar));
-        setContentPane(panelPrincipal);
 
         actualizarTextos();
 
