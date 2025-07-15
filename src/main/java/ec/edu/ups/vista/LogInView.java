@@ -27,8 +27,8 @@ public class LogInView extends JFrame {
     private MensajeInternacionalizacionHandler mensajes;
 
     public LogInView(MensajeInternacionalizacionHandler mensajes) {
-        setContentPane(panelPrincipal);
         this.mensajes = mensajes;
+        setContentPane(panelPrincipal);
         menubar = new JMenuBar();
         menuIdiomas = new JMenu();
         menuItemEspañol = new JMenuItem();

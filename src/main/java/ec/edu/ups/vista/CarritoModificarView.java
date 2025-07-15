@@ -33,9 +33,9 @@ public class CarritoModificarView extends JInternalFrame {
 
     public CarritoModificarView(MensajeInternacionalizacionHandler mensajes) {
         super("", true, true, false, true);
+        setContentPane(panelPrincipal);
         this.mensajes = mensajes;
         this.locale = new Locale(mensajes.get("locale.language"), mensajes.get("locale.country"));
-        setContentPane(panelPrincipal);
 
 
         setSize(600, 400);

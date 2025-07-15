@@ -26,8 +26,8 @@ public class UsuarioListarView extends JInternalFrame {
     public UsuarioListarView(MensajeInternacionalizacionHandler mensajes) {
 
         super("", true, true, false, true);
-        setContentPane(panelPrincipal);
         this.mensajes = mensajes;
+        setContentPane(panelPrincipal);
         setSize(600, 400);
         URL urlBuscar = getClass().getResource("/search.png");
         URL urlListar = getClass().getResource("/list.png");

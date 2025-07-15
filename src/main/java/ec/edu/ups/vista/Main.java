@@ -68,9 +68,10 @@ public class Main {
 
                     String rutaUsuarios = rutaBase + java.io.File.separator + "usuarios.txt";
                     String rutaCarritos = rutaBase + java.io.File.separator + "carritos.txt";
+                    String rutaProductos = rutaBase + java.io.File.separator + "productos.dat";
 
                     usuarioDAO = new UsuarioDAOArchivoTexto(rutaUsuarios);
-                    productoDAO = new ProductoDAOMemoria();
+                    productoDAO = new ProductoDAOArchivoBinario(rutaProductos);
                     carritoDAO = new CarritoDAOArchivoTexto(rutaCarritos, usuarioDAO, productoDAO);
 
                     seleccionarDAOView.dispose();

@@ -3,12 +3,10 @@ package ec.edu.ups.vista;
 import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Locale;
 
 public class SeleccionarDAO extends JFrame {
-    private JPanel panelPrincipal;
+    private JPanel principalPane;
     private JCheckBox cbxMemoria;
     private JCheckBox cbxArchivo;
     private JFileChooser Archivos;
@@ -24,13 +22,14 @@ public class SeleccionarDAO extends JFrame {
     private Locale locale;
 
     public SeleccionarDAO(MensajeInternacionalizacionHandler mensajes) {
+        setContentPane(principalPane);
         this.mensajes = mensajes;
-        setContentPane(panelPrincipal);
         menubar = new JMenuBar();
         menuIdiomas = new JMenu();
         menuItemEspañol = new JMenuItem();
         menuItemIngles = new JMenuItem();
         menuItemNoruego = new JMenuItem();
+
 
         Archivos.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         Archivos.setAcceptAllFileFilterUsed(false);

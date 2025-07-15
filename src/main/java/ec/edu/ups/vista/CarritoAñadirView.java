@@ -42,9 +42,9 @@ public class CarritoAñadirView extends JInternalFrame {
 
     public CarritoAñadirView(MensajeInternacionalizacionHandler mensajes) {
         super("", true, true, false, true);
-        setContentPane(panelPrincipal);
         this.mensajes = mensajes;
         this.locale = new Locale(mensajes.get("locale.language"), mensajes.get("locale.country"));
+        setContentPane(panelPrincipal);
 
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setSize(600, 550);

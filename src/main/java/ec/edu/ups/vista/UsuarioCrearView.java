@@ -22,8 +22,9 @@ public class UsuarioCrearView extends JInternalFrame {
 
     public UsuarioCrearView(MensajeInternacionalizacionHandler mensajes) {
         super("", true, true, false, true);
-        this.mensajes = mensajes;
         setContentPane(panelPrincipal);
+
+        this.mensajes = mensajes;
         URL urlCrear = getClass().getResource("/plus.png");
         btnCrear.setIcon(new ImageIcon(urlCrear));
         setSize(600, 400);

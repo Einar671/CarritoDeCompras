@@ -48,7 +48,6 @@ public class UsuarioDAOArchivoTexto implements UsuarioDAO {
         try (BufferedReader br = new BufferedReader(new FileReader(ruta))) {
             String linea;
             while ((linea = br.readLine()) != null) {
-                // Optimización: si la línea empieza con el username, la procesamos.
                 if (linea.startsWith(username + SEPARADOR_CAMPOS)) {
                     return stringToUsuario(linea);
                 }

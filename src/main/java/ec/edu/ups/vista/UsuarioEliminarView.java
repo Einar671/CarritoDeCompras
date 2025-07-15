@@ -21,10 +21,10 @@ public class UsuarioEliminarView extends JInternalFrame {
     private MensajeInternacionalizacionHandler mensajes;
 
     public UsuarioEliminarView(MensajeInternacionalizacionHandler mensajes) {
-
         super("", true, true, false, true);
-        this.mensajes = mensajes;
         setContentPane(panelPrincipal);
+
+        this.mensajes = mensajes;
         setSize(600, 400);
         URL urlBuscar = getClass().getResource("/search.png");
         btnBuscar.setIcon(new ImageIcon(urlBuscar));

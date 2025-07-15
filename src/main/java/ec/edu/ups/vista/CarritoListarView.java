@@ -28,9 +28,10 @@ public class CarritoListarView extends JInternalFrame {
 
     public CarritoListarView(MensajeInternacionalizacionHandler mensajes) {
         super("", true, true, false, true);
+        setContentPane(panelPrincipal);
+
         this.mensajes = mensajes;
         this.locale = new Locale(mensajes.get("locale.language"), mensajes.get("locale.country"));
-        setContentPane(panelPrincipal);
 
         setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
         setSize(800, 600);

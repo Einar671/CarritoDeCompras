@@ -22,8 +22,9 @@ public class PreguntasRegisterView extends JFrame {
     private final MensajeInternacionalizacionHandler mensajes;
 
     public PreguntasRegisterView(MensajeInternacionalizacionHandler mensajes) {
-        this.mensajes = mensajes;
         setContentPane(panelPrincipal);
+
+        this.mensajes = mensajes;
 
         this.etiquetasDePregunta = new ArrayList<>();
         this.camposDeRespuesta = new ArrayList<>();

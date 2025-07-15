@@ -24,6 +24,8 @@ public class PreguntasModificarView extends JFrame {
     private final MensajeInternacionalizacionHandler mensajes;
 
     public PreguntasModificarView(MensajeInternacionalizacionHandler mensajes) {
+        setContentPane(panelPrincipal);
+
         this.mensajes = mensajes;
         scrollPane.setViewportView(containerPanel);
         this.camposDeRespuesta = new HashMap<>();
@@ -34,7 +36,6 @@ public class PreguntasModificarView extends JFrame {
 
         btnVerificar.setIcon(new ImageIcon(urlVerificar));
 
-        setContentPane(panelPrincipal);
         setSize(600, 400);
 
         actualizarTextos();
