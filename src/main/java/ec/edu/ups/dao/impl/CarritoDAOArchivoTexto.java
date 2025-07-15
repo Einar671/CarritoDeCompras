@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class CarritoDAOArchivoTexto implements CarritoDAO {
 
-    private final String ruta = "C:/Users/USUARIO/Desktop/carritos.txt";
+    private final String ruta;
     private final UsuarioDAO usuarioDAO;
     private final ProductoDAO productoDAO;
 
@@ -32,7 +32,8 @@ public class CarritoDAOArchivoTexto implements CarritoDAO {
      * @param usuarioDAO El DAO para buscar usuarios por su username.
      * @param productoDAO El DAO para buscar productos por su código.
      */
-    public CarritoDAOArchivoTexto(UsuarioDAO usuarioDAO, ProductoDAO productoDAO) {
+    public CarritoDAOArchivoTexto(String ruta, UsuarioDAO usuarioDAO, ProductoDAO productoDAO) {
+        this.ruta = ruta;
         this.usuarioDAO = usuarioDAO;
         this.productoDAO = productoDAO;
         try {

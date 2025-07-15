@@ -19,18 +19,72 @@ import java.util.List;   // Importar List
 
 public class Main {
 
-    private static final UsuarioDAO usuarioDAO = new UsuarioDAOArchivoTexto();
-    private static final ProductoDAO productoDAO = new ProductoDAOMemoria();
-    private static final CarritoDAO carritoDAO = new CarritoDAOArchivoTexto(usuarioDAO,productoDAO);
+    private static UsuarioDAO usuarioDAO;
+    private static ProductoDAO productoDAO;
+    private static CarritoDAO carritoDAO;
 
     private static final MensajeInternacionalizacionHandler mensajes = new MensajeInternacionalizacionHandler("en", "US");
     private static PrincipalView principalView;
 
     public static void main(String[] args) {
-        java.awt.EventQueue.invokeLater(Main::mostrarVentanaDeLogin);
+        java.awt.EventQueue.invokeLater(Main::seleccionarTipoDePersistencia);
     }
 
-    public static void mostrarVentanaDeLogin() {
+    public static void seleccionarTipoDePersistencia() {
+        SeleccionarDAO seleccionarDAOView = new SeleccionarDAO(mensajes);
+
+        seleccionarDAOView.getMenuItemEspañol().addActionListener(e -> {
+            mensajes.setLenguaje("es", "EC");
+            seleccionarDAOView.actualizar();
+        });
+        seleccionarDAOView.getMenuItemIngles().addActionListener(e -> {
+            mensajes.setLenguaje("en", "US");
+            seleccionarDAOView.actualizar();
+        });
+        seleccionarDAOView.getMenuItemNoruego().addActionListener(e -> {
+            mensajes.setLenguaje("nk", "NK");
+            seleccionarDAOView.actualizar();
+        });
+
+        seleccionarDAOView.getBtnAceptar().addActionListener(e -> {
+            boolean memoriaSeleccionada = seleccionarDAOView.getCbxMemoria().isSelected();
+            boolean archivoSeleccionado = seleccionarDAOView.getCbxArchivo().isSelected();
+
+            if (memoriaSeleccionada) {
+                usuarioDAO = new UsuarioDAOMemoria();
+                productoDAO = new ProductoDAOMemoria();
+                carritoDAO = new CarritoDAOMemoria();
+                seleccionarDAOView.dispose();
+                mostrarVentanaDeLogin();
+            } else if (archivoSeleccionado) {
+                JFileChooser fileChooser = seleccionarDAOView.getArchivos();
+                fileChooser.setDialogTitle(mensajes.get("seleccionadorDAO.dialogo.titulo"));
+
+                int resultado = fileChooser.showOpenDialog(seleccionarDAOView);
+
+                if (resultado == JFileChooser.APPROVE_OPTION) {
+                    java.io.File carpetaSeleccionada = fileChooser.getSelectedFile();
+                    String rutaBase = carpetaSeleccionada.getAbsolutePath();
+
+                    String rutaUsuarios = rutaBase + java.io.File.separator + "usuarios.txt";
+                    String rutaCarritos = rutaBase + java.io.File.separator + "carritos.txt";
+
+                    usuarioDAO = new UsuarioDAOArchivoTexto(rutaUsuarios);
+                    productoDAO = new ProductoDAOMemoria();
+                    carritoDAO = new CarritoDAOArchivoTexto(rutaCarritos, usuarioDAO, productoDAO);
+
+                    seleccionarDAOView.dispose();
+                    mostrarVentanaDeLogin();
+                }
+            } else {
+                seleccionarDAOView.mostrarMensaje(mensajes.get("mensaje.seleccionadorDAO.noSeleccionado"));
+            }
+        });
+
+        seleccionarDAOView.setVisible(true);
+    }
+
+    private static void mostrarVentanaDeLogin() {
         LogInView loginView = new LogInView(mensajes);
         UsuarioCrearView usuarioCrearView = new UsuarioCrearView(mensajes);
         UsuarioModificarView usuarioModificarView = new UsuarioModificarView(mensajes);
@@ -100,7 +154,7 @@ public class Main {
         loginView.setVisible(true);
     }
 
-    public static void iniciarAplicacionPrincipal(Usuario usuarioAutenticado, UsuarioCrearView usuarioCrearView, UsuarioModificarView usuarioModificarView, UsuarioEliminarView usuarioEliminarView, UsuarioModificarMisView usuarioModificarMisView, UsuarioListarView usuarioListarView, RegistrarseView registrarseView, PreguntasRegisterView preguntasView, PreguntasModificarView preguntasModificarView) {
+    private static void iniciarAplicacionPrincipal(Usuario usuarioAutenticado, UsuarioCrearView usuarioCrearView, UsuarioModificarView usuarioModificarView, UsuarioEliminarView usuarioEliminarView, UsuarioModificarMisView usuarioModificarMisView, UsuarioListarView usuarioListarView, RegistrarseView registrarseView, PreguntasRegisterView preguntasView, PreguntasModificarView preguntasModificarView) {
 
         principalView = new PrincipalView(mensajes);
         ProductoModificarView productoModificarView = new ProductoModificarView(mensajes);

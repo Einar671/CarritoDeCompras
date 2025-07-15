@@ -14,13 +14,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class UsuarioDAOArchivoTexto implements UsuarioDAO {
-    private final String ruta = "C:/Users/USUARIO/Desktop/usuarios.txt";
+    private String ruta;
 
     private static final String SEPARADOR_CAMPOS = "|";
     private static final String SEPARADOR_PREGUNTAS = ";";
     private static final String SEPARADOR_RESPUESTAS = ",";
 
-    public UsuarioDAOArchivoTexto() {
+    public UsuarioDAOArchivoTexto(String ruta) {
+        this.ruta = ruta;
         try {
             new FileWriter(ruta, true).close();
         } catch (IOException e) {

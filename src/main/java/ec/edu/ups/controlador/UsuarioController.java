@@ -5,9 +5,14 @@ import ec.edu.ups.modelo.Pregunta;
 import ec.edu.ups.modelo.Respuesta;
 import ec.edu.ups.modelo.Rol;
 import ec.edu.ups.modelo.Usuario;
+import ec.edu.ups.util.CedulaValidatorException;
+import ec.edu.ups.util.ContraseñaValidatorException;
 import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 import ec.edu.ups.util.Sonido;
 import ec.edu.ups.vista.*;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Random;
 import javax.swing.*;
 import javax.swing.event.InternalFrameAdapter;
@@ -326,37 +331,48 @@ public class UsuarioController {
     }
 
     private void procesarDatosDeRegistro() {
-        String username = registrarseView.getTxtUsername().getText().trim();
-        String contraseña = new String(registrarseView.getTxtContraseña().getPassword());
-        String repeContra = new String(registrarseView.getTxtRepContra().getPassword());
-        String nombreCompleto = registrarseView.getTxtNombreCom().getText().trim();
-        String email = registrarseView.getTxtEmail().getText().trim();
-        String telefono = registrarseView.getTxtTelefono().getText().trim();
 
-        int edad = (int) registrarseView.getSpnEdad().getValue();
-        ec.edu.ups.modelo.Genero genero = (ec.edu.ups.modelo.Genero) registrarseView.getCbxGenero().getSelectedItem();
+            String username = registrarseView.getTxtUsername().getText().trim();
+            String contraseña = new String(registrarseView.getTxtContraseña().getPassword());
+            String repeContra = new String(registrarseView.getTxtRepContra().getPassword());
+            String nombreCompleto = registrarseView.getTxtNombreCom().getText().trim();
+            String email = registrarseView.getTxtEmail().getText().trim();
+            String telefono = registrarseView.getTxtTelefono().getText().trim();
 
-        if (username.isEmpty() || contraseña.isEmpty() || nombreCompleto.isEmpty() || email.isEmpty() || telefono.isEmpty()) {
-            registrarseView.mostrarMensaje(mensajes.get("mensaje.usuario.modificarMis.incompleto"));
-            return;
-        }
-        if (genero == null) {
-            registrarseView.mostrarMensaje("Por favor, seleccione un género.");
-            return;
-        }
-        if (!contraseña.equals(repeContra)) {
-            registrarseView.mostrarMensaje(mensajes.get("mensaje.register.contraseñaRepetida"));
-            return;
-        }
-        if (usuarioDAO.buscarPorUsuario(username) != null) {
-            registrarseView.mostrarMensaje(mensajes.get("mensaje.usuario.error.nombreUsado"));
-            return;
+            int edad = (int) registrarseView.getSpnEdad().getValue();
+            ec.edu.ups.modelo.Genero genero = (ec.edu.ups.modelo.Genero) registrarseView.getCbxGenero().getSelectedItem();
+
+            if (username.isEmpty() || contraseña.isEmpty() || nombreCompleto.isEmpty() || email.isEmpty() || telefono.isEmpty()) {
+                registrarseView.mostrarMensaje(mensajes.get("mensaje.usuario.modificarMis.incompleto"));
+                return;
+            }
+            if (genero == null) {
+                registrarseView.mostrarMensaje("Por favor, seleccione un género.");
+                return;
+            }
+            if (!contraseña.equals(repeContra)) {
+                registrarseView.mostrarMensaje(mensajes.get("mensaje.register.contraseñaRepetida"));
+                return;
+            }
+            if (usuarioDAO.buscarPorUsuario(username) != null) {
+                registrarseView.mostrarMensaje(mensajes.get("mensaje.usuario.error.nombreUsado"));
+                return;
+            }
+        try {
+
+            this.usuarioTemporal = new Usuario( Rol.USUARIO, nombreCompleto, edad, genero, telefono, email);
+            usuarioTemporal.setUsername(username);
+            usuarioTemporal.setPassword(contraseña);
+
+            preguntasView.setVisible(true);
+            registrarseView.setVisible(false);
+
+        }catch (CedulaValidatorException e){
+            registrarseView.mostrarMensaje(mensajes.get("excepcion.usuario.cedula"));
+        }catch (ContraseñaValidatorException e){
+            registrarseView.mostrarMensaje(mensajes.get("excepcion.usuario.contraseña"));
         }
 
-        this.usuarioTemporal = new Usuario(username, Rol.USUARIO, contraseña, nombreCompleto, edad, genero, telefono, email);
-
-        preguntasView.setVisible(true);
-        registrarseView.setVisible(false);
     }
 
 
