@@ -3,6 +3,7 @@ package ec.edu.ups.vista;
 import ec.edu.ups.controlador.CarritoController;
 import ec.edu.ups.controlador.ProductoController;
 import ec.edu.ups.controlador.UsuarioController;
+import ec.edu.ups.dao.PreguntaDAO;
 import ec.edu.ups.dao.CarritoDAO;
 import ec.edu.ups.dao.ProductoDAO;
 import ec.edu.ups.dao.UsuarioDAO;
@@ -22,6 +23,7 @@ public class Main {
     private static UsuarioDAO usuarioDAO;
     private static ProductoDAO productoDAO;
     private static CarritoDAO carritoDAO;
+    private static PreguntaDAO preguntaDAO;
 
     private static final MensajeInternacionalizacionHandler mensajes = new MensajeInternacionalizacionHandler("en", "US");
     private static PrincipalView principalView;
@@ -54,6 +56,7 @@ public class Main {
                 usuarioDAO = new UsuarioDAOMemoria();
                 productoDAO = new ProductoDAOMemoria();
                 carritoDAO = new CarritoDAOMemoria();
+                preguntaDAO = new PreguntaDAOMemoria(mensajes);
                 seleccionarDAOView.dispose();
                 mostrarVentanaDeLogin();
             } else if (archivoSeleccionado) {
@@ -69,9 +72,11 @@ public class Main {
                     String rutaUsuarios = rutaBase + java.io.File.separator + "usuarios.txt";
                     String rutaCarritos = rutaBase + java.io.File.separator + "carritos.txt";
                     String rutaProductos = rutaBase + java.io.File.separator + "productos.dat";
+                    String rutaPreguntas = rutaBase + java.io.File.separator + "preguntas.dat";
 
                     usuarioDAO = new UsuarioDAOArchivoTexto(rutaUsuarios);
                     productoDAO = new ProductoDAOArchivoBinario(rutaProductos);
+                    preguntaDAO = new PreguntaDAOArchivoBinario(rutaPreguntas, mensajes);
                     carritoDAO = new CarritoDAOArchivoTexto(rutaCarritos, usuarioDAO, productoDAO);
 
                     seleccionarDAOView.dispose();
@@ -138,7 +143,7 @@ public class Main {
             preguntasView.actualizarTextos();
             preguntasModificarView.actualizarTextos();        });
 
-        UsuarioController usuarioController = new UsuarioController(usuarioCrearView, usuarioDAO, loginView, usuarioModificarView, usuarioEliminarView, usuarioModificarMisView, usuarioListarView, mensajes, registrarseView, preguntasView, preguntasModificarView);
+        UsuarioController usuarioController = new UsuarioController(usuarioCrearView, usuarioDAO, preguntaDAO, loginView, usuarioModificarView, usuarioEliminarView, usuarioModificarMisView, usuarioListarView, mensajes, registrarseView, preguntasView, preguntasModificarView);
 
         loginView.addWindowListener(new WindowAdapter() {
             @Override

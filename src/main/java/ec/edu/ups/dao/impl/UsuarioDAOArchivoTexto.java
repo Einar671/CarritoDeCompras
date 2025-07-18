@@ -6,16 +6,16 @@ import ec.edu.ups.modelo.Pregunta;
 import ec.edu.ups.modelo.Respuesta;
 import ec.edu.ups.modelo.Rol;
 import ec.edu.ups.modelo.Usuario;
+import ec.edu.ups.util.CedulaValidatorException;
+import ec.edu.ups.util.ContraseñaValidatorException;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class UsuarioDAOArchivoTexto implements UsuarioDAO {
-    private String ruta;
-
+    private final String ruta;
     private static final String SEPARADOR_CAMPOS = "|";
     private static final String SEPARADOR_PREGUNTAS = ";";
     private static final String SEPARADOR_RESPUESTAS = ",";
@@ -23,20 +23,23 @@ public class UsuarioDAOArchivoTexto implements UsuarioDAO {
     public UsuarioDAOArchivoTexto(String ruta) {
         this.ruta = ruta;
         try {
-            new FileWriter(ruta, true).close();
-        } catch (IOException e) {
-            System.err.println("Error al inicializar el archivo de usuarios: " + e.getMessage());
+            File archivo = new File(ruta);
+            // Si el archivo no existe o está vacío, se crean los usuarios por defecto.
+            if (!archivo.exists() || archivo.length() == 0) {
+                archivo.createNewFile();
+                // Se usan datos que cumplen las reglas de validación de Cédula y Contraseña.
+                crear(new Usuario("0302581863", Rol.ADMINISTRADOR, "Admin@123", "Administrador Principal", 30, Genero.OTRO, "0999999999", "admin@example.com"));
+                crear(new Usuario("0150363232", Rol.USUARIO, "User_456", "Usuario de Prueba", 25, Genero.MASCULINO, "0888888888", "user@example.com"));
+            }
+        } catch (IOException | CedulaValidatorException | ContraseñaValidatorException e) {
+            System.err.println("Error al inicializar o crear usuarios por defecto en el archivo: " + e.getMessage());
         }
     }
 
     @Override
     public void crear(Usuario usuario) {
-        if (buscarPorUsuario(usuario.getUsername()) != null) {
-            System.err.println("Intento de crear un usuario que ya existe: " + usuario.getUsername());
-            return;
-        }
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(ruta, true))) {
-            bw.append(usuarioToString(usuario));
+            bw.write(usuarioToString(usuario));
             bw.newLine();
         } catch (IOException e) {
             System.err.println("Error al crear el usuario en el archivo: " + e.getMessage());
@@ -86,7 +89,18 @@ public class UsuarioDAOArchivoTexto implements UsuarioDAO {
     @Override
     public void eliminar(String username) {
         List<Usuario> usuarios = listarTodos();
-        boolean eliminado = usuarios.removeIf(usuario -> usuario.getUsername().equals(username));
+        // Reemplazo de removeIf con un iterador para ser más explícito.
+        Iterator<Usuario> iterador = usuarios.iterator();
+        boolean eliminado = false;
+        while (iterador.hasNext()) {
+            Usuario usuario = iterador.next();
+            if (usuario.getUsername().equals(username)) {
+                iterador.remove();
+                eliminado = true;
+                break; // Se asume que los usernames son únicos.
+            }
+        }
+
         if (eliminado) {
             sobrescribirArchivo(usuarios);
         }
@@ -104,16 +118,23 @@ public class UsuarioDAOArchivoTexto implements UsuarioDAO {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            // No se imprime error si el archivo no se encuentra, es un caso normal.
+            if (!(e instanceof FileNotFoundException)) {
+                e.printStackTrace();
+            }
         }
         return usuarios;
     }
 
     @Override
     public List<Usuario> listarRol(Rol rol) {
-        return listarTodos().stream()
-                .filter(usuario -> usuario.getRol() == rol)
-                .collect(Collectors.toList());
+        List<Usuario> resultado = new ArrayList<>();
+        for (Usuario usuario : listarTodos()) {
+            if (usuario.getRol() == rol) {
+                resultado.add(usuario);
+            }
+        }
+        return resultado;
     }
 
     @Override
@@ -128,6 +149,7 @@ public class UsuarioDAOArchivoTexto implements UsuarioDAO {
 
 
     private void sobrescribirArchivo(List<Usuario> usuarios) {
+        // Se usa 'false' para sobrescribir completamente el archivo.
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(ruta, false))) {
             for (Usuario u : usuarios) {
                 bw.write(usuarioToString(u));
@@ -151,10 +173,14 @@ public class UsuarioDAOArchivoTexto implements UsuarioDAO {
 
         if (usuario.getRespuestasSeguridad() != null && !usuario.getRespuestasSeguridad().isEmpty()) {
             sb.append(SEPARADOR_CAMPOS);
-            String respuestasString = usuario.getRespuestasSeguridad().stream()
-                    .map(r -> r.getPregunta().getId() + SEPARADOR_RESPUESTAS + r.getRespuesta())
-                    .collect(Collectors.joining(SEPARADOR_PREGUNTAS));
-            sb.append(respuestasString);
+
+            List<String> respuestasFormateadas = new ArrayList<>();
+            for (Respuesta r : usuario.getRespuestasSeguridad()) {
+                // Se asume que la clase Respuesta tiene el método getTextoRespuesta()
+                // para mantener consistencia con el resto del proyecto.
+                respuestasFormateadas.add(r.getPregunta().getId() + SEPARADOR_RESPUESTAS + r.getRespuesta());
+            }
+            sb.append(String.join(SEPARADOR_PREGUNTAS, respuestasFormateadas));
         }
         return sb.toString();
     }
@@ -182,15 +208,16 @@ public class UsuarioDAOArchivoTexto implements UsuarioDAO {
                     String[] prParts = pr.split(SEPARADOR_RESPUESTAS);
                     if (prParts.length == 2) {
                         int preguntaId = Integer.parseInt(prParts[0]);
-                        String respuestaTexto = prParts[1];
+                        String textoRespuesta = prParts[1];
+                        // El texto de la pregunta no se guarda, se recupera desde los archivos de mensajes.
                         Pregunta pregunta = new Pregunta(preguntaId, "");
-                        usuario.addRespuesta(pregunta, respuestaTexto);
+                        usuario.addRespuesta(pregunta, textoRespuesta);
                     }
                 }
             }
             return usuario;
-        } catch (IllegalArgumentException e) {
-            System.err.println("Error al parsear la línea de usuario: " + linea);
+        } catch (IllegalArgumentException | CedulaValidatorException | ContraseñaValidatorException e) {
+            System.err.println("Error al parsear la línea de usuario o datos inválidos: " + linea);
             e.printStackTrace();
             return null;
         }

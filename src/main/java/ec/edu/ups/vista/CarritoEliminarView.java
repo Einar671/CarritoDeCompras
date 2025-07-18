@@ -6,7 +6,10 @@ import ec.edu.ups.util.FormateadorUtils;
 import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
+import javax.swing.plaf.FontUIResource;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.StyleContext;
+import java.awt.*;
 import java.net.URL;
 import java.util.List;
 import java.util.Locale;
@@ -35,7 +38,7 @@ public class CarritoEliminarView extends JInternalFrame {
         setContentPane(panelPrincipal);
         this.mensajes = mensajes;
         this.locale = new Locale(mensajes.get("locale.language"), mensajes.get("locale.country"));
-        URL urlBuscar= getClass().getResource("/search.png");
+        URL urlBuscar = getClass().getResource("/search.png");
         URL urlEliminar = getClass().getResource("/trash.png");
         btnBuscar.setIcon(new ImageIcon(urlBuscar));
         btnEliminar.setIcon(new ImageIcon(urlEliminar));
@@ -102,11 +105,32 @@ public class CarritoEliminarView extends JInternalFrame {
         JOptionPane.showMessageDialog(this, mensaje, mensajes.get("yesNo.app.titulo"), JOptionPane.INFORMATION_MESSAGE);
     }
 
-    public JTextField getTxtCodigo() { return txtCodigo; }
-    public JButton getBtnBuscar() { return btnBuscar; }
-    public JTable getTblItems() { return tblItems; }
-    public JTextField getTxtUsuario() { return txtUsuario; }
-    public JTextField getTxtFecha() { return txtFecha; }
-    public JButton getBtnEliminar() { return btnEliminar; }
-    public Carrito getCarritoActual() { return carritoActual; }
+    public JTextField getTxtCodigo() {
+        return txtCodigo;
+    }
+
+    public JButton getBtnBuscar() {
+        return btnBuscar;
+    }
+
+    public JTable getTblItems() {
+        return tblItems;
+    }
+
+    public JTextField getTxtUsuario() {
+        return txtUsuario;
+    }
+
+    public JTextField getTxtFecha() {
+        return txtFecha;
+    }
+
+    public JButton getBtnEliminar() {
+        return btnEliminar;
+    }
+
+    public Carrito getCarritoActual() {
+        return carritoActual;
+    }
+
 }

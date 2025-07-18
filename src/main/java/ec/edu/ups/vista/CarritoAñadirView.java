@@ -6,7 +6,11 @@ import ec.edu.ups.util.FormateadorUtils;
 import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
+import javax.swing.plaf.FontUIResource;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.StyleContext;
+import java.awt.*;
 import java.net.URL;
 import java.util.Locale;
 
@@ -51,9 +55,9 @@ public class CarritoAñadirView extends JInternalFrame {
         setClosable(true);
         setIconifiable(true);
         URL urlBuscar = getClass().getResource("/search.png");
-        URL urlAñadir= getClass().getResource("/plus.png");
-        URL urlGuardar=getClass().getResource("/check.png");
-        URL urlLimpiar=getClass().getResource("/clean.png");
+        URL urlAñadir = getClass().getResource("/plus.png");
+        URL urlGuardar = getClass().getResource("/check.png");
+        URL urlLimpiar = getClass().getResource("/clean.png");
         modelo = new DefaultTableModel();
         tblItems.setModel(modelo);
         btnBuscar.setIcon(new ImageIcon(urlBuscar));
@@ -103,7 +107,7 @@ public class CarritoAñadirView extends JInternalFrame {
 
 
     public void mostrarCarrito(Carrito carrito) {
-        this.carritoActual=carrito;
+        this.carritoActual = carrito;
         modelo.setRowCount(0);
         if (carrito != null) {
             for (ItemCarrito item : carrito.obtenerItems()) {
@@ -125,20 +129,62 @@ public class CarritoAñadirView extends JInternalFrame {
         }
     }
 
-    public JTextField getTxtCodigo() { return txtCodigo; }
-    public JTextField getTxtNombre() { return txtNombre; }
-    public JTextField getTxtPrecio() { return txtPrecio; }
-    public JTextField getTxtSubtotal() { return txtSubtotal; }
-    public JTextField getTxtIVA() { return txtIVA; }
-    public JTextField getTxtTotal() { return txtTotal; }
-    public JButton getBtnGuardar() { return btnGuardar; }
-    public JButton getBtnBuscar() { return btnBuscar; }
-    public JButton getBtnAñadir() { return btnAñadir; }
-    public JButton getBtnLimpiar() { return btnLimpiar; }
-    public JComboBox<String> getCbxCantidad() { return cbxCantidad; }
-    public JTable getTblItems() { return tblItems; }
-    public DefaultTableModel getModelo() { return modelo; }
+    public JTextField getTxtCodigo() {
+        return txtCodigo;
+    }
+
+    public JTextField getTxtNombre() {
+        return txtNombre;
+    }
+
+    public JTextField getTxtPrecio() {
+        return txtPrecio;
+    }
+
+    public JTextField getTxtSubtotal() {
+        return txtSubtotal;
+    }
+
+    public JTextField getTxtIVA() {
+        return txtIVA;
+    }
+
+    public JTextField getTxtTotal() {
+        return txtTotal;
+    }
+
+    public JButton getBtnGuardar() {
+        return btnGuardar;
+    }
+
+    public JButton getBtnBuscar() {
+        return btnBuscar;
+    }
+
+    public JButton getBtnAñadir() {
+        return btnAñadir;
+    }
+
+    public JButton getBtnLimpiar() {
+        return btnLimpiar;
+    }
+
+    public JComboBox<String> getCbxCantidad() {
+        return cbxCantidad;
+    }
+
+    public JTable getTblItems() {
+        return tblItems;
+    }
+
+    public DefaultTableModel getModelo() {
+        return modelo;
+    }
+
     public void mostrarMensaje(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje, mensajes.get("yesNo.app.titulo"), JOptionPane.INFORMATION_MESSAGE);
     }
+
+
+
 }

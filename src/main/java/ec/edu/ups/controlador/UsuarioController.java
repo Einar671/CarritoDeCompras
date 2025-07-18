@@ -1,6 +1,7 @@
 package ec.edu.ups.controlador;
 
 import ec.edu.ups.dao.UsuarioDAO;
+import ec.edu.ups.dao.PreguntaDAO;
 import ec.edu.ups.modelo.Pregunta;
 import ec.edu.ups.modelo.Respuesta;
 import ec.edu.ups.modelo.Rol;
@@ -24,6 +25,7 @@ import java.util.Map;
 
 public class UsuarioController {
     private final UsuarioDAO usuarioDAO;
+    private final PreguntaDAO preguntaDAO;
     private final MensajeInternacionalizacionHandler mensajes;
 
     private final UsuarioCrearView usuarioCrearView;
@@ -39,12 +41,13 @@ public class UsuarioController {
     private Usuario usuarioTemporal;
     private Usuario usuarioEnRecuperacion;
 
-    public UsuarioController(UsuarioCrearView usuarioCrearView, UsuarioDAO usuarioDAO, LogInView logInView,
+    public UsuarioController(UsuarioCrearView usuarioCrearView, UsuarioDAO usuarioDAO, PreguntaDAO preguntaDAO, LogInView logInView,
                              UsuarioModificarView usuarioModificarView, UsuarioEliminarView usuarioEliminarView,
                              UsuarioModificarMisView usuarioModificarMisView, UsuarioListarView usuarioListarView,
                              MensajeInternacionalizacionHandler mensajes, RegistrarseView registrarseView, PreguntasRegisterView preguntasView, PreguntasModificarView preguntasModificarView) {
         this.usuarioCrearView = usuarioCrearView;
         this.usuarioDAO = usuarioDAO;
+        this.preguntaDAO = preguntaDAO;
         this.logInView = logInView;
         this.usuarioModificarView = usuarioModificarView;
         this.usuarioEliminarView = usuarioEliminarView;
@@ -301,23 +304,21 @@ public class UsuarioController {
     }
 
     private void guardarUsuarioConPreguntas() {
-        List<String> respuestasTexto = preguntasView.getRespuestas();
+        Map<Pregunta, String> respuestasIngresadas = preguntasView.getRespuestasIngresadas();
 
-        long respuestasDadas = respuestasTexto.stream().filter(r -> r != null && !r.trim().isEmpty()).count();
+        long respuestasDadas = respuestasIngresadas.values().stream().filter(r -> r != null && !r.trim().isEmpty()).count();
         if (respuestasDadas < 3) {
             JOptionPane.showMessageDialog(preguntasView, mensajes.get("mensaje.pregunta.minimoRequerido"));
             return;
         }
 
-        for (int i = 0; i < respuestasTexto.size(); i++) {
-            String respuesta = respuestasTexto.get(i);
-            if (respuesta != null && !respuesta.trim().isEmpty()) {
-                int preguntaId = i + 1;
-                String textoPregunta = mensajes.get("pregunta.seguridad." + preguntaId);
-                Pregunta pregunta = new Pregunta(preguntaId, textoPregunta);
-                usuarioTemporal.addRespuesta(pregunta, respuesta);
+        respuestasIngresadas.forEach((pregunta, respuestaTexto) -> {
+            if (respuestaTexto != null && !respuestaTexto.trim().isEmpty()) {
+                // Aseguramos que la pregunta tenga el texto correcto antes de añadirla
+                pregunta.setTexto(mensajes.get("pregunta.seguridad." + pregunta.getId()));
+                usuarioTemporal.addRespuesta(pregunta, respuestaTexto);
             }
-        }
+        });
 
         usuarioDAO.crear(usuarioTemporal);
 
@@ -364,6 +365,9 @@ public class UsuarioController {
             usuarioTemporal.setUsername(username);
             usuarioTemporal.setPassword(contraseña);
 
+            // Cargar las preguntas desde el DAO y pasarlas a la vista
+            List<Pregunta> preguntas = preguntaDAO.obtenerTodasLasPreguntas();
+            preguntasView.mostrarPreguntas(preguntas);
             preguntasView.setVisible(true);
             registrarseView.setVisible(false);
 

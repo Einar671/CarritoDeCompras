@@ -6,7 +6,10 @@ import ec.edu.ups.util.FormateadorUtils;
 import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
+import javax.swing.plaf.FontUIResource;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.StyleContext;
+import java.awt.*;
 import java.net.URL;
 import java.util.List;
 import java.util.Locale;
@@ -38,7 +41,7 @@ public class CarritoListarMisView extends JInternalFrame {
 
         setSize(600, 450);
 
-        URL urlListar=getClass().getResource("/list.png");
+        URL urlListar = getClass().getResource("/list.png");
 
         modeloCarritos = new DefaultTableModel();
         tblCarritos.setModel(modeloCarritos);
@@ -104,7 +107,7 @@ public class CarritoListarMisView extends JInternalFrame {
     }
 
     public void mostrarDetalles(Carrito carrito) {
-        this.carritoActual=carrito;
+        this.carritoActual = carrito;
         modeloDetalles.setRowCount(0);
 
         if (carrito != null) {
@@ -138,4 +141,5 @@ public class CarritoListarMisView extends JInternalFrame {
     public JPanel getPanelPrincipal() {
         return panelPrincipal;
     }
+
 }

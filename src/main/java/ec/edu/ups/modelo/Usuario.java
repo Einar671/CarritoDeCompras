@@ -31,6 +31,10 @@ public class Usuario {
         this.email = email;
         this.rol = rol;
         this.respuestasSeguridad = new ArrayList<>();
+
+        // Corrección: Usar los setters para forzar la validación desde la creación.
+        setUsername(username);
+        setPassword(password);
     }
     public Usuario(Rol rol, String nombreCompleto, int edad, Genero genero, String telefono, String email)
             throws CedulaValidatorException, ContraseñaValidatorException {
@@ -108,7 +112,8 @@ public class Usuario {
         return password;
     }
 
-    public void setPassword(String password) {
+    // Corrección: Se añade 'throws' para manejar la validación correctamente
+    public void setPassword(String password) throws ContraseñaValidatorException {
         if(!validarContraseña(password)) {
             throw new ContraseñaValidatorException("");
         }

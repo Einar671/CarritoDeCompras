@@ -18,18 +18,17 @@ public class PreguntasModificarView extends JFrame {
     private JPanel panelPrincipal;
     private JPanel containerPanel;
 
+    private final Map<Pregunta, JLabel> etiquetasPregunta;
     private final Map<Pregunta, JTextField> camposDeRespuesta;
-    private List<Respuesta> respuestasActuales;
 
     private final MensajeInternacionalizacionHandler mensajes;
 
     public PreguntasModificarView(MensajeInternacionalizacionHandler mensajes) {
         setContentPane(panelPrincipal);
-
         this.mensajes = mensajes;
-        scrollPane.setViewportView(containerPanel);
+        this.etiquetasPregunta = new HashMap<>();
         this.camposDeRespuesta = new HashMap<>();
-        this.respuestasActuales = null;
+
         URL urlVerificar = getClass().getResource("/check.png");
 
         containerPanel = new JPanel();
@@ -42,9 +41,8 @@ public class PreguntasModificarView extends JFrame {
     }
 
     public void mostrarPreguntasDelUsuario(List<Respuesta> respuestasDelUsuario) {
-        this.respuestasActuales = respuestasDelUsuario;
-
         containerPanel.removeAll();
+        etiquetasPregunta.clear();
         camposDeRespuesta.clear();
 
         if (respuestasDelUsuario == null || respuestasDelUsuario.isEmpty()) {
@@ -54,39 +52,37 @@ public class PreguntasModificarView extends JFrame {
         }
 
         containerPanel.setLayout(new GridLayout(respuestasDelUsuario.size(), 2, 10, 10));
-
         for (Respuesta respuesta : respuestasDelUsuario) {
             Pregunta pregunta = respuesta.getPregunta();
             JLabel etiqueta = new JLabel(pregunta.getTexto());
             JTextField campoTexto = new JTextField();
 
+            // Guardar referencias a los componentes creados
+            etiquetasPregunta.put(pregunta, etiqueta);
             camposDeRespuesta.put(pregunta, campoTexto);
 
             containerPanel.add(etiqueta);
             containerPanel.add(campoTexto);
         }
 
+        scrollPane.setViewportView(containerPanel);
         containerPanel.revalidate();
         containerPanel.repaint();
     }
 
     public void actualizarTextos() {
+        // Actualizar textos estáticos
         setTitle(mensajes.get("pregunta.recuperar.titulo"));
         lblTitulo.setText(mensajes.get("pregunta.recuperar.titulo"));
-        btnVerificar.setText(mensajes.get("global.boton.verificar")); // Clave nueva
+        btnVerificar.setText(mensajes.get("global.boton.verificar"));
 
-        if (respuestasActuales != null && !respuestasActuales.isEmpty()) {
-            for (Map.Entry<Pregunta, JTextField> entry : camposDeRespuesta.entrySet()) {
-                Pregunta pregunta = entry.getKey();
-                for (Component comp : containerPanel.getComponents()) {
-                    if (comp instanceof JLabel) {
-                        JLabel etiqueta = (JLabel) comp;
-                        String clave = "pregunta.seguridad." + pregunta.getId();
-                        pregunta.setTexto(mensajes.get(clave));
-                        etiqueta.setText(pregunta.getTexto());
-                    }
-                }
-            }
+        // Actualizar las etiquetas de las preguntas dinámicas
+        for (Map.Entry<Pregunta, JLabel> entry : etiquetasPregunta.entrySet()) {
+            Pregunta pregunta = entry.getKey();
+            JLabel etiqueta = entry.getValue();
+            String nuevoTexto = mensajes.get("pregunta.seguridad." + pregunta.getId());
+            etiqueta.setText(nuevoTexto);
+            pregunta.setTexto(nuevoTexto);
         }
     }
 
