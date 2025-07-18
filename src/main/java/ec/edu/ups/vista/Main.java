@@ -18,6 +18,21 @@ import java.awt.event.WindowEvent;
 import java.util.Arrays; // Importar Arrays
 import java.util.List;   // Importar List
 
+/**
+ * Clase principal que actúa como punto de entrada para la aplicación del carrito de compras.
+ * <p>
+ * Esta clase se encarga de:
+ * <ul>
+ *     <li>Inicializar la aplicación y permitir al usuario seleccionar el tipo de persistencia de datos (memoria o archivos).</li>
+ *     <li>Gestionar el flujo de la aplicación, comenzando con la ventana de inicio de sesión.</li>
+ *     <li>Inicializar los DAOs, controladores y vistas necesarios.</li>
+ *     <li>Configurar la ventana principal de la aplicación después de una autenticación exitosa.</li>
+ *     <li>Manejar la internacionalización de los textos en la interfaz gráfica.</li>
+ * </ul>
+ *
+ * @author Einar Kaalhus
+ * @version 1.0
+ */
 public class Main {
 
     private static UsuarioDAO usuarioDAO;

@@ -7,14 +7,44 @@ import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementación de la interfaz ProductoDAO que utiliza un archivo binario
+ * de acceso aleatorio para la persistencia de datos de los productos.
+ * <p>
+ * Cada producto se almacena en un registro de tamaño fijo, lo que permite
+ * un acceso y modificación eficientes. La eliminación de productos se gestiona
+ * de forma lógica mediante un indicador (booleano) de disponibilidad.
+ *
+ * @author Einar Kaalhus
+ * @version 1.0
+ */
 public class ProductoDAOArchivoBinario implements ProductoDAO {
+    /**
+     * La ruta completa del archivo binario donde se almacenan los datos de los productos.
+     */
     private final String ruta;
 
 
+    /**
+     * El tamaño fijo en caracteres para el campo de nombre del producto.
+     */
     private static final int NOMBRE_SIZE_CHARS = 25;
+    /**
+     * El tamaño fijo en caracteres para el campo de descripción del producto.
+     */
     private static final int DESC_SIZE_CHARS = 50;
+    /**
+     * El tamaño total en bytes de un único registro de producto en el archivo.
+     * Se calcula sumando el tamaño de cada campo:
+     * int (4) + nombre(25*2) + descripcion(50*2) + double(8) + int(4) + boolean(1).
+     */
     private static final int RECORD_SIZE = 4 + (NOMBRE_SIZE_CHARS * 2) + (DESC_SIZE_CHARS * 2) + 8 + 4 + 1;
 
+    /**
+     * Constructor para ProductoDAOArchivoBinario.
+     *
+     * @param ruta La ruta del archivo binario a utilizar.
+     */
     public ProductoDAOArchivoBinario(String ruta) {
         this.ruta = ruta;
         try {
@@ -25,6 +55,11 @@ public class ProductoDAOArchivoBinario implements ProductoDAO {
         }
     }
 
+    /**
+     * Agrega un nuevo producto al final del archivo binario.
+     *
+     * @param producto El objeto {@link Producto} a ser creado y almacenado.
+     */
     @Override
     public void crear(Producto producto) {
         try (RandomAccessFile file = new RandomAccessFile(ruta, "rw")) {
@@ -38,6 +73,14 @@ public class ProductoDAOArchivoBinario implements ProductoDAO {
         }
     }
 
+    /**
+     * Busca un producto específico en el archivo por su código.
+     * Lee el archivo registro por registro hasta encontrar uno que coincida con el código
+     * y esté marcado como disponible.
+     *
+     * @param codigo El código del producto a buscar.
+     * @return El objeto {@link Producto} encontrado, o {@code null} si no existe o no está disponible.
+     */
     @Override
     public Producto buscarPorCodigo(int codigo) {
         try (RandomAccessFile file = new RandomAccessFile(ruta, "r")) {
@@ -65,6 +108,13 @@ public class ProductoDAOArchivoBinario implements ProductoDAO {
         return null;
     }
 
+    /**
+     * Busca productos en el archivo cuyo nombre coincida exactamente (ignorando mayúsculas y minúsculas)
+     * con el nombre proporcionado.
+     *
+     * @param nombre El nombre del producto a buscar.
+     * @return Una lista de objetos {@link Producto} que coinciden con el criterio de búsqueda.
+     */
     @Override
     public List<Producto> buscarPorNombre(String nombre) {
         List<Producto> productos = new ArrayList<>();
@@ -90,6 +140,12 @@ public class ProductoDAOArchivoBinario implements ProductoDAO {
         return productos;
     }
 
+    /**
+     * Actualiza un producto existente en el archivo.
+     * Busca el registro por su código y lo sobrescribe completamente con los nuevos datos.
+     *
+     * @param producto El objeto {@link Producto} con la información actualizada.
+     */
     @Override
     public void actualizar(Producto producto) {
         try (RandomAccessFile file = new RandomAccessFile(ruta, "rw")) {
@@ -111,6 +167,12 @@ public class ProductoDAOArchivoBinario implements ProductoDAO {
         }
     }
 
+    /**
+     * Realiza una eliminación lógica de un producto en el archivo.
+     * Busca el registro por su código y establece su bandera de disponibilidad a {@code false}.
+     *
+     * @param codigo El código del producto a eliminar.
+     */
     @Override
     public void eliminar(int codigo) {
         try (RandomAccessFile file = new RandomAccessFile(ruta, "rw")) {
@@ -129,6 +191,12 @@ public class ProductoDAOArchivoBinario implements ProductoDAO {
         }
     }
 
+    /**
+     * Lee todos los registros del archivo y devuelve una lista de todos los productos
+     * que están marcados como disponibles.
+     *
+     * @return Una lista de todos los productos disponibles.
+     */
     @Override
     public List<Producto> listarTodos() {
         List<Producto> productos = new ArrayList<>();
@@ -151,12 +219,32 @@ public class ProductoDAOArchivoBinario implements ProductoDAO {
         return productos;
     }
 
+    /**
+     * Escribe una cadena de texto en el archivo con una longitud fija.
+     * Si la cadena es más corta que el tamaño especificado, se rellena con caracteres nulos.
+     * Si es más larga, se trunca.
+     *
+     * @param file El archivo de acceso aleatorio donde se escribirá.
+     * @param str  La cadena de texto a escribir.
+     * @param size El tamaño fijo (en caracteres) que debe ocupar la cadena en el archivo.
+     * @throws IOException Si ocurre un error de E/S.
+     */
     private void writeFixedString(RandomAccessFile file, String str, int size) throws IOException {
         StringBuilder buffer = new StringBuilder(str != null ? str : "");
         buffer.setLength(size);
         file.writeChars(buffer.toString());
     }
 
+    /**
+     * Lee una cadena de texto de longitud fija desde la posición actual del puntero del archivo.
+     * Lee el número especificado de caracteres y los convierte en una cadena,
+     * deteniéndose en el primer carácter nulo encontrado.
+     *
+     * @param file El archivo de acceso aleatorio desde donde se leerá.
+     * @param size El número de caracteres a leer.
+     * @return La cadena de texto leída.
+     * @throws IOException Si ocurre un error de E/S.
+     */
     private String readFixedString(RandomAccessFile file, int size) throws IOException {
         char[] buffer = new char[size];
         for (int i = 0; i < size; i++) {

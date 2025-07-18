@@ -5,19 +5,61 @@ import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Un componente JDesktopPane personalizado que dibuja un fondo de paisaje.
+ * <p>
+ * Esta clase extiende {@link JDesktopPane} para anular su método de pintado
+ * y mostrar una escena gráfica que incluye un cielo con degradado, un sol, nubes,
+ * montañas, un río, y otros elementos decorativos. También muestra un mensaje
+ * de bienvenida que puede ser internacionalizado.
+ *
+ * @author Einar Kaalhus
+ * @version 1.0
+ */
 public class MiJDesktopPane extends JDesktopPane {
+    /**
+     * Manejador para la internacionalización de los mensajes de la aplicación.
+     */
     private MensajeInternacionalizacionHandler mensajes;
 
+    /**
+     * Constructor para MiJDesktopPane.
+     *
+     * @param mensajes El manejador de internacionalización a utilizar para obtener los textos.
+     */
     public MiJDesktopPane(MensajeInternacionalizacionHandler mensajes) {
         super();
         this.mensajes = mensajes;
     }
 
-
+    /**
+     * Solicita que el componente se vuelva a pintar.
+     * <p>
+     * Este método es útil para forzar la actualización de los textos en el panel
+     * cuando cambia el idioma, ya que el texto se dibuja en el método {@code paintComponent}.
+     */
     public void actualizarTextos() {
         repaint();
     }
 
+    /**
+     * Pinta el componente con una escena de paisaje personalizada.
+     * <p>
+     * Anula el método de la superclase para dibujar una escena completa que incluye:
+     * <ul>
+     *     <li>Un cielo con un degradado.</li>
+     *     <li>Un sol con rayos.</li>
+     *     <li>Nubes.</li>
+     *     <li>Montañas con cimas nevadas.</li>
+     *     <li>Pasto verde con flores.</li>
+     *     <li>Un río.</li>
+     *     <li>Un árbol.</li>
+     *     <li>Una ilustración de un carrito de compras.</li>
+     *     <li>Un mensaje de bienvenida obtenido del manejador de internacionalización.</li>
+     * </ul>
+     *
+     * @param g el contexto gráfico en el que se va a pintar.
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
